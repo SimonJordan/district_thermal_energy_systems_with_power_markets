@@ -1,0 +1,25 @@
+description;variable;value
+waste production per year;sigma_waste_y;100
+investment cost for chp;c_inv_CHP;100
+investment costs for hot water tank;c_inv_cap_HWT;100
+;c_inv_sto_HWT;100
+;c_fix_CHP;10
+;c_fix_cap_HWT;10
+;c_fix_sto_HWT;10
+;c_var_CHP;1
+;c_var_HWT;1
+;alpha_h2;1
+;eta_CHP;0.7
+;eta_CHP_elec;0.4
+;eta_HWT;0.9
+scenario probability;psi;0.1
+existing chp capacity;q_CHP_start;0
+existing hwt capacity;q_HWT_start;0
+existing hwt capacity (storage);q_HWT_sto_start;0
+investment cost for st;c_inv_ST;100
+existing st capacity;q_ST_start;0
+investment cost for gs;c_inv_GS;0
+existing gs capacity;q_GS_start;0
+investment cost for wi;c_inv_WI;0
+existing wi capacity;q_WI_start;0
+investment cost of geothermal;c_inv_geo;22
