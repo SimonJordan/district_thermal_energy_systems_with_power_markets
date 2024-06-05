@@ -25,7 +25,7 @@ def add_ates_equations(m=None):
     def ates_c_var(m, y, t, s):
         m.v_ates_c_var(y, s) == m.v_ates_k_thermal_max[y, s] * m.p_c_elec[y, t, s] * m.p_ates_elec + m.v_c_opam[y, s] + (m.v_ates_q_thermal_in[y, t, s] + m.v_ates_q_thermal_out[y, t, s]) * m.p_ates_c_charge_discharge[y, t, s]
 
-def add_hp_variables(m=None):
+def add_ates_variables(m=None):
     m.v_ates_q_thermal_in = py.Variable(
         m.set_scenarios * m.set_years * m.set_hours,
         domain = py.NonNegativeReals,
@@ -62,7 +62,7 @@ def add_hp_variables(m=None):
         doc = 'var costs of ATES per year in EUR'
         )
 
-def add_hp_parameters(m=None):
+def add_ates_parameters(m=None):
     m.p_ates_losses = py.Parameter( #Einlesen von Inputs fehlt!
         within = py.NonNegativeReals,
         doc = 'losses of the storage'

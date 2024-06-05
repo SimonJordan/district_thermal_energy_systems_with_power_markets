@@ -25,7 +25,8 @@ def add_ttes_equations(m=None):
     def ttes_c_var(m, y, t, s):
         m.v_ttes_c_var(y, s) == m.v_ttes_k_thermal_max[y, s] * m.p_c_elec[y, t, s] * m.p_ttes_elec + m.v_c_opam[y, s] + (m.v_ttes_q_thermal_in[y, t, s] + m.v_ttes_q_thermal_out[y, t, s]) * m.p_ttes_c_charge_discharge[y, t, s]
 
-def add_hp_variables(m=None):
+def add_ttes_variables(m=None):
+    """This section defines the variables for TTES"""
     m.v_ttes_q_thermal_in = py.Variable(
         m.set_scenarios * m.set_years * m.set_hours,
         domain = py.NonNegativeReals,
@@ -62,7 +63,7 @@ def add_hp_variables(m=None):
         doc = 'var costs of TTES per year in EUR'
         )
 
-def add_hp_parameters(m=None):
+def add_ttes_parameters(m=None):
     m.p_ttes_losses = py.Parameter( #Einlesen von Inputs fehlt!
         within = py.NonNegativeReals,
         doc = 'losses of the storage'
