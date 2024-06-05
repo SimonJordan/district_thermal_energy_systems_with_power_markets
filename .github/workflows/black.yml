@@ -26,4 +26,4 @@ jobs:
       run: pip install black
 
     - name: Run Black code formatter
-      run: black framework/main.py
+      run: black 'source code/main.py'
