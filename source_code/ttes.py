@@ -64,6 +64,7 @@ def add_ttes_variables(m=None):
         )
 
 def add_ttes_parameters(m=None):
+    """This section defines the parameters for TTES"""
     m.p_ttes_losses = py.Parameter( #Einlesen von Inputs fehlt!
         within = py.NonNegativeReals,
         doc = 'losses of the storage'
