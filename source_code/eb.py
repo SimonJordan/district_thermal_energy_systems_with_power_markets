@@ -15,14 +15,17 @@ def add_eb_equations(m=None):
             return m.v_eb_c_fix[y, s] == m.v_eb_Q_heat_max[y, s] * m.p_eb_c_inv[y, s]
         
     def eb_c_var(m, y, t, s): # OPAM = operational and maintanance, förderung?
-        return m.v_eb_c_var[y, s] == m.v_eb_q_elec_in[y, t, s] * m.p_c_elec[y, t, s]
+        return m.v_eb_c_var[y, t, s] == m.v_eb_q_elec_in[y, t, s] * m.p_c_elec[y, t, s]
         
     m.con_eb_feed_in_max_bound = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                                rule = eb_feed_in_max_bound)
+    
     m.con_eb_elec_heat = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                                rule = eb_elec_heat)
+    
     m.con_eb_c_fix = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                                rule = eb_c_fix)
+    
     m.con_eb_c_var = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                                rule = eb_c_var)
 
@@ -44,7 +47,7 @@ def add_eb_variables(m=None):
                           domain = py.NonNegativeReals,
                           doc = 'Fix cost eb per hear in EUR')
     
-    m.v_eb_c_var = py.Var(m.set_years, m.set_scenarios,
+    m.v_eb_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
                           domain = py.NonNegativeReals,
                           doc = 'var cost eb per hear in EUR')
 
