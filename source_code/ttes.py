@@ -6,17 +6,15 @@ def add_ttes_equations(m=None):
         return m.v_ttes_q_thermal_in[y, t, s] <= m.v_ttes_Q_thermal_max[y, s]
 
     def ttes_storage_max_bound(m, y, t, s):
-        return m.v_ttes_q_thermal_out[y, t, s] <= m.v_ttes_Q_thermal_max[y, s]
+        return m.v_ttes_q_thermal_out[y, t, s] <= m.v_ttes_hp_Q_max[y, s]
 
     def ttes_soc_max_bound(m, y, t, s):
         return m.v_ttes_k_thermal[y, t, s] <= m.v_ttes_k_thermal_max[y, s]
 
-    def ttes_soc(m, y, t, s):#cop abhängig von temp/soc des speichers von 30 bis 90 grad celsius
+    def ttes_soc(m, y, t, s):
         if t == 0:
-            #cop_init = (273.15 + 150)/(273.15 + 150 - (273.15 + 60 * m.v_ttes_k_thermal[y, 0, s] / m.v_ttes_k_thermal_max[y, s] + 30))
             return m.v_ttes_k_thermal[y, 0, s] == m.v_ttes_k_thermal_max[y, s] * m.p_ttes_losses[y, s] * m.p_ttes_init[y, s] + m.v_ttes_q_thermal_out[y, 0, s] * m.p_ttes_eta[y, s] - m.v_ttes_q_thermal_in[y, 0, s] / m.p_ttes_eta[y, s]
         else:
-            #cop_cur = (273.15 + 150)/(273.15 + 150 - (273.15 + 60 * m.v_ttes_k_thermal[y, t-1, s] / m.v_ttes_k_thermal_max[y, s] + 30))
             return m.v_ttes_k_thermal[y, t, s] == m.v_ttes_k_thermal[y, t-1, s] * m.p_ttes_losses[y, s] + m.v_ttes_q_thermal_out[y, t, s] * m.p_ttes_eta[y, s] - m.v_ttes_q_thermal_in[y, t, s] / m.p_ttes_eta[y, s]
     
     def ttes_soc_final(m, y, t, s):
@@ -27,12 +25,21 @@ def add_ttes_equations(m=None):
     
     def ttes_k_inv(m, y, s):
         if (y - 5) in m.set_years:
-            return m.v_ttes_k_diff[y, s] == m.v_ttes_k_thermal_max[y, s] - m.v_ttes_k_thermal_max[y-5, s]
+            return m.v_ttes_k_inv[y, s] == (m.v_ttes_k_thermal_max[y, s] - m.v_ttes_k_thermal_max[y-5, s]) * m.p_ttes_c_inv[y, s] + (m.v_ttes_hp_Q_max[y, s] - m.v_ttes_hp_Q_max[y-5, s]) * m.p_hp_c_inv[y, s]
         else:
-            return m.v_ttes_k_diff[y, s] == m.v_ttes_k_thermal_max[y, s]
+            return m.v_ttes_k_inv[y, s] == m.v_ttes_k_thermal_max[y, s] * m.p_ttes_c_inv[y, s] + m.v_ttes_hp_Q_max[y, s] * m.p_hp_c_inv[y, s]
     
+    def ttes_hp_Q_inv(m, y, s):
+        if (y - 5) in m.set_years:
+            return m.v_ttes_hp_Q_inv[y, s] == (m.v_ttes_hp_Q_max[y, s] - m.v_ttes_hp_Q_max[y-5, s])
+        else:
+            return m.v_ttes_hp_Q_inv[y, s] == m.v_ttes_hp_Q_max[y, s]
+   
+    def ttes_c_inv(m, y, s):
+        return m.v_ttes_c_inv[y, s] == m.v_ttes_k_inv[y, s] * m.p_ttes_c_inv[y, s] + m.v_ttes_hp_Q_inv[y, s] * m.p_hp_c_inv[y, s]
+        
     def ttes_c_fix(m, y, s):
-        return m.v_ttes_c_fix[y, s] == m.v_ttes_k_diff[y, s] * m.p_ttes_c_inv[y, s] + m.v_ttes_k_thermal_max[y, s] * m.p_c_mean_elec[y, s] * m.p_ttes_elec[y, s]
+        return m.v_ttes_c_fix[y, s] == m.v_ttes_k_thermal_max[y, s] * m.p_c_mean_elec[y, s] * m.p_ttes_elec[y, s] + m.v_ttes_hp_Q_max[y, s] * m.p_hp_c_fix[y, s]
     
     def ttes_c_var(m, y, t, s):
         return m.v_ttes_c_var[y, t, s] == m.v_ttes_q_elec_in[y, t, s] * m.p_c_elec[y, t, s] + (m.v_ttes_q_thermal_in[y, t, s] + m.v_ttes_q_thermal_out[y, t, s]) * m.p_ttes_c_charge_discharge[y, s] # + m.v_c_opam[y, s]
@@ -58,6 +65,12 @@ def add_ttes_equations(m=None):
     m.con_ttes_k_inv = py.Constraint(m.set_years, m.set_scenarios,
                                      rule = ttes_k_inv)
     
+    m.con_ttes_hp_Q_inv = py.Constraint(m.set_years, m.set_scenarios,
+                                        rule = ttes_hp_Q_inv)
+    
+    m.con_ttes_c_inv = py.Constraint(m.set_years, m.set_scenarios,
+                                     rule = ttes_c_inv)
+    
     m.con_ttes_c_fix = py.Constraint(m.set_years, m.set_scenarios,
                                      rule = ttes_c_fix)
     
@@ -76,7 +89,11 @@ def add_ttes_variables(m=None):
     
     m.v_ttes_Q_thermal_max = py.Var(m.set_years, m.set_scenarios,
                                     domain = py.NonNegativeReals,
-                                    doc = 'maximum thermal energy feed in/storing per scenario and year')
+                                    doc = 'maximum thermal energy feed in per scenario and year')
+    
+    m.v_ttes_hp_Q_max = py.Var(m.set_years, m.set_scenarios,
+                               domain = py.NonNegativeReals,
+                               doc = 'maximum thermal energy storing per scenario and year')
     
     m.v_ttes_k_thermal = py.Var(m.set_years, m.set_hours, m.set_scenarios,
                                 domain = py.NonNegativeReals,
@@ -88,19 +105,27 @@ def add_ttes_variables(m=None):
     
     m.v_ttes_q_elec_in = py.Var(m.set_years, m.set_hours, m.set_scenarios,
                                 domain = py.NonNegativeReals,
-                                doc = 'electricity input of heat pump per scenario, year, and hour')
+                                doc = 'electricity input of heat pump per scenario, year and hour')
    
-    m.v_ttes_k_diff = py.Var(m.set_years, m.set_scenarios,
-                             domain = py.NonNegativeReals,
-                             doc = 'difference of capacity for investments')
+    m.v_ttes_k_inv = py.Var(m.set_years, m.set_scenarios,
+                            domain = py.NonNegativeReals,
+                            doc = 'installed capacity of TTES per scenario and year in EUR')
+   
+    m.v_ttes_hp_Q_inv = py.Var(m.set_years, m.set_scenarios,
+                               domain = py.NonNegativeReals,
+                               doc = 'installed capacity of hp for TTES per scenario and year in EUR')
+    
+    m.v_ttes_c_inv = py.Var(m.set_years, m.set_scenarios,
+                            domain = py.NonNegativeReals,
+                            doc = 'inv costs of TTES per scenario and year in EUR')
     
     m.v_ttes_c_fix = py.Var(m.set_years, m.set_scenarios,
                             domain = py.NonNegativeReals,
-                            doc = 'fix costs of TTES per year in EUR')
+                            doc = 'fix costs of TTES per scenario and year in EUR')
     
     m.v_ttes_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
                             domain = py.NonNegativeReals,
-                            doc = 'var costs of TTES per year in EUR')
+                            doc = 'var costs of TTES per scenario, year and hour in EUR')
     
 def add_ttes_parameters(m=None):
     """This section defines the parameters for TTES"""

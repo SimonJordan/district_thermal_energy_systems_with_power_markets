@@ -71,9 +71,9 @@ for year in years:
     p_eb_c_fix = df_eb['p_eb_c_fix'].tolist()[0]
     data_eb[year] = {'p_eb_eta' : p_eb_eta, 'p_eb_c_inv' : p_eb_c_inv, 'p_eb_c_fix': p_eb_c_fix}
     p_hp_c_inv = df_hp['p_hp_c_inv'].tolist()[0]
-    p_hp_c_fix = df_hp['p_eb_c_fix'].tolist()[0]
+    p_hp_c_fix = df_hp['p_hp_c_fix'].tolist()[0]
     p_hp_cop = df_hp_cop['p_hp_cop'].tolist()
-    data_hp[year] = {'p_hp_c_inv' : p_hp_c_inv, 'p_eb_c_fix' : p_eb_c_fix, 'p_hp_cop': p_hp_cop}
+    data_hp[year] = {'p_hp_c_inv' : p_hp_c_inv, 'p_hp_c_fix' : p_hp_c_fix, 'p_hp_cop': p_hp_cop}
     p_ttes_losses = df_ttes['p_ttes_losses'].tolist()[0]
     p_ttes_eta = df_ttes['p_ttes_eta'].tolist()[0]
     p_ttes_init = df_ttes['p_ttes_init'].tolist()[0]
@@ -152,12 +152,26 @@ model.con_demand_balance = py.Constraint(model.set_years, model.set_hours, model
 #-----------------------------------------------------------------------------#
 
 def objective_function(m):
-    return sum(m.v_eb_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_eb_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_hp_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_hp_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_ttes_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios)# + \
-           #sum(m.v_ttes_c_penalty[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios)
+    return sum(m.v_eb_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_eb_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_eb_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
+           sum(m.v_hp_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_hp_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_hp_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
+           sum(m.v_ttes_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios)
 
 model.obj = py.Objective(expr=objective_function, sense=py.minimize)
+
+#-----------------------------------------------------------------------------#
+#                                                                             #
+# setting intermediate point for runtime measurement                          #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+intermediate_time = time.time()
+elapsed_time_1 = intermediate_time - start_time
+start_time = intermediate_time
+hours_1 = elapsed_time_1 // 3600
+minutes_1 = (elapsed_time_1 % 3600) // 60
+seconds_1 = elapsed_time_1 % 60
+
+print('Script intermediate time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_1, minutes_1, seconds_1))
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -204,8 +218,31 @@ model.display()
 
 sys.stdout = original_stdout
 output = captured_output.getvalue()
-with open('output.txt', 'w') as f:
-    f.write(output)
+# with open('output.txt', 'w') as f:
+#     f.write(output)
+
+max_file_size = 100 * 1000 * 1000 #100 MB Beschränkung auf GitHub: 100 * 1024 * 1024
+
+def write_output_to_files(output, base_filename, max_file_size):
+    file_index = 1
+    bytes_written = 0
+    buffer = []
+    for line in output.splitlines(keepends=True):
+        buffer.append(line)
+        bytes_written += len(line.encode('utf-8'))
+        if bytes_written >= max_file_size:
+            file_path = '{}_{}.txt'.format(base_filename, file_index)
+            with open(file_path, 'w') as f:
+                f.writelines(buffer)
+            buffer = []
+            bytes_written = 0
+            file_index += 1
+    if buffer:
+        file_path = '{}_{}.txt'.format(base_filename, file_index)
+        with open(file_path, 'w') as f:
+            f.writelines(buffer)
+
+write_output_to_files(output, 'output', max_file_size)
 
 print(solution)
 
@@ -215,11 +252,18 @@ print(solution)
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-
 end_time = time.time()
-elapsed_time = end_time - start_time
-hours = elapsed_time // 3600
-minutes = (elapsed_time % 3600) // 60
-seconds = elapsed_time % 60
+elapsed_time_2 = end_time - start_time
+hours_2 = elapsed_time_2 // 3600
+minutes_2 = (elapsed_time_2 % 3600) // 60
+seconds_2 = elapsed_time_2 % 60
+
+print('Script solving time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_2, minutes_2, seconds_2))
+
+seconds = seconds_1 + seconds_2
+minutes = minutes_1 + minutes_2 + seconds // 60
+seconds = seconds % 60
+hours = hours_1 + hours_2 + minutes // 60
+minutes = minutes % 60
 
 print('Script execution time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours, minutes, seconds))
