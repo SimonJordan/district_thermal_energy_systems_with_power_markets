@@ -200,7 +200,6 @@ solution = solver.solve(model)
 #ttes charge discharge kosten
 #einheiten überprüfen
 #dieses file besser die abschnitte kommentieren
-
 #fixkosten z.B. eb tatsächlich anpassen pro Jahr oder festsetzen pro Investition
 #Notizen von Felix durchgehen
 

@@ -21,8 +21,11 @@ def add_eb_equations(m=None):
         return m.v_eb_c_inv[y, s] == m.v_eb_Q_inv[y, s] * m.p_eb_c_inv[y, s]
     
     def eb_c_fix(m, y, s):
-        return m.v_eb_c_fix[y, s] == m.v_eb_Q_heat_max[y, s] * m.p_eb_c_fix[y, s]
-        
+        if (y - 5) in m.set_years:
+            return m.v_eb_c_fix[y, s] == m.v_eb_c_fix[y-5, s] + m.v_eb_Q_inv[y, s] * m.p_eb_c_fix[y, s]
+        else:
+            return m.v_eb_c_fix[y, s] == m.v_eb_Q_inv[y, s] * m.p_eb_c_fix[y, s]
+    
     def eb_c_var(m, y, t, s): # OPAM = operational and maintanance, förderung?
         return m.v_eb_c_var[y, t, s] == m.v_eb_q_elec_in[y, t, s] * m.p_c_elec[y, t, s]
         
@@ -63,7 +66,7 @@ def add_eb_variables(m=None):
     
     m.v_eb_Q_inv = py.Var(m.set_years, m.set_scenarios,
                           domain = py.NonNegativeReals,
-                          doc = 'istalled TTES capacity per scenario and year in EUR')
+                          doc = 'istalled eb capacity per scenario and year in EUR')
    
     m.v_eb_c_inv = py.Var(m.set_years, m.set_scenarios,
                           domain = py.NonNegativeReals,

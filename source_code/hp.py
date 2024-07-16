@@ -6,7 +6,7 @@ def add_hp_equations(m=None):
         return m.v_hp_q_heat_in[y, t, s] <= m.v_hp_Q_heat_max[y, s]
     
     # def test(m, y, s):
-    #     return m.v_eb_Q_heat_max[y, s] <= 800
+    #     return m.v_hp_Q_heat_max[y, s] <= 800
     
     def hp_elec_heat(m, y, t, s): 
         return m.v_hp_q_heat_in[y, t, s] == m.v_hp_q_elec_in[y, t, s] * m.p_hp_cop[y, t, s]
@@ -21,8 +21,11 @@ def add_hp_equations(m=None):
         return m.v_hp_c_inv[y, s] == m.v_hp_Q_inv[y, s] * m.p_hp_c_inv[y, s]
   
     def hp_c_fix(m, y, s):
-        return m.v_hp_c_fix[y, s] == m.v_hp_Q_heat_max[y, s] * m.p_hp_c_fix[y, s]
-    
+        if (y - 5) in m.set_years:
+            return m.v_hp_c_fix[y, s] == m.v_hp_c_fix[y-5, s] + m.v_hp_Q_inv[y, s] * m.p_hp_c_fix[y, s]
+        else:
+            return m.v_hp_c_fix[y, s] == m.v_hp_Q_inv[y, s] * m.p_hp_c_fix[y, s]
+
     def hp_c_var(m, y, t, s): # OPAM = operational and maintanance, förderung?
         return m.v_hp_c_var[y, t, s] == m.v_hp_q_elec_in[y, t, s] * m.p_c_elec[y, t, s]
 
