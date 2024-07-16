@@ -25,9 +25,9 @@ def add_ttes_equations(m=None):
     
     def ttes_k_inv(m, y, s):
         if (y - 5) in m.set_years:
-            return m.v_ttes_k_inv[y, s] == (m.v_ttes_k_thermal_max[y, s] - m.v_ttes_k_thermal_max[y-5, s]) * m.p_ttes_c_inv[y, s] + (m.v_ttes_hp_Q_max[y, s] - m.v_ttes_hp_Q_max[y-5, s]) * m.p_hp_c_inv[y, s]
+            return m.v_ttes_k_inv[y, s] == (m.v_ttes_k_thermal_max[y, s] - m.v_ttes_k_thermal_max[y-5, s])
         else:
-            return m.v_ttes_k_inv[y, s] == m.v_ttes_k_thermal_max[y, s] * m.p_ttes_c_inv[y, s] + m.v_ttes_hp_Q_max[y, s] * m.p_hp_c_inv[y, s]
+            return m.v_ttes_k_inv[y, s] == m.v_ttes_k_thermal_max[y, s]
     
     def ttes_hp_Q_inv(m, y, s):
         if (y - 5) in m.set_years:
@@ -37,9 +37,12 @@ def add_ttes_equations(m=None):
    
     def ttes_c_inv(m, y, s):
         return m.v_ttes_c_inv[y, s] == m.v_ttes_k_inv[y, s] * m.p_ttes_c_inv[y, s] + m.v_ttes_hp_Q_inv[y, s] * m.p_hp_c_inv[y, s]
-        
+    
     def ttes_c_fix(m, y, s):
-        return m.v_ttes_c_fix[y, s] == m.v_ttes_k_thermal_max[y, s] * m.p_c_mean_elec[y, s] * m.p_ttes_elec[y, s] + m.v_ttes_hp_Q_max[y, s] * m.p_hp_c_fix[y, s]
+        if (y - 5) in m.set_years:
+            return m.v_ttes_c_fix[y, s] == m.v_ttes_c_fix[y-5, s] + m.v_ttes_hp_Q_inv[y, s] * m.p_hp_c_fix[y, s] + (m.v_ttes_k_thermal_max[y, s] - m.v_ttes_k_thermal_max[y-5, s]) * m.p_c_mean_elec[y, s] * m.p_ttes_elec[y, s]
+        else:
+            return m.v_ttes_c_fix[y, s] == m.v_ttes_hp_Q_inv[y, s] * m.p_hp_c_fix[y, s] + m.v_ttes_k_thermal_max[y, s] * m.p_c_mean_elec[y, s] * m.p_ttes_elec[y, s]
     
     def ttes_c_var(m, y, t, s):
         return m.v_ttes_c_var[y, t, s] == m.v_ttes_q_elec_in[y, t, s] * m.p_c_elec[y, t, s] + (m.v_ttes_q_thermal_in[y, t, s] + m.v_ttes_q_thermal_out[y, t, s]) * m.p_ttes_c_charge_discharge[y, s] # + m.v_c_opam[y, s]
