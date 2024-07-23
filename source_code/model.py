@@ -46,7 +46,7 @@ path_to_file_demand_baltimore = os.path.join(path_to_input_folder, 'demand_balti
 path_to_file_electricity_price = os.path.join(path_to_input_folder, 'electricity_price.xlsx')
 path_to_file_eb = os.path.join(path_to_input_folder, 'eb.xlsx')
 path_to_file_hp = os.path.join(path_to_input_folder, 'hp.xlsx')
-path_to_file_hp_cop = os.path.join(path_to_input_folder, 'hp_cop.xlsx')
+path_to_file_hp_cop = os.path.join(path_to_input_folder, 'temperature_baltimore.xlsx')
 path_to_file_ttes = os.path.join(path_to_input_folder, 'ttes.xlsx')
 
 #-----------------------------------------------------------------------------#
@@ -68,12 +68,12 @@ for year in years:
     electricity_mean_price[year] = np.mean(electricity_price[year])
     p_eb_eta = df_eb['p_eb_eta'].tolist()[0]
     p_eb_c_inv = df_eb['p_eb_c_inv'].tolist()[0]
-    p_eb_c_fix = df_eb['p_eb_c_fix'].tolist()[0]
-    data_eb[year] = {'p_eb_eta' : p_eb_eta, 'p_eb_c_inv' : p_eb_c_inv, 'p_eb_c_fix': p_eb_c_fix}
+    # p_eb_c_fix = df_eb['p_eb_c_fix'].tolist()[0]
+    data_eb[year] = {'p_eb_eta' : p_eb_eta, 'p_eb_c_inv' : p_eb_c_inv}
     p_hp_c_inv = df_hp['p_hp_c_inv'].tolist()[0]
-    p_hp_c_fix = df_hp['p_hp_c_fix'].tolist()[0]
+    # p_hp_c_fix = df_hp['p_hp_c_fix'].tolist()[0]
     p_hp_cop = df_hp_cop['p_hp_cop'].tolist()
-    data_hp[year] = {'p_hp_c_inv' : p_hp_c_inv, 'p_hp_c_fix' : p_hp_c_fix, 'p_hp_cop': p_hp_cop}
+    data_hp[year] = {'p_hp_c_inv' : p_hp_c_inv, 'p_hp_cop': p_hp_cop}
     p_ttes_losses = df_ttes['p_ttes_losses'].tolist()[0]
     p_ttes_eta = df_ttes['p_ttes_eta'].tolist()[0]
     p_ttes_init = df_ttes['p_ttes_init'].tolist()[0]

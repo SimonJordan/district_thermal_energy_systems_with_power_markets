@@ -22,9 +22,9 @@ def add_eb_equations(m=None):
     
     def eb_c_fix(m, y, s):
         if (y - 5) in m.set_years:
-            return m.v_eb_c_fix[y, s] == m.v_eb_c_fix[y-5, s] + m.v_eb_Q_inv[y, s] * m.p_eb_c_fix[y, s]
+            return m.v_eb_c_fix[y, s] == m.v_eb_c_fix[y-5, s] + m.v_eb_Q_inv[y, s] * m.p_eb_c_inv[y, s] * 0.02
         else:
-            return m.v_eb_c_fix[y, s] == m.v_eb_Q_inv[y, s] * m.p_eb_c_fix[y, s]
+            return m.v_eb_c_fix[y, s] == m.v_eb_Q_inv[y, s] * m.p_eb_c_inv[y, s] * 0.02
     
     def eb_c_var(m, y, t, s): # OPAM = operational and maintanance, förderung?
         return m.v_eb_c_var[y, t, s] == m.v_eb_q_elec_in[y, t, s] * m.p_c_elec[y, t, s]
@@ -88,8 +88,8 @@ def add_eb_parameters(m=None):
     def init_eb_c_inv(m, y, s):
         return m.data_values[s]['eb'][y]['p_eb_c_inv']
     
-    def init_eb_c_fix(m, y, s):
-        return m.data_values[s]['eb'][y]['p_eb_c_fix']
+    # def init_eb_c_fix(m, y, s):
+    #     return m.data_values[s]['eb'][y]['p_eb_c_fix']
     
     def init_c_elec(m, y, t, s):
         return m.data_values[s]['electricity_price'][y][t]
@@ -107,10 +107,10 @@ def add_eb_parameters(m=None):
                             within = py.NonNegativeReals,
                             doc = 'specific inv cost of eb')
     
-    m.p_eb_c_fix = py.Param(m.set_years, m.set_scenarios,
-                            initialize = init_eb_c_fix,
-                            within = py.NonNegativeReals,
-                            doc = 'fixed cost of eb')
+    # m.p_eb_c_fix = py.Param(m.set_years, m.set_scenarios,
+    #                         initialize = init_eb_c_fix,
+    #                         within = py.NonNegativeReals,
+    #                         doc = 'fixed cost of eb')
     
     m.p_c_elec = py.Param(m.set_years, m.set_hours, m.set_scenarios,
                           initialize = init_c_elec,
