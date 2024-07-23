@@ -66,7 +66,7 @@ def add_hp_variables(m=None):
     
     m.v_hp_Q_inv = py.Var(m.set_years, m.set_scenarios,
                           domain = py.NonNegativeReals,
-                          doc = 'istalled hp capacity per scenario and year in EUR')
+                          doc = 'new istalled hp capacity per scenario and year in EUR')
 
     m.v_hp_c_inv = py.Var(m.set_years, m.set_scenarios,
                           domain = py.NonNegativeReals,

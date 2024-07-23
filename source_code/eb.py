@@ -66,7 +66,7 @@ def add_eb_variables(m=None):
     
     m.v_eb_Q_inv = py.Var(m.set_years, m.set_scenarios,
                           domain = py.NonNegativeReals,
-                          doc = 'istalled eb capacity per scenario and year in EUR')
+                          doc = 'new istalled eb capacity per scenario and year in EUR')
    
     m.v_eb_c_inv = py.Var(m.set_years, m.set_scenarios,
                           domain = py.NonNegativeReals,
