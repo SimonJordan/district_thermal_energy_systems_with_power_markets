@@ -5,17 +5,17 @@ def add_st_equations(m=None):
     def st_feed_in_max_bound(m, y, t, s):
         return m.v_st_q_heat_in[y, t, s] <= m.v_st_Q_heat_max[y, s]
     
-    # def test(m, y, s):
-    #     return m.v_st_Q_heat_max[y, s] <= 800
+    # def st_limit(m, y, s):
+    #     return m.v_st_Q_heat_max[y, s] <= 200
     
-    def st_eta(m, y, s):
-        if (y - 5) in m.set_years:
-            return m.v_st_eta_avg[y, s] == m.p_st_eta[y, s]#(m.v_st_eta_avg[y-5, s] * m.v_st_P_max[y-5, s] + m.p_st_eta[y, s] * m.v_st_P_inv[y, s]) / (m.v_st_P_max[y-5, s] + m.v_st_P_inv[y, s])
-        else:
-            return m.v_st_eta_avg[y, s] == m.p_st_eta[y, s]
+    # def st_eta(m, y, s):
+    #     if (y - 5) in m.set_years:
+    #         return m.v_st_eta_avg[y, s] == (m.v_st_eta_avg[y-5, s] * m.v_st_P_max[y-5, s] + m.p_st_eta[y, s] * m.v_st_P_inv[y, s]) / (m.v_st_P_max[y-5, s] + m.v_st_P_inv[y, s])
+    #     else:
+    #         return m.v_st_eta_avg[y, s] == m.p_st_eta[y, s]
     
     def st_solar_radiation(m, y, t, s):
-        return m.v_st_q_heat_in[y, t, s] == m.p_st_solar_radiation[y, t, s] * m.v_st_p[y, t, s] * 1000 * m.v_st_eta_avg[y, s]
+        return m.v_st_q_heat_in[y, t, s] == m.p_st_solar_radiation[y, t, s] * m.v_st_p[y, t, s] / 1000 * m.p_st_eta[y, s]
     
     def st_elec_heat(m, y, t, s):
         return m.v_st_q_heat_in[y, t, s] == m.v_st_q_elec_in[y, t, s] * m.p_st_cop[y, s]
@@ -50,8 +50,8 @@ def add_st_equations(m=None):
     m.con_st_feed_in_max_bound = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                                rule = st_feed_in_max_bound)
     
-    m.con_st_eta = py.Constraint(m.set_years, m.set_scenarios,
-                                 rule = st_eta)
+    # m.con_st_eta = py.Constraint(m.set_years, m.set_scenarios,
+    #                              rule = st_eta)
     
     m.con_st_solar_radiation = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                              rule = st_solar_radiation)
@@ -77,8 +77,8 @@ def add_st_equations(m=None):
     m.con_st_c_var = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                    rule = st_c_var)
     
-    # m.con_test = py.Constraint(m.set_years, m.set_scenarios,
-    #                            rule = test)
+    # m.con_st_limit = py.Constraint(m.set_years, m.set_scenarios,
+    #                                rule = st_limit)
     
      
 def add_st_variables(m=None):
@@ -91,9 +91,9 @@ def add_st_variables(m=None):
                               domain = py.NonNegativeReals,
                               doc = 'electricity input of solar thermal per scenario, year, and hour')
     
-    m.v_st_eta_avg = py.Var(m.set_years, m.set_scenarios,
-                            domain = py.NonNegativeReals,
-                            doc = 'average eta of solar thermal per scenario and year')
+    # m.v_st_eta_avg = py.Var(m.set_years, m.set_scenarios,
+    #                         domain = py.NonNegativeReals,
+    #                         doc = 'average eta of solar thermal per scenario and year')
     
     m.v_st_p = py.Var(m.set_years, m.set_hours, m.set_scenarios,
                       domain = py.NonNegativeReals,
