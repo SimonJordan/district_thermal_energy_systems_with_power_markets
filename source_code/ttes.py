@@ -112,11 +112,11 @@ def add_ttes_variables(m=None):
    
     m.v_ttes_k_inv = py.Var(m.set_years, m.set_scenarios,
                             domain = py.NonNegativeReals,
-                            doc = 'installed capacity of TTES per scenario and year in EUR')
+                            doc = 'new installed capacity of TTES per scenario and year in EUR')
    
     m.v_ttes_hp_Q_inv = py.Var(m.set_years, m.set_scenarios,
                                domain = py.NonNegativeReals,
-                               doc = 'installed capacity of hp for TTES per scenario and year in EUR')
+                               doc = 'new installed capacity of hp for TTES per scenario and year in EUR')
     
     m.v_ttes_c_inv = py.Var(m.set_years, m.set_scenarios,
                             domain = py.NonNegativeReals,
