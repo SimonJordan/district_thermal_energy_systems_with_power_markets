@@ -1,114 +1,170 @@
 import pyomo.environ as py
 
 def add_wi_equations(m=None):
-    #max waste per year
+
     def wi_feed_in_max_bound(m, y, t, s):
-        return m.v_wi_q_heat_in[y, t, s] <= m.v_wi_Q_heat_max[y, s]
+        return m.v_wi_q_heat_in[y, t, s] + m.v_wi_q_elec_in[y, t, s] <= m.v_wi_Q_mix_max[y, s]
     
     def wi_waste_heat(m, y, t, s):
-        return m.v_wi_q_heat_in[y, t, s] == m.v_wi_q_waste_in[y, t, s] * m.p_wi_eta
+        return m.v_wi_q_heat_in[y, t, s] == m.p_wi_q_waste[y, s] * m.p_wi_eta[y, s] * m.p_wi_h_waste[y, s] * m.p_wi_heat[y, s] * m.v_wi_p_scale[y, t, s]
         
-    def wi_q_co2(m, y, t, s):
-        return m.v_wi_q_co2[y, t, s] == m.v_wi_q_waste_in[y, t, s] * m.p_wi_eta_co2
+    def wi_waste_elec(m, y, t, s):
+        return m.v_wi_q_elec_in[y, t, s] == m.p_wi_q_waste[y, s] * m.p_wi_eta[y, s] * m.p_wi_h_waste[y, s] * m.p_wi_elec[y, s] * m.v_wi_p_scale[y, t, s]
     
-    def wi_elec(m, y, t, s):
-        return m.v_wi_q_elec_in[y, t, s] ==  m.v_wi_q_heat_in[y, t, s] * m.p_wi_eta_el[t]
+    def wi_p_scale(m, y, t, s):
+        return m.v_wi_p_scale[y, t, s] <= 1
     
-    def wi_c_fix(m, y, t, s): 
+    def wi_Q_inv(m, y, s):
         if (y - 5) in m.set_years:
-            return m.v_wi_c_fix[y, s] == (m.v_wi_Q_heat_max[y, s] - m.v_wi_Q_heat_max[y-5, s]) * m.p_wi_c_inv[y, s]
+            return m.v_wi_Q_inv[y, s] == (m.v_wi_Q_mix_max[y, s] - m.v_wi_Q_mix_max[y-5, s])
         else:
-            return m.v_wi_c_fix[y, s] == m.v_wi_Q_heat_max[y, s] * m.p_wi_c_inv[y, s]
+            return m.v_wi_Q_inv[y, s] == m.v_wi_Q_mix_max[y, s]
     
-    def wi_c_var(m, y, t, s): 
-        return m.v_wi_c_var(y, s) == m.v_wi_q_waste_in[y, t, s] * m.v_c_waste[y, t, s] + m.v_wi_q_elec_in[y, t, s] * m.v_c_elec[y, t, s] + m.v_wi_q_co2[y, t, s] * m.v_c_co2[y, t, s]
-
+    def wi_c_inv(m, y, s):
+        return m.v_wi_c_inv[y, s] == m.v_wi_Q_inv[y, s] * m.p_wi_c_inv[y, s]
+   
+    def wi_c_fix(m, y, s):
+        if (y - 5) in m.set_years:
+            return m.v_wi_c_fix[y, s] == m.v_wi_c_fix[y-5, s] + m.v_wi_Q_inv[y, s] * m.p_wi_c_inv[y, s] * 0.02
+        else:
+            return m.v_wi_c_fix[y, s] == m.v_wi_Q_inv[y, s] * m.p_wi_c_inv[y, s] * 0.02
+    
+    def wi_c_var(m, y, t, s): # OPAM = operational and maintanance, förderung?
+        return m.v_wi_c_var[y, t, s] == m.p_wi_q_waste[y, s] * m.p_wi_c_waste[y, s] * m.v_wi_p_scale[y, t, s] + m.p_wi_q_waste[y, s] * m.p_wi_co2_share[y, s] * m.p_wi_c_co2[y, s] * m.v_wi_p_scale[y, t, s] - m.v_wi_q_elec_in[y, t, s] * m.p_c_elec[y, t, s]
+    
     m.con_wi_feed_in_max_bound = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                                rule = wi_feed_in_max_bound)
+    
     m.con_wi_waste_heat = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
-                                               rule = wi_waste_heat)
-    m.con_wi_q_co2 = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
-                                               rule = wi_q_co2)
-    m.con_wi_elec = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
-                                               rule = wi_elec)
-    m.con_wi_c_fix = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
-                                               rule = wi_c_fix)
+                                        rule = wi_waste_heat)
+    
+    m.con_wi_waste_elec = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
+                                        rule = wi_waste_elec)
+    
+    m.con_wi_p_scale = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
+                                     rule = wi_p_scale)
+        
+    m.con_wi_Q_inv = py.Constraint(m.set_years, m.set_scenarios,
+                                   rule = wi_Q_inv)
+    
+    m.con_wi_c_inv = py.Constraint(m.set_years, m.set_scenarios,
+                                   rule = wi_c_inv)
+    
+    m.con_wi_c_fix = py.Constraint(m.set_years, m.set_scenarios,
+                                   rule = wi_c_fix)
+    
     m.con_wi_c_var = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
-                                               rule = wi_c_var)
+                                   rule = wi_c_var)
 
 def add_wi_variables(m=None):
     
-    m.v_wi_q_heat_in = py.Variable(
-        m.set_scenarios * m.set_years * m.set_hours,
-        domain = py.NonNegativeReals,
-        doc = 'heat energy feed in from WI per scenario, year, and hour'
-    )
-    m.v_wi_q_waste_in = py.Variable(
-        m.set_scenarios * m.set_years * m.set_hours,
-        domain = py.NonNegativeReals,
-        doc = 'wast input of WI per scenario, year, and hour'
-    )
-    m.v_wi_Q_heat_max = py.Variable(
-        m.set_scenarios * m.set_years,
-        domain = py.NonNegativeReals,
-        doc = 'max heat feed in from WI for district heating'
-    ) 
-    m.v_wi_c_fix = py.Variable(
-        m.set_years[1:] * m.set_scenarios,
-        domain = py.NonNegativeReals,
-        doc = 'Fix cost wi per heat in EUR'
-    )
-    m.v_wi_c_var = py.Variable(
-        m.set_years * m.set_scenarios,
-        domain = py.NonNegativeReals,
-        doc = 'var cost wi per heat in EUR'
-    )
-    m.v_wi_q_co2= py.Variable(
-        m.set_years * m.set_scenarios,
-        domain = py.NonNegativeReals,
-        doc = 'var quantity of co2 for wi per ton waste in EUR'
-    )
-    m.v_wi_q_elec_in= py.Variable(
-        m.set_years, m.set_scenarios, m.set_hours,
-        domain = py.NonNegativeReals,
-        doc = 'electricity used per heat input'
-    )
+    m.v_wi_q_heat_in = py.Var(m.set_years, m.set_hours, m.set_scenarios,
+                              domain = py.NonNegativeReals,
+                              doc = 'heat energy feed in from waste incineration per scenario, year and hour')
+
+    m.v_wi_q_elec_in = py.Var(m.set_years, m.set_hours, m.set_scenarios,
+                              domain = py.NonNegativeReals,
+                              doc = 'electricity feed in from waste incineration per scenario, year and hour')
+    
+    m.v_wi_p_scale = py.Var(m.set_years, m.set_hours, m.set_scenarios,
+                            domain = py.NonNegativeReals,
+                            doc = 'scale size of waste incineration per scenario, year and hour')
+
+    m.v_wi_Q_mix_max = py.Var(m.set_years, m.set_scenarios,
+                              domain = py.NonNegativeReals,
+                              doc = 'max energy feed in from waste incineration per scenario, year and hour')
+    
+    m.v_wi_Q_inv = py.Var(m.set_years, m.set_scenarios,
+                          domain = py.NonNegativeReals,
+                          doc = 'new installed power of waste incineration per scenario and year')
+   
+    m.v_wi_c_inv = py.Var(m.set_years, m.set_scenarios,
+                          domain = py.NonNegativeReals,
+                          doc = 'inv costs of wi per scenario and year in EUR')
+
+    m.v_wi_c_fix = py.Var(m.set_years, m.set_scenarios,
+                         domain = py.NonNegativeReals,
+                         doc = 'fix costs of wi per scenario and year in EUR')
+    
+    m.v_wi_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
+                          domain = py.Reals,
+                          doc = 'var costs of wi per scenario, year and hour in EUR')
+    
 def add_wi_parameters(m=None):
-    #auslesen aus tabelle FEHlt!!
-    m.p_wi_eta_el = py.Parameter( #Einlesen von Inputs fehlt!
-        m.set_hours,
-        within = py.NonNegativeReals,
-        doc = 'electric efficiency of the wi'
-    )
-    m.p_wi_eta = py.Parameter( #Einlesen von Inputs fehlt!
-        within = py.NonNegativeReals,
-        doc = 'efficiency of the wi'
-    )
-    m.p_wi_eta_co2 = py.Parameter( #Einlesen von Inputs fehlt!
-        within = py.NonNegativeReals,
-        doc = 'co2 output for waste input of the wi'
-    )
-    m.p_wi_c_inv =py.Parameter( #Einlesen von Inputs fehlt!
-        m.set_years * m.set_scenarios,
-        within = py.NonNegativeReals,
-        doc = 'specific inv cost of wi'
-        )
-    m.p_c_elec=py.Parameter( #Einlesen von Inputs fehlt!
-        m.set_years * m.set_scenarios * m.set_hours,
-        within = py.Reals,
-        doc = 'specific electrisity prices year hour and scenario'
-        )
-    m.p_c_waste=py.Parameter( #Einlesen von Inputs fehlt!
-        m.set_years * m.set_scenarios * m.set_hours,
-        within = py.Reals,
-        doc = 'specific waste prices year hour and scenario'
-        )
-    m.p_c_co2=py.Parameter( #Einlesen von Inputs fehlt!
-        m.set_years * m.set_scenarios * m.set_hours,
-        within = py.Reals,
-        doc = 'specific co2 prices year hour and scenario'
-        )
-    # m.p_c_opam=py.Parameter( #Einlesen von Inputs fehlt!
+
+    def init_wi_eta(m, y, s):
+        return m.data_values[s]['wi'][y]['p_wi_eta']
+    
+    def init_wi_q_waste(m, y, s):
+        return m.data_values[s]['wi'][y]['p_wi_q_waste']
+    
+    def init_wi_c_waste(m, y, s):
+        return m.data_values[s]['wi'][y]['p_wi_c_waste']
+    
+    def init_wi_h_waste(m, y, s):
+        return m.data_values[s]['wi'][y]['p_wi_h_waste']
+    
+    def init_wi_heat(m, y, s):
+        return m.data_values[s]['wi'][y]['p_wi_heat']
+    
+    def init_wi_elec(m, y, s):
+        return m.data_values[s]['wi'][y]['p_wi_elec']
+    
+    def init_wi_co2_share(m, y, s):
+        return m.data_values[s]['wi'][y]['p_wi_co2_share']
+    
+    def init_wi_c_co2(m, y, s):
+        return m.data_values[s]['wi'][y]['p_wi_c_co2']
+    
+    def init_wi_c_inv(m, y, s):
+        return m.data_values[s]['wi'][y]['p_wi_c_inv']
+    
+    m.p_wi_eta = py.Param(m.set_years, m.set_scenarios,
+                          initialize = init_wi_eta,
+                          within = py.NonNegativeReals,
+                          doc = 'efficiency of the wi')
+    
+    m.p_wi_q_waste = py.Param(m.set_years, m.set_scenarios,
+                              initialize = init_wi_q_waste,
+                              within = py.NonNegativeReals,
+                              doc = 'amount of waste for wi')
+    
+    m.p_wi_c_waste = py.Param(m.set_years, m.set_scenarios,
+                              initialize = init_wi_c_waste,
+                              within = py.NonNegativeReals,
+                              doc = 'price of waste for wi')
+    
+    m.p_wi_h_waste = py.Param(m.set_years, m.set_scenarios,
+                              initialize = init_wi_h_waste,
+                              within = py.NonNegativeReals,
+                              doc = 'calorific value of waste for wi')
+    
+    m.p_wi_heat = py.Param(m.set_years, m.set_scenarios,
+                            initialize = init_wi_heat,
+                            within = py.NonNegativeReals,
+                            doc = 'share of heat output of the wi')
+    
+    m.p_wi_elec = py.Param(m.set_years, m.set_scenarios,
+                           initialize = init_wi_elec,
+                           within = py.NonNegativeReals,
+                           doc = 'share of electric output of the wi')
+    
+    m.p_wi_co2_share = py.Param(m.set_years, m.set_scenarios,
+                                initialize = init_wi_co2_share,
+                                within = py.NonNegativeReals,
+                                doc = 'share of CO2 of the waste for wi')
+    
+    m.p_wi_c_co2 = py.Param(m.set_years, m.set_scenarios,
+                            initialize = init_wi_c_co2,
+                            within = py.NonNegativeReals,
+                            doc = 'CO2 price')
+    
+    m.p_wi_c_inv = py.Param(m.set_years, m.set_scenarios,
+                            initialize = init_wi_c_inv,
+                            within = py.NonNegativeReals,
+                            doc = 'specific inv cost of wi')
+    
+    # m.p_c_opam=py.Param( #Einlesen von Inputs fehlt!
     #     m.set_years * m.set_scenarios,
     #     within = py.NonNegativeReals,
     #     doc = 'Operational and Maintanance cost per year and scenario'

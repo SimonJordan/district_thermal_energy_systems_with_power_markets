@@ -85,11 +85,11 @@ def add_st_variables(m=None):
     
     m.v_st_q_heat_in = py.Var(m.set_years, m.set_hours, m.set_scenarios,
                               domain = py.NonNegativeReals,
-                              doc = 'heat energy feed in from solar thermal per scenario, year, and hour')
+                              doc = 'heat energy feed in from solar thermal per scenario, year and hour')
     
     m.v_st_q_elec_in = py.Var(m.set_years, m.set_hours, m.set_scenarios,
                               domain = py.NonNegativeReals,
-                              doc = 'electricity input of solar thermal per scenario, year, and hour')
+                              doc = 'electricity input of solar thermal per scenario, year and hour')
     
     # m.v_st_eta_avg = py.Var(m.set_years, m.set_scenarios,
     #                         domain = py.NonNegativeReals,
@@ -97,7 +97,7 @@ def add_st_variables(m=None):
     
     m.v_st_p = py.Var(m.set_years, m.set_hours, m.set_scenarios,
                       domain = py.NonNegativeReals,
-                      doc = 'power of solar thermal per scenario, year, and hour')
+                      doc = 'power of solar thermal per scenario, year and hour')
     
     m.v_st_P_max = py.Var(m.set_years, m.set_scenarios,
                           domain = py.NonNegativeReals,
