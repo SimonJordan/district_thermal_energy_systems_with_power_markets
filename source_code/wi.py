@@ -30,7 +30,7 @@ def add_wi_equations(m=None):
             return m.v_wi_c_fix[y, s] == m.v_wi_Q_inv[y, s] * m.p_wi_c_inv[y, s] * 0.02
     
     def wi_c_var(m, y, t, s): # OPAM = operational and maintanance, förderung?
-        return m.v_wi_c_var[y, t, s] == m.p_wi_q_waste[y, s] * m.p_wi_c_waste[y, s] * m.v_wi_p_scale[y, t, s] + m.p_wi_q_waste[y, s] * m.p_wi_co2_share[y, s] * m.p_wi_c_co2[y, s] * m.v_wi_p_scale[y, t, s] - m.v_wi_q_elec_in[y, t, s] * m.p_c_elec[y, t, s]
+        return m.v_wi_c_var[y, t, s] == m.p_wi_q_waste[y, s] * m.p_wi_c_waste[y, s] * m.v_wi_p_scale[y, t, s] + m.p_wi_q_waste[y, s] * m.p_wi_co2_share[y, s] * m.p_c_co2[y, s] * m.v_wi_p_scale[y, t, s] - m.v_wi_q_elec_in[y, t, s] * m.p_c_elec[y, t, s]
     
     m.con_wi_feed_in_max_bound = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                                rule = wi_feed_in_max_bound)
@@ -112,10 +112,7 @@ def add_wi_parameters(m=None):
     
     def init_wi_co2_share(m, y, s):
         return m.data_values[s]['wi'][y]['p_wi_co2_share']
-    
-    def init_wi_c_co2(m, y, s):
-        return m.data_values[s]['wi'][y]['p_wi_c_co2']
-    
+        
     def init_wi_c_inv(m, y, s):
         return m.data_values[s]['wi'][y]['p_wi_c_inv']
     
@@ -153,12 +150,7 @@ def add_wi_parameters(m=None):
                                 initialize = init_wi_co2_share,
                                 within = py.NonNegativeReals,
                                 doc = 'share of CO2 of the waste for wi')
-    
-    m.p_wi_c_co2 = py.Param(m.set_years, m.set_scenarios,
-                            initialize = init_wi_c_co2,
-                            within = py.NonNegativeReals,
-                            doc = 'CO2 price')
-    
+        
     m.p_wi_c_inv = py.Param(m.set_years, m.set_scenarios,
                             initialize = init_wi_c_inv,
                             within = py.NonNegativeReals,

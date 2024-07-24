@@ -29,6 +29,7 @@ years = [2025, 2030, 2035, 2040, 2045, 2050]
 demand_baltimore = {}
 electricity_price = {}
 electricity_mean_price = {}
+co2_price = {}
 data_eb = {}
 data_hp = {}
 data_st = {}
@@ -46,6 +47,7 @@ cur_dir = os.path.dirname(__file__)
 path_to_input_folder = os.path.join(cur_dir, 'data')
 path_to_file_demand_baltimore = os.path.join(path_to_input_folder, 'demand_baltimore.xlsx')
 path_to_file_electricity_price = os.path.join(path_to_input_folder, 'electricity_price.xlsx')
+path_to_file_co2_price = os.path.join(path_to_input_folder, 'co2_price.xlsx')
 path_to_file_hp_cop = os.path.join(path_to_input_folder, 'temperature_baltimore.xlsx')
 path_to_file_solar_radiation = os.path.join(path_to_input_folder, 'solar_radiation_baltimore.xlsx')
 path_to_file_eb = os.path.join(path_to_input_folder, 'eb.xlsx')
@@ -63,6 +65,7 @@ path_to_file_ttes = os.path.join(path_to_input_folder, 'ttes.xlsx')
 for year in years:
     df_demand_baltimore = pd.read_excel(path_to_file_demand_baltimore, sheet_name=str(year))
     df_electricity_price = pd.read_excel(path_to_file_electricity_price, sheet_name=str(year))
+    df_co2_price = pd.read_excel(path_to_file_co2_price, sheet_name=str(year))
     df_hp_cop = pd.read_excel(path_to_file_hp_cop, sheet_name=str(year))
     df_solar_radiation = pd.read_excel(path_to_file_solar_radiation, sheet_name=str(year))
     df_eb = pd.read_excel(path_to_file_eb, sheet_name=str(year))
@@ -74,6 +77,7 @@ for year in years:
     demand_baltimore[year] = df_demand_baltimore['demand_baltimore'].tolist()
     electricity_price[year] = df_electricity_price['electricity_price'].tolist()
     electricity_mean_price[year] = np.mean(electricity_price[year])
+    co2_price[year] = df_co2_price['co2_price'].tolist()[0]
     p_eb_eta = df_eb['p_eb_eta'].tolist()[0]
     p_eb_c_inv = df_eb['p_eb_c_inv'].tolist()[0]
     # p_eb_c_fix = df_eb['p_eb_c_fix'].tolist()[0]
@@ -95,10 +99,9 @@ for year in years:
     p_wi_heat = df_wi['p_wi_heat'].tolist()[0]
     p_wi_elec = df_wi['p_wi_elec'].tolist()[0]    
     p_wi_co2_share = df_wi['p_wi_co2_share'].tolist()[0]
-    p_wi_c_co2 = df_wi['p_wi_c_co2'].tolist()[0]
     p_wi_c_inv = df_wi['p_wi_c_inv'].tolist()[0]
     # p_wi_c_fix = df_wi['p_wi_c_fix'].tolist()[0]
-    data_wi[year] = {'p_wi_eta' : p_wi_eta, 'p_wi_q_waste': p_wi_q_waste, 'p_wi_c_waste': p_wi_c_waste, 'p_wi_h_waste': p_wi_h_waste, 'p_wi_heat': p_wi_heat, 'p_wi_elec': p_wi_elec, 'p_wi_co2_share': p_wi_co2_share, 'p_wi_c_co2': p_wi_c_co2, 'p_wi_c_inv': p_wi_c_inv}
+    data_wi[year] = {'p_wi_eta' : p_wi_eta, 'p_wi_q_waste': p_wi_q_waste, 'p_wi_c_waste': p_wi_c_waste, 'p_wi_h_waste': p_wi_h_waste, 'p_wi_heat': p_wi_heat, 'p_wi_elec': p_wi_elec, 'p_wi_co2_share': p_wi_co2_share, 'p_wi_c_inv': p_wi_c_inv}
     p_ttes_losses = df_ttes['p_ttes_losses'].tolist()[0]
     p_ttes_eta = df_ttes['p_ttes_eta'].tolist()[0]
     p_ttes_init = df_ttes['p_ttes_init'].tolist()[0]
@@ -115,7 +118,7 @@ for year in years:
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-data['basic'] = {'demand': demand_baltimore, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'ttes': data_ttes}
+data['basic'] = {'demand': demand_baltimore, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'ttes': data_ttes}
 data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours_per_year}
 model_name = 'FLXenabler'
 
@@ -131,6 +134,15 @@ model.set_scenarios = py.Set(initialize=data_structure['scenarios'])
 model.set_years = py.Set(initialize=data_structure['years'])
 model.set_hours = py.Set(initialize=data_structure['hours'])
 model.data_values = data
+
+#-----------------------------------------------------------------------------#
+#                                                                             #
+# adding the general parameters for the model                                 #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+from general import add_general_parameters
+add_general_parameters(model)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
