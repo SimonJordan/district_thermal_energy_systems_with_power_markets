@@ -18,7 +18,7 @@ def add_st_equations(m=None):
         return m.v_st_q_heat_in[y, t, s] == m.p_st_solar_radiation[y, t, s] * m.v_st_p[y, t, s] / 1000 * m.p_st_eta[y, s]
     
     def st_elec_heat(m, y, t, s):
-        return m.v_st_q_heat_in[y, t, s] == m.v_st_q_elec_in[y, t, s] * m.p_st_cop[y, s]
+        return m.v_st_q_heat_in[y, t, s] == m.v_st_q_elec_consumption[y, t, s] * m.p_st_cop[y, s]
      
     def st_p_max_bound(m, y, t, s):
         return m.v_st_p[y, t, s] <= m.v_st_P_max[y, s]
@@ -45,7 +45,7 @@ def add_st_equations(m=None):
             return m.v_st_c_fix[y, s] == (m.v_st_P_inv[y, s] * m.p_st_c_inv[y, s] + m.v_st_hp_Q_inv[y, s] * m.p_hp_c_inv[y, s]) * 0.02
     
     def st_c_var(m, y, t, s): # OPAM = operational and maintanance, förderung?
-        return m.v_st_c_var[y, t, s] == m.v_st_q_elec_in[y, t, s] * m.p_c_elec[y, t, s]
+        return m.v_st_c_var[y, t, s] == m.v_st_q_elec_consumption[y, t, s] * m.p_c_elec[y, t, s]
     
     m.con_st_feed_in_max_bound = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                                rule = st_feed_in_max_bound)
@@ -87,9 +87,9 @@ def add_st_variables(m=None):
                               domain = py.NonNegativeReals,
                               doc = 'heat energy feed in from solar thermal per scenario, year and hour')
     
-    m.v_st_q_elec_in = py.Var(m.set_years, m.set_hours, m.set_scenarios,
-                              domain = py.NonNegativeReals,
-                              doc = 'electricity input of solar thermal per scenario, year and hour')
+    m.v_st_q_elec_consumption = py.Var(m.set_years, m.set_hours, m.set_scenarios,
+                                       domain = py.NonNegativeReals,
+                                       doc = 'electricity input of solar thermal per scenario, year and hour')
     
     # m.v_st_eta_avg = py.Var(m.set_years, m.set_scenarios,
     #                         domain = py.NonNegativeReals,
