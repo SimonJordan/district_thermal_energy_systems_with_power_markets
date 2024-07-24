@@ -21,7 +21,7 @@ def add_ttes_equations(m=None):
         return m.v_ttes_k_thermal[y, 8759, s] == m.v_ttes_k_thermal_max[y, s] * m.p_ttes_end[y, s]
 
     def ttes_elec_heat(m, y, t, s):
-        return m.v_ttes_q_thermal_in[y, t, s] == m.v_ttes_q_elec_in[y, t, s] * m.p_ttes_cop[y, s]
+        return m.v_ttes_q_thermal_in[y, t, s] == m.v_ttes_q_elec_consumption[y, t, s] * m.p_ttes_cop[y, s]
     
     def ttes_k_inv(m, y, s):
         if (y - 5) in m.set_years:
@@ -45,7 +45,7 @@ def add_ttes_equations(m=None):
             return m.v_ttes_c_fix[y, s] == (m.v_ttes_k_inv[y, s] * m.p_ttes_c_inv[y, s] + m.v_ttes_hp_Q_inv[y, s] * m.p_hp_c_inv[y, s]) * 0.02 + m.v_ttes_k_thermal_max[y, s] * m.p_c_mean_elec[y, s] * m.p_ttes_elec[y, s]
     
     def ttes_c_var(m, y, t, s):
-        return m.v_ttes_c_var[y, t, s] == m.v_ttes_q_elec_in[y, t, s] * m.p_c_elec[y, t, s] + (m.v_ttes_q_thermal_in[y, t, s] + m.v_ttes_q_thermal_out[y, t, s]) * m.p_ttes_c_charge_discharge[y, s] # + m.v_c_opam[y, s]
+        return m.v_ttes_c_var[y, t, s] == m.v_ttes_q_elec_consumption[y, t, s] * m.p_c_elec[y, t, s] + (m.v_ttes_q_thermal_in[y, t, s] + m.v_ttes_q_thermal_out[y, t, s]) * m.p_ttes_c_charge_discharge[y, s] # + m.v_c_opam[y, s]
 
     m.con_ttes_feed_in_max_bound = py.Constraint(m.set_years, m.set_hours, m.set_scenarios,
                                                  rule = ttes_feed_in_max_bound)
@@ -106,17 +106,17 @@ def add_ttes_variables(m=None):
                                     domain = py.NonNegativeReals,
                                     doc = 'maximum state of charge per scenario, year and hour')
     
-    m.v_ttes_q_elec_in = py.Var(m.set_years, m.set_hours, m.set_scenarios,
-                                domain = py.NonNegativeReals,
-                                doc = 'electricity input of heat pump per scenario, year and hour')
+    m.v_ttes_q_elec_consumption = py.Var(m.set_years, m.set_hours, m.set_scenarios,
+                                         domain = py.NonNegativeReals,
+                                         doc = 'electricity input of heat pump per scenario, year and hour')
    
     m.v_ttes_k_inv = py.Var(m.set_years, m.set_scenarios,
                             domain = py.NonNegativeReals,
-                            doc = 'installed capacity of TTES per scenario and year in EUR')
+                            doc = 'new installed capacity of TTES per scenario and year in EUR')
    
     m.v_ttes_hp_Q_inv = py.Var(m.set_years, m.set_scenarios,
                                domain = py.NonNegativeReals,
-                               doc = 'installed capacity of hp for TTES per scenario and year in EUR')
+                               doc = 'new installed capacity of hp for TTES per scenario and year in EUR')
     
     m.v_ttes_c_inv = py.Var(m.set_years, m.set_scenarios,
                             domain = py.NonNegativeReals,
