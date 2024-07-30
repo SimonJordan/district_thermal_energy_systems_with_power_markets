@@ -77,7 +77,7 @@ def add_eb_variables(m=None):
                           doc = 'fix costs of eb per scenario and year in EUR')
     
     m.v_eb_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
-                          domain = py.NonNegativeReals,
+                          domain = py.Reals,
                           doc = 'var costs of eb per scenario, year and hour in EUR')
 
 def add_eb_parameters(m=None):

@@ -123,11 +123,11 @@ def add_ttes_variables(m=None):
                             doc = 'inv costs of TTES per scenario and year in EUR')
     
     m.v_ttes_c_fix = py.Var(m.set_years, m.set_scenarios,
-                            domain = py.NonNegativeReals,
+                            domain = py.Reals,
                             doc = 'fix costs of TTES per scenario and year in EUR')
     
     m.v_ttes_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
-                            domain = py.NonNegativeReals,
+                            domain = py.Reals,
                             doc = 'var costs of TTES per scenario, year and hour in EUR')
     
 def add_ttes_parameters(m=None):
@@ -156,9 +156,6 @@ def add_ttes_parameters(m=None):
     
     def init_ttes_c_charge_discharge(m, y, s):
         return m.data_values[s]['ttes'][y]['p_ttes_c_charge_discharge']
-    
-    # def init_c_elec(m, y, t, s):
-    #     return m.data_values[s]['electricity_price'][y][t]
     
     m.p_ttes_losses = py.Param(m.set_years, m.set_scenarios,
                                initialize = init_ttes_losses,
@@ -200,11 +197,6 @@ def add_ttes_parameters(m=None):
                                            within = py.NonNegativeReals,
                                            doc = 'charge/discharge price per scenario, year and hour')
     
-    # m.p_c_elec = py.Param(m.set_years, m.set_hours, m.set_scenarios,
-    #                       initialize = init_c_elec,
-    #                       within = py.Reals,
-    #                       doc = 'specific electriyity prices year hour and scenario')
-
     # m.p_c_opam = py.Param( #Einlesen von Inputs fehlt!
     #     m.set_years * m.set_scenarios,
     #     within = py.NonNegativeReals,
