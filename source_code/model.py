@@ -34,6 +34,8 @@ data_eb = {}
 data_hp = {}
 data_st = {}
 data_wi = {}
+data_gt = {}
+data_dgt = {}
 data_ttes = {}
 data = {}
 
@@ -54,6 +56,8 @@ path_to_file_eb = os.path.join(path_to_input_folder, 'eb.xlsx')
 path_to_file_hp = os.path.join(path_to_input_folder, 'hp.xlsx')
 path_to_file_st = os.path.join(path_to_input_folder, 'st.xlsx')
 path_to_file_wi = os.path.join(path_to_input_folder, 'wi.xlsx')
+path_to_file_gt = os.path.join(path_to_input_folder, 'gt.xlsx')
+path_to_file_dgt = os.path.join(path_to_input_folder, 'dgt.xlsx')
 path_to_file_ttes = os.path.join(path_to_input_folder, 'ttes.xlsx')
 
 #-----------------------------------------------------------------------------#
@@ -72,6 +76,8 @@ for year in years:
     df_hp = pd.read_excel(path_to_file_hp, sheet_name=str(year))
     df_st = pd.read_excel(path_to_file_st, sheet_name=str(year))
     df_wi = pd.read_excel(path_to_file_wi, sheet_name=str(year))
+    df_gt = pd.read_excel(path_to_file_gt, sheet_name=str(year))
+    df_dgt = pd.read_excel(path_to_file_dgt, sheet_name=str(year))
     df_ttes = pd.read_excel(path_to_file_ttes, sheet_name=str(year))
     hours_per_year = df_demand_baltimore['hour'].tolist()
     demand_baltimore[year] = df_demand_baltimore['demand_baltimore'].tolist()
@@ -102,6 +108,13 @@ for year in years:
     p_wi_c_inv = df_wi['p_wi_c_inv'].tolist()[0]
     # p_wi_c_fix = df_wi['p_wi_c_fix'].tolist()[0]
     data_wi[year] = {'p_wi_eta' : p_wi_eta, 'p_wi_q_waste': p_wi_q_waste, 'p_wi_c_waste': p_wi_c_waste, 'p_wi_h_waste': p_wi_h_waste, 'p_wi_heat': p_wi_heat, 'p_wi_elec': p_wi_elec, 'p_wi_co2_share': p_wi_co2_share, 'p_wi_c_inv': p_wi_c_inv}
+    p_gt_c_inv = df_gt['p_gt_c_inv'].tolist()[0]
+    # p_gt_c_fix = df_gt['p_gt_c_fix'].tolist()[0]
+    p_gt_cop = df_gt['p_gt_cop'].tolist()[0]
+    data_gt[year] = {'p_gt_c_inv' : p_gt_c_inv, 'p_gt_cop': p_gt_cop}
+    p_dgt_c_inv = df_dgt['p_dgt_c_inv'].tolist()[0]
+    # p_dgt_c_fix = df_dgt['p_dgt_c_fix'].tolist()[0]
+    data_dgt[year] = {'p_dgt_c_inv' : p_dgt_c_inv}
     p_ttes_losses = df_ttes['p_ttes_losses'].tolist()[0]
     p_ttes_eta = df_ttes['p_ttes_eta'].tolist()[0]
     p_ttes_init = df_ttes['p_ttes_init'].tolist()[0]
@@ -118,7 +131,7 @@ for year in years:
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-data['basic'] = {'demand': demand_baltimore, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'ttes': data_ttes}
+data['basic'] = {'demand': demand_baltimore, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ttes': data_ttes}
 data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours_per_year}
 model_name = 'FLXenabler'
 
@@ -170,6 +183,16 @@ add_wi_parameters(model)
 add_wi_variables(model)
 add_wi_equations(model)
 
+from gt import add_gt_variables, add_gt_parameters, add_gt_equations
+add_gt_parameters(model)
+add_gt_variables(model)
+add_gt_equations(model)
+
+from dgt import add_dgt_variables, add_dgt_parameters, add_dgt_equations
+add_dgt_parameters(model)
+add_dgt_variables(model)
+add_dgt_equations(model)
+
 #-----------------------------------------------------------------------------#
 #                                                                             #
 # adding the parameters, variables and equations of the storage technologies  #
@@ -188,7 +211,7 @@ add_ttes_equations(model)
 #-----------------------------------------------------------------------------#
 
 def demand_balance(m, y, t, s):
-    return m.v_eb_q_heat_in[y, t, s] + m.v_hp_q_heat_in[y, t, s] + m.v_st_q_heat_in[y, t, s] + m.v_wi_q_heat_in[y, t, s] + m.v_ttes_q_thermal_in[y, t, s] - m.v_ttes_q_thermal_out[y, t, s] == model.data_values[s]['demand'][y][t]
+    return m.v_eb_q_heat_in[y, t, s] + m.v_hp_q_heat_in[y, t, s] + m.v_st_q_heat_in[y, t, s] + m.v_wi_q_heat_in[y, t, s] + m.v_gt_q_heat_in[y, t, s] + m.v_dgt_q_heat_in[y, t, s] + m.v_ttes_q_thermal_in[y, t, s] - m.v_ttes_q_thermal_out[y, t, s] == model.data_values[s]['demand'][y][t]
 
 model.con_demand_balance = py.Constraint(model.set_years, model.set_hours, model.set_scenarios, rule=demand_balance)
 
@@ -203,6 +226,8 @@ def objective_function(m):
            sum(m.v_hp_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_hp_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_hp_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
            sum(m.v_st_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_st_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_st_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
            sum(m.v_wi_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_wi_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_wi_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
+           sum(m.v_gt_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_gt_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_gt_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
+           sum(m.v_dgt_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_dgt_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_dgt_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
            sum(m.v_ttes_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios)
 
 model.obj = py.Objective(expr=objective_function, sense=py.minimize)
