@@ -36,6 +36,7 @@ data_st = {}
 data_wi = {}
 data_gt = {}
 data_dgt = {}
+data_ieh = {}
 data_ttes = {}
 data = {}
 
@@ -52,12 +53,14 @@ path_to_file_electricity_price = os.path.join(path_to_input_folder, 'electricity
 path_to_file_co2_price = os.path.join(path_to_input_folder, 'co2_price.xlsx')
 path_to_file_hp_cop = os.path.join(path_to_input_folder, 'temperature_baltimore.xlsx')
 path_to_file_solar_radiation = os.path.join(path_to_input_folder, 'solar_radiation_baltimore.xlsx')
+path_to_file_ieh_profile = os.path.join(path_to_input_folder, 'ieh_profile.xlsx')
 path_to_file_eb = os.path.join(path_to_input_folder, 'eb.xlsx')
 path_to_file_hp = os.path.join(path_to_input_folder, 'hp.xlsx')
 path_to_file_st = os.path.join(path_to_input_folder, 'st.xlsx')
 path_to_file_wi = os.path.join(path_to_input_folder, 'wi.xlsx')
 path_to_file_gt = os.path.join(path_to_input_folder, 'gt.xlsx')
 path_to_file_dgt = os.path.join(path_to_input_folder, 'dgt.xlsx')
+path_to_file_ieh = os.path.join(path_to_input_folder, 'ieh.xlsx')
 path_to_file_ttes = os.path.join(path_to_input_folder, 'ttes.xlsx')
 
 #-----------------------------------------------------------------------------#
@@ -72,12 +75,14 @@ for year in years:
     df_co2_price = pd.read_excel(path_to_file_co2_price, sheet_name=str(year))
     df_hp_cop = pd.read_excel(path_to_file_hp_cop, sheet_name=str(year))
     df_solar_radiation = pd.read_excel(path_to_file_solar_radiation, sheet_name=str(year))
+    df_ieh_profile = pd.read_excel(path_to_file_ieh_profile, sheet_name=str(year))
     df_eb = pd.read_excel(path_to_file_eb, sheet_name=str(year))
     df_hp = pd.read_excel(path_to_file_hp, sheet_name=str(year))
     df_st = pd.read_excel(path_to_file_st, sheet_name=str(year))
     df_wi = pd.read_excel(path_to_file_wi, sheet_name=str(year))
     df_gt = pd.read_excel(path_to_file_gt, sheet_name=str(year))
     df_dgt = pd.read_excel(path_to_file_dgt, sheet_name=str(year))
+    df_ieh = pd.read_excel(path_to_file_ieh, sheet_name=str(year))
     df_ttes = pd.read_excel(path_to_file_ttes, sheet_name=str(year))
     hours_per_year = df_demand_baltimore['hour'].tolist()
     demand_baltimore[year] = df_demand_baltimore['demand_baltimore'].tolist()
@@ -115,6 +120,12 @@ for year in years:
     p_dgt_c_inv = df_dgt['p_dgt_c_inv'].tolist()[0]
     # p_dgt_c_fix = df_dgt['p_dgt_c_fix'].tolist()[0]
     data_dgt[year] = {'p_dgt_c_inv' : p_dgt_c_inv}
+    p_ieh_c_inv = df_ieh['p_ieh_c_inv'].tolist()[0]
+    # p_ieh_c_fix = df_ieh['p_ieh_c_fix'].tolist()[0]
+    p_ieh_c_in = df_ieh['p_ieh_c_in'].tolist()[0]
+    p_ieh_elec = df_ieh['p_ieh_elec'].tolist()[0]
+    p_ieh_in = df_ieh_profile['p_ieh_in'].tolist()
+    data_ieh[year] = {'p_ieh_c_inv' : p_ieh_c_inv, 'p_ieh_c_in': p_ieh_c_in, 'p_ieh_elec': p_ieh_elec, 'p_ieh_in': p_ieh_in}
     p_ttes_losses = df_ttes['p_ttes_losses'].tolist()[0]
     p_ttes_eta = df_ttes['p_ttes_eta'].tolist()[0]
     p_ttes_init = df_ttes['p_ttes_init'].tolist()[0]
@@ -131,7 +142,7 @@ for year in years:
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-data['basic'] = {'demand': demand_baltimore, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ttes': data_ttes}
+data['basic'] = {'demand': demand_baltimore, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'ttes': data_ttes}
 data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours_per_year}
 model_name = 'FLXenabler'
 
@@ -193,6 +204,11 @@ add_dgt_parameters(model)
 add_dgt_variables(model)
 add_dgt_equations(model)
 
+from ieh import add_ieh_variables, add_ieh_parameters, add_ieh_equations
+add_ieh_parameters(model)
+add_ieh_variables(model)
+add_ieh_equations(model)
+
 #-----------------------------------------------------------------------------#
 #                                                                             #
 # adding the parameters, variables and equations of the storage technologies  #
@@ -211,7 +227,7 @@ add_ttes_equations(model)
 #-----------------------------------------------------------------------------#
 
 def demand_balance(m, y, t, s):
-    return m.v_eb_q_heat_in[y, t, s] + m.v_hp_q_heat_in[y, t, s] + m.v_st_q_heat_in[y, t, s] + m.v_wi_q_heat_in[y, t, s] + m.v_gt_q_heat_in[y, t, s] + m.v_dgt_q_heat_in[y, t, s] + m.v_ttes_q_thermal_in[y, t, s] - m.v_ttes_q_thermal_out[y, t, s] == model.data_values[s]['demand'][y][t]
+    return m.v_eb_q_heat_in[y, t, s] + m.v_hp_q_heat_in[y, t, s] + m.v_st_q_heat_in[y, t, s] + m.v_wi_q_heat_in[y, t, s] + m.v_gt_q_heat_in[y, t, s] + m.v_dgt_q_heat_in[y, t, s] + m.v_ieh_q_heat_in[y, t, s] + m.v_ttes_q_thermal_in[y, t, s] - m.v_ttes_q_thermal_out[y, t, s] == model.data_values[s]['demand'][y][t]
 
 model.con_demand_balance = py.Constraint(model.set_years, model.set_hours, model.set_scenarios, rule=demand_balance)
 
@@ -228,6 +244,7 @@ def objective_function(m):
            sum(m.v_wi_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_wi_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_wi_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
            sum(m.v_gt_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_gt_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_gt_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
            sum(m.v_dgt_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_dgt_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_dgt_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
+           sum(m.v_ieh_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ieh_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ieh_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
            sum(m.v_ttes_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios)
 
 model.obj = py.Objective(expr=objective_function, sense=py.minimize)
