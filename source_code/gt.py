@@ -77,7 +77,7 @@ def add_gt_variables(m=None):
                           doc = 'fix costs of gt per scenario and year in EUR')
     
     m.v_gt_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
-                          domain = py.NonNegativeReals,
+                          domain = py.Reals,
                           doc = 'var costs of gt per scenario, year and hour in EUR')
 
 def add_gt_parameters(m=None):

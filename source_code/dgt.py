@@ -67,7 +67,7 @@ def add_dgt_variables(m=None):
                            doc = 'fix costs of dgt per scenario and year in EUR')
     
     m.v_dgt_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
-                           domain = py.NonNegativeReals,
+                           domain = py.Reals,
                            doc = 'var costs of dgt per scenario, year and hour in EUR')
 
 def add_dgt_parameters(m=None):

@@ -124,7 +124,7 @@ def add_st_variables(m=None):
                             doc = 'fix costs of st per scenario and year in EUR')
     
     m.v_st_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
-                            domain = py.NonNegativeReals,
+                            domain = py.Reals,
                             doc = 'var costs of st per scenario, year and hour in EUR')
 
 def add_st_parameters(m=None):
