@@ -67,7 +67,7 @@ def add_ieh_variables(m=None):
                            doc = 'fix costs of ieh per scenario and year in EUR')
     
     m.v_ieh_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
-                           domain = py.NonNegativeReals,
+                           domain = py.Reals,
                            doc = 'var costs of ieh per scenario, year and hour in EUR')
 
 def add_ieh_parameters(m=None):

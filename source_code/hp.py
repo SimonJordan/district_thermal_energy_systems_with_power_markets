@@ -77,7 +77,7 @@ def add_hp_variables(m=None):
                           doc = 'fix costs of hp per scenario and year in EUR')
     
     m.v_hp_c_var = py.Var(m.set_years, m.set_hours, m.set_scenarios,
-                          domain = py.NonNegativeReals,
+                          domain = py.Reals,
                           doc = 'var costs of hp per scenario, year and hour in EUR')
 
 def add_hp_parameters(m=None):
