@@ -6,6 +6,8 @@ import datetime
 import numpy as np
 import pandas as pd
 import pyomo.environ as py
+import plotly.io as pio
+import plotly.graph_objects as go
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -301,7 +303,7 @@ hours_1 = elapsed_time_1 // 3600
 minutes_1 = (elapsed_time_1 % 3600) // 60
 seconds_1 = elapsed_time_1 % 60
 
-print('Script intermediate time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_1, minutes_1, seconds_1))
+print('Script initializing time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_1, minutes_1, seconds_1))
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -377,22 +379,117 @@ print(solution)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
-# setting end point for runtime measurement                                   #
+# setting intermediate point for runtime measurement                          #
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-end_time = time.time()
-elapsed_time_2 = end_time - start_time
+intermediate_time_2 = time.time()
+elapsed_time_2 = intermediate_time_2 - start_time
+start_time = intermediate_time_2
 hours_2 = elapsed_time_2 // 3600
 minutes_2 = (elapsed_time_2 % 3600) // 60
 seconds_2 = elapsed_time_2 % 60
 
 print('Script solving time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_2, minutes_2, seconds_2))
 
-seconds = seconds_1 + seconds_2
-minutes = minutes_1 + minutes_2 + seconds // 60
+#-----------------------------------------------------------------------------#
+#                                                                             #
+# visualization of the data                                                   #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+pio.renderers.default = 'browser'
+
+hours = model.set_hours
+visualize_year = 2025
+visualize_scenario = 'basic'
+
+eb_in = []
+hp_in = []
+st_in = []
+wi_in = []
+gt_in = []
+dgt_in = []
+ieh_in = []
+chp_in = []
+ates_in = []
+ates_out = []
+ttes_in = []
+ttes_out = []
+
+demand = heating_demand[visualize_year]
+
+for hour in range(8760):
+    eb_in.append(py.value(model.v_eb_q_heat_in[visualize_year, hour, visualize_scenario]))
+    hp_in.append(py.value(model.v_hp_q_heat_in[visualize_year, hour, visualize_scenario]))
+    st_in.append(py.value(model.v_st_q_heat_in[visualize_year, hour, visualize_scenario]))
+    wi_in.append(py.value(model.v_wi_q_heat_in[visualize_year, hour, visualize_scenario]))
+    gt_in.append(py.value(model.v_gt_q_heat_in[visualize_year, hour, visualize_scenario]))
+    dgt_in.append(py.value(model.v_dgt_q_heat_in[visualize_year, hour, visualize_scenario]))
+    ieh_in.append(py.value(model.v_ieh_q_heat_in[visualize_year, hour, visualize_scenario]))
+    chp_in.append(py.value(model.v_chp_q_heat_in[visualize_year, hour, visualize_scenario]))
+    ates_in.append(py.value(model.v_ates_q_thermal_in[visualize_year, hour, visualize_scenario]))
+    ates_out.append(-py.value(model.v_ates_q_thermal_out[visualize_year, hour, visualize_scenario]))
+    ttes_in.append(py.value(model.v_ttes_q_thermal_in[visualize_year, hour, visualize_scenario]))
+    ttes_out.append(-py.value(model.v_ttes_q_thermal_out[visualize_year, hour, visualize_scenario]))
+
+df = pd.DataFrame({'hour': hours, 'demand': demand, 'eb': eb_in, 'hp': hp_in, 'st': st_in, 'wi': wi_in, 'gt': gt_in, 'dgt': dgt_in, 'ieh': ieh_in, 'chp': chp_in, 'ates+': ates_in, 'ates-': ates_out, 'ttes+': ttes_in, 'ttes-': ttes_out})
+
+fig = go.Figure()
+
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['demand'], fill='tozeroy', name='Demand'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['eb'], fill='tonexty', name='Electric Boiler'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['hp'], fill='tonexty', name='Heat Pump'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['st'], fill='tonexty', name='Solar Thermal'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['wi'], fill='tonexty', name='Waste Incineration'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['gt'], fill='tonexty', name='Geothermal'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['dgt'], fill='tonexty', name='Deep Geothermal'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['ieh'], fill='tonexty', name='Industrial Excess Heat'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['chp'], fill='tonexty', name='Combined Heat and Power'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['ates+'], fill='tonexty', name='ATES in'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['ates-'], fill='tonexty', name='ATES out'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['ttes+'], fill='tonexty', name='TTES in'))
+# fig.add_trace(go.Scatter(x=df['hour'], y=df['ttes-'], fill='tonexty', name='TTES out'))
+
+fig.add_trace(go.Scatter(x=df['hour'], y=df['demand'], mode='lines', name='Demand', line=dict(color='black', width=2)))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['eb'], mode='lines', name='Electric Boiler', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['hp'], mode='lines', name='Heat Pump', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['st'], mode='lines', name='Solar Thermal', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['wi'], mode='lines', name='Waste Incineration', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['gt'], mode='lines', name='Geothermal', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['dgt'], mode='lines', name='Deep Geothermal', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['ieh'], mode='lines', name='Industrial Excess Heat', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['chp'], mode='lines', name='Combined Heat and Power', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['ates+'], mode='lines', name='ATES in', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['ates-'], mode='lines', name='ATES out', stackgroup='two'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['ttes+'], mode='lines', name='TTES in', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['ttes-'], mode='lines', name='TTES out', stackgroup='two'))
+
+
+fig.update_layout(title='Load Curve', xaxis_title='time in h', yaxis_title='energy in MWh', legend_title='Technologies')
+
+fig.show()
+
+
+
+#-----------------------------------------------------------------------------#
+#                                                                             #
+# setting end point for runtime measurement                                   #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+end_time = time.time()
+elapsed_time_3 = end_time - start_time
+hours_3 = elapsed_time_3 // 3600
+minutes_3 = (elapsed_time_3 % 3600) // 60
+seconds_3 = elapsed_time_3 % 60
+
+print('Script visualizing time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_3, minutes_3, seconds_3))
+
+seconds = seconds_1 + seconds_2 + seconds_3
+minutes = minutes_1 + minutes_2 + minutes_3 + seconds // 60
 seconds = seconds % 60
-hours = hours_1 + hours_2 + minutes // 60
+hours = hours_1 + hours_2 + hours_3 + minutes // 60
 minutes = minutes % 60
 
 print('Script execution time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours, minutes, seconds))
