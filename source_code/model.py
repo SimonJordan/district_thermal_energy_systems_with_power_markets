@@ -26,7 +26,7 @@ print('Start of the script at:', formatted_time)
 
 scenarios = ['basic']
 years = [2025, 2030, 2035, 2040, 2045, 2050]
-demand_baltimore = {}
+heating_demand = {}
 electricity_price = {}
 gas_price = {}
 electricity_mean_price = {}
@@ -51,7 +51,7 @@ data = {}
 
 cur_dir = os.path.dirname(__file__)
 path_to_input_folder = os.path.join(cur_dir, 'data')
-path_to_file_demand_baltimore = os.path.join(path_to_input_folder, 'demand_baltimore.xlsx')
+path_to_file_demand = os.path.join(path_to_input_folder, 'demand.xlsx')
 path_to_file_electricity_price = os.path.join(path_to_input_folder, 'electricity_price.xlsx')
 path_to_file_gas_price = os.path.join(path_to_input_folder, 'gas_price.xlsx')
 path_to_file_co2_price = os.path.join(path_to_input_folder, 'co2_price.xlsx')
@@ -76,7 +76,7 @@ path_to_file_ttes = os.path.join(path_to_input_folder, 'ttes.xlsx')
 #-----------------------------------------------------------------------------#
 
 for year in years:
-    df_demand_baltimore = pd.read_excel(path_to_file_demand_baltimore, sheet_name=str(year))
+    df_demand = pd.read_excel(path_to_file_demand, sheet_name=str(year))
     df_electricity_price = pd.read_excel(path_to_file_electricity_price, sheet_name=str(year))
     df_gas_price = pd.read_excel(path_to_file_gas_price, sheet_name=str(year))
     df_co2_price = pd.read_excel(path_to_file_co2_price, sheet_name=str(year))
@@ -93,8 +93,8 @@ for year in years:
     df_chp = pd.read_excel(path_to_file_chp, sheet_name=str(year))
     df_ates = pd.read_excel(path_to_file_ates, sheet_name=str(year))
     df_ttes = pd.read_excel(path_to_file_ttes, sheet_name=str(year))
-    hours_per_year = df_demand_baltimore['hour'].tolist()
-    demand_baltimore[year] = df_demand_baltimore['demand_baltimore'].tolist()
+    hours_per_year = df_demand['hour'].tolist()
+    heating_demand[year] = df_demand['heating_demand_districts_building'].tolist()
     electricity_price[year] = df_electricity_price['electricity_price'].tolist()
     electricity_mean_price[year] = np.mean(electricity_price[year])
     gas_price[year] = df_gas_price['gas_price'].tolist()
@@ -169,7 +169,7 @@ for year in years:
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-data['basic'] = {'demand': demand_baltimore, 'electricity_price': electricity_price, 'gas_price': gas_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
+data['basic'] = {'demand': heating_demand, 'electricity_price': electricity_price, 'gas_price': gas_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
 data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours_per_year}
 model_name = 'FLXenabler'
 
