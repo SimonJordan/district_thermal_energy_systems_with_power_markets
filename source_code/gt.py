@@ -3,19 +3,19 @@ import pyomo.environ as py
 def add_gt_equations(m=None):
 
     def gt_feed_in_max_bound(m, s, y, t):
-        return m.v_gt_q_heat_in[s, y, t] <= m.v_gt_Q_heat_max[s, y]
+        return m.v_gt_q_heat_in[s, y, t] <= m.v_gt_Q_heat_max[y]
     
     # def gt_limit(m, s, y):
-    #     return m.v_gt_Q_heat_max[s, y] <= 300
+    #     return m.v_gt_Q_heat_max[y] <= 300
     
     def gt_elec_heat(m, s, y, t): 
         return m.v_gt_q_heat_in[s, y, t] == m.v_gt_q_elec_consumption[s, y, t] * m.p_gt_cop[s, y]
      
     def gt_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_gt_Q_inv[s, y] == (m.v_gt_Q_heat_max[s, y] - m.v_gt_Q_heat_max[s, y-5])
+            return m.v_gt_Q_inv[s, y] == (m.v_gt_Q_heat_max[y] - m.v_gt_Q_heat_max[y-5])
         else:
-            return m.v_gt_Q_inv[s, y] == m.v_gt_Q_heat_max[s, y]
+            return m.v_gt_Q_inv[s, y] == m.v_gt_Q_heat_max[y]
     
     def gt_c_inv(m, s, y):
         return m.v_gt_c_inv[s, y] == m.v_gt_Q_inv[s, y] * (m.p_gt_c_inv[s, y] + m.p_hp_c_inv[s, y])
@@ -60,7 +60,7 @@ def add_gt_variables(m=None):
                                        domain = py.NonNegativeReals,
                                        doc = 'electricity input of large-scale geothermal per scenario, year, and hour')
     
-    m.v_gt_Q_heat_max = py.Var(m.set_scenarios, m.set_years,
+    m.v_gt_Q_heat_max = py.Var(m.set_years,
                                domain = py.NonNegativeReals,
                                doc = 'max heat feed in from large-scale geothermal for district heating')
     

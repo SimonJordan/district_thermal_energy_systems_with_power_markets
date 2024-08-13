@@ -3,46 +3,46 @@ import pyomo.environ as py
 def add_ttes_equations(m=None):
     
     def ttes_feed_in_max_bound(m, s, y, t):
-        return m.v_ttes_q_thermal_in[s, y, t] <= m.v_ttes_Q_thermal_max[s, y]
+        return m.v_ttes_q_thermal_in[s, y, t] <= m.v_ttes_Q_thermal_max[y]
 
     def ttes_storage_max_bound(m, s, y, t):
-        return m.v_ttes_q_thermal_out[s, y, t] <= m.v_ttes_hp_Q_max[s, y]
+        return m.v_ttes_q_thermal_out[s, y, t] <= m.v_ttes_hp_Q_max[y]
 
     def ttes_soc_max_bound(m, s, y, t):
-        return m.v_ttes_k_thermal[s, y, t] <= m.v_ttes_k_thermal_max[s, y]
+        return m.v_ttes_k_thermal[s, y, t] <= m.v_ttes_k_thermal_max[y]
 
     def ttes_soc(m, s, y, t):
         if t == 0:
-            return m.v_ttes_k_thermal[s, y, 0] == m.v_ttes_k_thermal_max[s, y] * m.p_ttes_losses[s, y] * m.p_ttes_init[s, y] + m.v_ttes_q_thermal_out[s, y, 0] * m.p_ttes_eta[s, y] - m.v_ttes_q_thermal_in[s, y, 0] / m.p_ttes_eta[s, y]
+            return m.v_ttes_k_thermal[s, y, 0] == m.v_ttes_k_thermal_max[y] * m.p_ttes_losses[s, y] * m.p_ttes_init[s, y] + m.v_ttes_q_thermal_out[s, y, 0] * m.p_ttes_eta[s, y] - m.v_ttes_q_thermal_in[s, y, 0] / m.p_ttes_eta[s, y]
         else:
             return m.v_ttes_k_thermal[s, y, t] == m.v_ttes_k_thermal[s, y, t-1] * m.p_ttes_losses[s, y] + m.v_ttes_q_thermal_out[s, y, t] * m.p_ttes_eta[s, y] - m.v_ttes_q_thermal_in[s, y, t] / m.p_ttes_eta[s, y]
     
     def ttes_soc_final(m, s, y, t):
-        return m.v_ttes_k_thermal[s, y, 8759] == m.v_ttes_k_thermal_max[s, y] * m.p_ttes_end[s, y]
+        return m.v_ttes_k_thermal[s, y, 8759] == m.v_ttes_k_thermal_max[y] * m.p_ttes_end[s, y]
 
     def ttes_elec_heat(m, s, y, t):
         return m.v_ttes_q_thermal_in[s, y, t] == m.v_ttes_q_elec_consumption[s, y, t] * m.p_ttes_cop[s, y]
     
     def ttes_k_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_k_inv[s, y] == (m.v_ttes_k_thermal_max[s, y] - m.v_ttes_k_thermal_max[s, y-5])
+            return m.v_ttes_k_inv[s, y] == (m.v_ttes_k_thermal_max[y] - m.v_ttes_k_thermal_max[y-5])
         else:
-            return m.v_ttes_k_inv[s, y] == m.v_ttes_k_thermal_max[s, y]
+            return m.v_ttes_k_inv[s, y] == m.v_ttes_k_thermal_max[y]
     
     def ttes_hp_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_hp_Q_inv[s, y] == (m.v_ttes_hp_Q_max[s, y] - m.v_ttes_hp_Q_max[s, y-5])
+            return m.v_ttes_hp_Q_inv[s, y] == (m.v_ttes_hp_Q_max[y] - m.v_ttes_hp_Q_max[y-5])
         else:
-            return m.v_ttes_hp_Q_inv[s, y] == m.v_ttes_hp_Q_max[s, y]
+            return m.v_ttes_hp_Q_inv[s, y] == m.v_ttes_hp_Q_max[y]
    
     def ttes_c_inv(m, s, y):
         return m.v_ttes_c_inv[s, y] == m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]
     
     def ttes_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_c_fix[s, y] == m.v_ttes_c_fix[s, y-5] + (m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ttes_k_thermal_max[s, y] - m.v_ttes_k_thermal_max[s, y-5]) * m.p_c_mean_elec[s, y] * m.p_ttes_elec[s, y]
+            return m.v_ttes_c_fix[s, y] == m.v_ttes_c_fix[s, y-5] + (m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ttes_k_thermal_max[y] - m.v_ttes_k_thermal_max[y-5]) * m.p_c_mean_elec[s, y] * m.p_ttes_elec[s, y]
         else:
-            return m.v_ttes_c_fix[s, y] == (m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ttes_k_thermal_max[s, y] * m.p_c_mean_elec[s, y] * m.p_ttes_elec[s, y]
+            return m.v_ttes_c_fix[s, y] == (m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ttes_k_thermal_max[y] * m.p_c_mean_elec[s, y] * m.p_ttes_elec[s, y]
     
     def ttes_c_var(m, s, y, t):
         return m.v_ttes_c_var[s, y, t] == m.v_ttes_q_elec_consumption[s, y, t] * m.p_c_elec[s, y, t] + (m.v_ttes_q_thermal_in[s, y, t] + m.v_ttes_q_thermal_out[s, y, t]) * m.p_ttes_c_charge_discharge[s, y]
@@ -90,11 +90,11 @@ def add_ttes_variables(m=None):
                                     domain = py.NonNegativeReals,
                                     doc = 'thermal energy storing per scenario, year and hour')
     
-    m.v_ttes_Q_thermal_max = py.Var(m.set_scenarios, m.set_years,
+    m.v_ttes_Q_thermal_max = py.Var(m.set_years,
                                     domain = py.NonNegativeReals,
                                     doc = 'maximum thermal energy feed in per scenario and year')
     
-    m.v_ttes_hp_Q_max = py.Var(m.set_scenarios, m.set_years,
+    m.v_ttes_hp_Q_max = py.Var(m.set_years,
                                domain = py.NonNegativeReals,
                                doc = 'maximum thermal energy storing per scenario and year')
     
@@ -102,7 +102,7 @@ def add_ttes_variables(m=None):
                                 domain = py.NonNegativeReals,
                                 doc = 'state of charge per scenario, year and hour')
     
-    m.v_ttes_k_thermal_max = py.Var(m.set_scenarios, m.set_years,
+    m.v_ttes_k_thermal_max = py.Var(m.set_years,
                                     domain = py.NonNegativeReals,
                                     doc = 'maximum state of charge per scenario, year and hour')
     

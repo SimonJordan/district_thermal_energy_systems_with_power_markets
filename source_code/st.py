@@ -3,10 +3,10 @@ import pyomo.environ as py
 def add_st_equations(m=None):
 
     def st_feed_in_max_bound(m, s, y, t):
-        return m.v_st_q_heat_in[s, y, t] <= m.v_st_Q_heat_max[s, y]
+        return m.v_st_q_heat_in[s, y, t] <= m.v_st_Q_heat_max[y]
     
     # def st_limit(m, s, y):
-    #     return m.v_st_Q_heat_max[s, y] <= 200
+    #     return m.v_st_Q_heat_max[y] <= 200
     
     # def st_eta(m, s, y):
     #     if (y - 5) in m.set_years:
@@ -31,9 +31,9 @@ def add_st_equations(m=None):
         
     def st_hp_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_st_hp_Q_inv[s, y] == (m.v_st_Q_heat_max[s, y] - m.v_st_Q_heat_max[s, y-5])
+            return m.v_st_hp_Q_inv[s, y] == (m.v_st_Q_heat_max[y] - m.v_st_Q_heat_max[y-5])
         else:
-            return m.v_st_hp_Q_inv[s, y] == m.v_st_Q_heat_max[s, y]
+            return m.v_st_hp_Q_inv[s, y] == m.v_st_Q_heat_max[y]
        
     def st_c_inv(m, s, y):
         return m.v_st_c_inv[s, y] == m.v_st_P_inv[s, y] * m.p_st_c_inv[s, y] + m.v_st_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]
@@ -111,7 +111,7 @@ def add_st_variables(m=None):
                              domain = py.NonNegativeReals,
                              doc = 'new installed capacity of hp for st per scenario and year in EUR')
     
-    m.v_st_Q_heat_max = py.Var(m.set_scenarios, m.set_years,
+    m.v_st_Q_heat_max = py.Var(m.set_years,
                                domain = py.NonNegativeReals,
                                doc = 'max heat feed in from solar thermal for district heating')
     

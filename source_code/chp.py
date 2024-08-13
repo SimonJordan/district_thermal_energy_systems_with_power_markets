@@ -3,7 +3,7 @@ import pyomo.environ as py
 def add_chp_equations(m=None):
 
     def chp_feed_in_max_bound(m, s, y, t):
-        return m.v_chp_q_heat_in[s, y, t] + m.v_chp_q_elec_in[s, y, t] <= m.v_chp_Q_mix_max[s, y]
+        return m.v_chp_q_heat_in[s, y, t] + m.v_chp_q_elec_in[s, y, t] <= m.v_chp_Q_mix_max[y]
     
     def chp_gas_heat(m, s, y, t):
         return m.v_chp_q_heat_in[s, y, t] == m.v_chp_q_gas[s, y, t] * m.p_chp_eta[s, y] * m.p_chp_heat[s, y]
@@ -13,9 +13,9 @@ def add_chp_equations(m=None):
     
     def chp_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_chp_Q_inv[s, y] == (m.v_chp_Q_mix_max[s, y] - m.v_chp_Q_mix_max[s, y-5])
+            return m.v_chp_Q_inv[s, y] == (m.v_chp_Q_mix_max[y] - m.v_chp_Q_mix_max[y-5])
         else:
-            return m.v_chp_Q_inv[s, y] == m.v_chp_Q_mix_max[s, y]
+            return m.v_chp_Q_inv[s, y] == m.v_chp_Q_mix_max[y]
     
     def chp_c_inv(m, s, y):
         return m.v_chp_c_inv[s, y] == m.v_chp_Q_inv[s, y] * m.p_chp_c_inv[s, y]
@@ -64,7 +64,7 @@ def add_chp_variables(m=None):
                            domain = py.NonNegativeReals,
                            doc = 'gas consumption from combined heat and power per scenario, year and hour')
 
-    m.v_chp_Q_mix_max = py.Var(m.set_scenarios, m.set_years,
+    m.v_chp_Q_mix_max = py.Var(m.set_years,
                               domain = py.NonNegativeReals,
                               doc = 'max energy feed in from combined heat and power per scenario, year and hour')
     

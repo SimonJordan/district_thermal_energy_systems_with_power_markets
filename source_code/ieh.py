@@ -3,16 +3,16 @@ import pyomo.environ as py
 def add_ieh_equations(m=None):
 
     def ieh_feed_in_max_bound(m, s, y, t):
-        return m.v_ieh_q_heat_in[s, y, t] <= m.v_ieh_Q_heat_max[s, y]
+        return m.v_ieh_q_heat_in[s, y, t] <= m.v_ieh_Q_heat_max[y]
     
     def ieh_limit(m, s, y, t):
         return m.v_ieh_q_heat_in[s, y, t] <= m.p_ieh_in[s, y, t]
     
     def ieh_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ieh_Q_inv[s, y] == (m.v_ieh_Q_heat_max[s, y] - m.v_ieh_Q_heat_max[s, y-5])
+            return m.v_ieh_Q_inv[s, y] == (m.v_ieh_Q_heat_max[y] - m.v_ieh_Q_heat_max[y-5])
         else:
-            return m.v_ieh_Q_inv[s, y] == m.v_ieh_Q_heat_max[s, y]
+            return m.v_ieh_Q_inv[s, y] == m.v_ieh_Q_heat_max[y]
         
     def ieh_c_inv(m, s, y):
         return m.v_ieh_c_inv[s, y] == m.v_ieh_Q_inv[s, y] * m.p_ieh_c_inv[s, y]
@@ -50,7 +50,7 @@ def add_ieh_variables(m=None):
                                domain = py.NonNegativeReals,
                                doc = 'heat energy feed in from industrial excess heat per scenario, year and hour')
     
-    m.v_ieh_Q_heat_max = py.Var(m.set_scenarios, m.set_years,
+    m.v_ieh_Q_heat_max = py.Var(m.set_years,
                                 domain = py.NonNegativeReals,
                                 doc = 'max heat feed in from industrial excess heat for diiehrict heating')
     
