@@ -26,8 +26,9 @@ print('Start of the script at:', formatted_time)
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-scenarios = ['basic']
+scenarios = ['0_basic', '1_high_electricity_price']
 years = [2025, 2030, 2035, 2040, 2045, 2050]
+hours = list(range(8760))
 heating_demand = {}
 electricity_price = {}
 gas_price = {}
@@ -95,7 +96,6 @@ for year in years:
     df_chp = pd.read_excel(path_to_file_chp, sheet_name=str(year))
     df_ates = pd.read_excel(path_to_file_ates, sheet_name=str(year))
     df_ttes = pd.read_excel(path_to_file_ttes, sheet_name=str(year))
-    hours_per_year = df_demand['hour'].tolist()
     heating_demand[year] = df_demand['heating_demand_districts_building'].tolist()
     electricity_price[year] = df_electricity_price['electricity_price'].tolist()
     electricity_mean_price[year] = np.mean(electricity_price[year])
@@ -171,8 +171,9 @@ for year in years:
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-data['basic'] = {'demand': heating_demand, 'electricity_price': electricity_price, 'gas_price': gas_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours_per_year}
+data['0_basic'] = {'demand': heating_demand, 'electricity_price': electricity_price, 'gas_price': gas_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
+data['1_high_electricity_price'] = {'demand': heating_demand, 'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()}, 'gas_price': gas_price, 'electricity_mean_price': {year: value * 1.5 for year, value in electricity_mean_price.items()}, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
+data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours}
 model_name = 'FLXenabler'
 
 #-----------------------------------------------------------------------------#
@@ -265,10 +266,10 @@ add_ttes_equations(model)
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-def demand_balance(m, y, t, s):
-    return m.v_eb_q_heat_in[y, t, s] + m.v_hp_q_heat_in[y, t, s] + m.v_st_q_heat_in[y, t, s] + m.v_wi_q_heat_in[y, t, s] + m.v_gt_q_heat_in[y, t, s] + m.v_dgt_q_heat_in[y, t, s] + m.v_ieh_q_heat_in[y, t, s] + m.v_chp_q_heat_in[y, t, s] + m.v_ttes_q_thermal_in[y, t, s] - m.v_ttes_q_thermal_out[y, t, s]  + m.v_ates_q_thermal_in[y, t, s] - m.v_ates_q_thermal_out[y, t, s]== model.data_values[s]['demand'][y][t]
+def demand_balance(m, s, y, t):
+    return m.v_eb_q_heat_in[s, y, t] + m.v_hp_q_heat_in[s, y, t] + m.v_st_q_heat_in[s, y, t] + m.v_wi_q_heat_in[s, y, t] + m.v_gt_q_heat_in[s, y, t] + m.v_dgt_q_heat_in[s, y, t] + m.v_ieh_q_heat_in[s, y, t] + m.v_chp_q_heat_in[s, y, t] + m.v_ttes_q_thermal_in[s, y, t] - m.v_ttes_q_thermal_out[s, y, t]  + m.v_ates_q_thermal_in[s, y, t] - m.v_ates_q_thermal_out[s, y, t] == model.data_values[s]['demand'][y][t]
 
-model.con_demand_balance = py.Constraint(model.set_years, model.set_hours, model.set_scenarios, rule=demand_balance)
+model.con_demand_balance = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -277,16 +278,16 @@ model.con_demand_balance = py.Constraint(model.set_years, model.set_hours, model
 #-----------------------------------------------------------------------------#
 
 def objective_function(m):
-    return sum(m.v_eb_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_eb_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_eb_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_hp_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_hp_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_hp_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_st_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_st_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_st_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_wi_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_wi_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_wi_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_gt_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_gt_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_gt_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_dgt_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_dgt_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_dgt_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_ieh_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ieh_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ieh_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_chp_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_chp_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_chp_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_ates_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ates_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ates_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios) + \
-           sum(m.v_ttes_c_inv[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_fix[y, s] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_var[y, t, s] for y in m.set_years for t in m.set_hours for s in m.set_scenarios)
+    return sum(m.v_eb_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_st_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_wi_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_gt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_dgt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_ieh_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_chp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_ates_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours)
 
 model.obj = py.Objective(expr=objective_function, sense=py.minimize)
 
@@ -400,9 +401,9 @@ print('Script solving time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_2, 
 
 pio.renderers.default = 'browser'
 
-hours = model.set_hours
+visualize_hours = hours
 visualize_year = 2025
-visualize_scenario = 'basic'
+visualize_scenario = '0_basic'
 
 eb_in = []
 hp_in = []
@@ -419,19 +420,19 @@ ttes_out = []
 
 demand = heating_demand[visualize_year]
 
-for hour in range(8760):
-    eb_in.append(py.value(model.v_eb_q_heat_in[visualize_year, hour, visualize_scenario]))
-    hp_in.append(py.value(model.v_hp_q_heat_in[visualize_year, hour, visualize_scenario]))
-    st_in.append(py.value(model.v_st_q_heat_in[visualize_year, hour, visualize_scenario]))
-    wi_in.append(py.value(model.v_wi_q_heat_in[visualize_year, hour, visualize_scenario]))
-    gt_in.append(py.value(model.v_gt_q_heat_in[visualize_year, hour, visualize_scenario]))
-    dgt_in.append(py.value(model.v_dgt_q_heat_in[visualize_year, hour, visualize_scenario]))
-    ieh_in.append(py.value(model.v_ieh_q_heat_in[visualize_year, hour, visualize_scenario]))
-    chp_in.append(py.value(model.v_chp_q_heat_in[visualize_year, hour, visualize_scenario]))
-    ates_in.append(py.value(model.v_ates_q_thermal_in[visualize_year, hour, visualize_scenario]))
-    ates_out.append(-py.value(model.v_ates_q_thermal_out[visualize_year, hour, visualize_scenario]))
-    ttes_in.append(py.value(model.v_ttes_q_thermal_in[visualize_year, hour, visualize_scenario]))
-    ttes_out.append(-py.value(model.v_ttes_q_thermal_out[visualize_year, hour, visualize_scenario]))
+for hour in visualize_hours:
+    eb_in.append(py.value(model.v_eb_q_heat_in[visualize_scenario, visualize_year, hour]))
+    hp_in.append(py.value(model.v_hp_q_heat_in[visualize_scenario, visualize_year, hour]))
+    st_in.append(py.value(model.v_st_q_heat_in[visualize_scenario, visualize_year, hour]))
+    wi_in.append(py.value(model.v_wi_q_heat_in[visualize_scenario, visualize_year, hour]))
+    gt_in.append(py.value(model.v_gt_q_heat_in[visualize_scenario, visualize_year, hour]))
+    dgt_in.append(py.value(model.v_dgt_q_heat_in[visualize_scenario, visualize_year, hour]))
+    ieh_in.append(py.value(model.v_ieh_q_heat_in[visualize_scenario, visualize_year, hour]))
+    chp_in.append(py.value(model.v_chp_q_heat_in[visualize_scenario, visualize_year, hour]))
+    ates_in.append(py.value(model.v_ates_q_thermal_in[visualize_scenario, visualize_year, hour]))
+    ates_out.append(-py.value(model.v_ates_q_thermal_out[visualize_scenario, visualize_year, hour]))
+    ttes_in.append(py.value(model.v_ttes_q_thermal_in[visualize_scenario, visualize_year, hour]))
+    ttes_out.append(-py.value(model.v_ttes_q_thermal_out[visualize_scenario, visualize_year, hour]))
 
 df = pd.DataFrame({'hour': hours, 'demand': demand, 'eb': eb_in, 'hp': hp_in, 'st': st_in, 'wi': wi_in, 'gt': gt_in, 'dgt': dgt_in, 'ieh': ieh_in, 'chp': chp_in, 'ates+': ates_in, 'ates-': ates_out, 'ttes+': ttes_in, 'ttes-': ttes_out})
 
@@ -486,10 +487,10 @@ seconds_3 = elapsed_time_3 % 60
 
 print('Script visualizing time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_3, minutes_3, seconds_3))
 
-seconds = seconds_1 + seconds_2 + seconds_3
-minutes = minutes_1 + minutes_2 + minutes_3 + seconds // 60
-seconds = seconds % 60
-hours = hours_1 + hours_2 + hours_3 + minutes // 60
-minutes = minutes % 60
+final_seconds = seconds_1 + seconds_2 + seconds_3
+final_minutes = minutes_1 + minutes_2 + minutes_3 + final_seconds // 60
+final_seconds = final_seconds % 60
+final_hours = hours_1 + hours_2 + hours_3 + final_minutes // 60
+final_minutes = final_minutes % 60
 
-print('Script execution time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours, minutes, seconds))
+print('Script execution time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(final_hours, final_minutes, final_seconds))
