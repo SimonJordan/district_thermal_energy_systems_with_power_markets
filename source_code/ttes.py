@@ -36,16 +36,16 @@ def add_ttes_equations(m=None):
             return m.v_ttes_hp_Q_inv[s, y] == m.v_ttes_hp_Q_max[y]
    
     def ttes_c_inv(m, s, y):
-        return m.v_ttes_c_inv[s, y] == m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]
+        return m.v_ttes_c_inv[s, y] == m.p_scenario_weighting[s] * (m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y])
     
     def ttes_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_c_fix[s, y] == m.v_ttes_c_fix[s, y-5] + (m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ttes_k_thermal_max[y] - m.v_ttes_k_thermal_max[y-5]) * m.p_c_mean_elec[s, y] * m.p_ttes_elec[s, y]
+            return m.v_ttes_c_fix[s, y] == m.p_scenario_weighting[s] * (m.v_ttes_c_fix[s, y-5] + (m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ttes_k_thermal_max[y] - m.v_ttes_k_thermal_max[y-5]) * m.p_c_mean_elec[s, y] * m.p_ttes_elec[s, y])
         else:
-            return m.v_ttes_c_fix[s, y] == (m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ttes_k_thermal_max[y] * m.p_c_mean_elec[s, y] * m.p_ttes_elec[s, y]
+            return m.v_ttes_c_fix[s, y] == m.p_scenario_weighting[s] * ((m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ttes_k_thermal_max[y] * m.p_c_mean_elec[s, y] * m.p_ttes_elec[s, y])
     
     def ttes_c_var(m, s, y, t):
-        return m.v_ttes_c_var[s, y, t] == m.v_ttes_q_elec_consumption[s, y, t] * m.p_c_elec[s, y, t] + (m.v_ttes_q_thermal_in[s, y, t] + m.v_ttes_q_thermal_out[s, y, t]) * m.p_ttes_c_charge_discharge[s, y]
+        return m.v_ttes_c_var[s, y, t] == m.p_scenario_weighting[s] * (m.v_ttes_q_elec_consumption[s, y, t] * m.p_c_elec[s, y, t] + (m.v_ttes_q_thermal_in[s, y, t] + m.v_ttes_q_thermal_out[s, y, t]) * m.p_ttes_c_charge_discharge[s, y])
 
     m.con_ttes_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                  rule = ttes_feed_in_max_bound)

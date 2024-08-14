@@ -14,6 +14,9 @@ def add_general_parameters(m=None):
     def init_c_co2(m, s, y):
         return m.data_values[s]['co2_price'][y]
     
+    def init_scenario_weighting(m, s):
+        return m.data_values[s]['scenario_weighting']
+    
     m.p_c_elec = py.Param(m.set_scenarios, m.set_years, m.set_hours,
                           initialize = init_c_elec,
                           within = py.Reals,
@@ -33,3 +36,8 @@ def add_general_parameters(m=None):
                          initialize = init_c_co2,
                          within = py.NonNegativeReals,
                          doc = 'CO2 price')
+    
+    m.p_scenario_weighting = py.Param(m.set_scenarios,
+                                      initialize = init_scenario_weighting,
+                                      within = py.NonNegativeReals,
+                                      doc = 'weighting of the scenario')

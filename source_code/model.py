@@ -27,6 +27,7 @@ print('Start of the script at:', formatted_time)
 #-----------------------------------------------------------------------------#
 
 scenarios = ['0_basic', '1_high_electricity_price']
+scenarios_weighting = {'0_basic': 0.5, '1_high_electricity_price': 0.5}
 years = [2025, 2030, 2035, 2040, 2045, 2050]
 hours = list(range(8760))
 heating_demand = {}
@@ -171,8 +172,8 @@ for year in years:
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-data['0_basic'] = {'demand': heating_demand, 'electricity_price': electricity_price, 'gas_price': gas_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-data['1_high_electricity_price'] = {'demand': heating_demand, 'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()}, 'gas_price': gas_price, 'electricity_mean_price': {year: value * 1.5 for year, value in electricity_mean_price.items()}, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
+data['0_basic'] = {'scenario_weighting': scenarios_weighting['0_basic'], 'demand': heating_demand, 'electricity_price': electricity_price, 'gas_price': gas_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
+data['1_high_electricity_price'] = {'scenario_weighting': scenarios_weighting['1_high_electricity_price'], 'demand': heating_demand, 'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()}, 'gas_price': gas_price, 'electricity_mean_price': {year: value * 1.5 for year, value in electricity_mean_price.items()}, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
 data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours}
 model_name = 'FLXenabler'
 
@@ -278,16 +279,16 @@ model.con_demand_balance = py.Constraint(model.set_scenarios, model.set_years, m
 #-----------------------------------------------------------------------------#
 
 def objective_function(m):
-    return sum(m.v_eb_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_st_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_wi_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_gt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_dgt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ieh_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_chp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ates_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours)
+    return sum(m.v_eb_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_eb_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_eb_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios) + \
+           sum(m.v_hp_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_hp_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_hp_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios) + \
+           sum(m.v_st_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_st_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_st_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios) + \
+           sum(m.v_wi_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_wi_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_wi_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios) + \
+           sum(m.v_gt_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_gt_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_gt_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios) + \
+           sum(m.v_dgt_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_dgt_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_dgt_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios) + \
+           sum(m.v_ieh_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ieh_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ieh_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios) + \
+           sum(m.v_chp_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_chp_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_chp_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios) + \
+           sum(m.v_ates_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ates_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ates_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios) + \
+           sum(m.v_ttes_c_inv[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_fix[s, y] for y in m.set_years for s in m.set_scenarios) + sum(m.v_ttes_c_var[s, y, t] for t in m.set_hours for y in m.set_years for s in m.set_scenarios)
 
 model.obj = py.Objective(expr=objective_function, sense=py.minimize)
 
