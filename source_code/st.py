@@ -45,8 +45,7 @@ def add_st_equations(m=None):
             return m.v_st_c_fix[s, y] == m.p_scenario_weighting[s] * ((m.v_st_P_inv[s, y] * m.p_st_c_inv[s, y] + m.v_st_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02)
     
     def st_c_var(m, s, y, t): # OPAM = operational and maintanance, förderung?
-        return m.v_st_c_var[s, y, t] == m.v_st_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y])
-        return m.v_st_c_var[s, y, t] == m.p_scenario_weighting[s] * (m.v_st_q_elec_consumption[s, y, t] * m.p_c_elec[s, y, t])
+        return m.v_st_c_var[s, y, t] == m.p_scenario_weighting[s] * (m.v_st_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
     
     m.con_st_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                rule = st_feed_in_max_bound)
