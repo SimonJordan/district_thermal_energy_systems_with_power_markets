@@ -27,7 +27,7 @@ print('Start of the script at:', formatted_time)
 #-----------------------------------------------------------------------------#
 
 scenarios = ['0_basic', '1_high_electricity_price']
-scenarios_weighting = {'0_basic': 0.5, '1_high_electricity_price': 0.5}
+scenarios_weighting = {'0_basic': 1, '1_high_electricity_price': 1}
 years = [2025, 2030, 2035, 2040, 2045, 2050]
 hours = list(range(8760))
 heating_demand = {}
