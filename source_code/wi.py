@@ -80,15 +80,15 @@ def add_wi_variables(m=None):
    
     m.v_wi_c_inv = py.Var(m.set_scenarios, m.set_years,
                           domain = py.NonNegativeReals,
-                          doc = 'inv costs of wi per scenario and year in EUR')
+                          doc = 'inv costs of wi per scenario and year in USD')
 
     m.v_wi_c_fix = py.Var(m.set_scenarios, m.set_years,
                          domain = py.NonNegativeReals,
-                         doc = 'fix costs of wi per scenario and year in EUR')
+                         doc = 'fix costs of wi per scenario and year in USD')
     
     m.v_wi_c_var = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                           domain = py.Reals,
-                          doc = 'var costs of wi per scenario, year and hour in EUR')
+                          doc = 'var costs of wi per scenario, year and hour in USD')
     
 def add_wi_parameters(m=None):
 

@@ -24,6 +24,7 @@ def add_ieh_equations(m=None):
             return m.v_ieh_c_fix[s, y] == m.p_scenario_weighting[s] * (m.v_ieh_Q_inv[s, y] * m.p_ieh_c_inv[s, y] * 0.02)
     
     def ieh_c_var(m, s, y, t): # OPAM = operational and maintanance, förderung?
+        return m.v_ieh_c_var[s, y, t] == m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_elec[s, y] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_c_in[s, y]
         return m.v_ieh_c_var[s, y, t] == m.p_scenario_weighting[s] * (m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_elec[s, y] * m.p_c_elec[s, y, t] + m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_c_in[s, y])
     
     m.con_ieh_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
@@ -60,15 +61,15 @@ def add_ieh_variables(m=None):
     
     m.v_ieh_c_inv = py.Var(m.set_scenarios, m.set_years,
                            domain = py.NonNegativeReals,
-                           doc = 'inv costs of ieh per scenario and year in EUR')
+                           doc = 'inv costs of ieh per scenario and year in USD')
 
     m.v_ieh_c_fix = py.Var(m.set_scenarios, m.set_years,
                            domain = py.NonNegativeReals,
-                           doc = 'fix costs of ieh per scenario and year in EUR')
+                           doc = 'fix costs of ieh per scenario and year in USD')
     
     m.v_ieh_c_var = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                            domain = py.Reals,
-                           doc = 'var costs of ieh per scenario, year and hour in EUR')
+                           doc = 'var costs of ieh per scenario, year and hour in USD')
 
 def add_ieh_parameters(m=None):
     

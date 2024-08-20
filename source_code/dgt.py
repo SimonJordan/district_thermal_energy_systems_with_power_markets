@@ -25,6 +25,7 @@ def add_dgt_equations(m=None):
 
     def dgt_c_var(m, s, y, t): # OPAM = operational and maintanance, förderung?
         return m.v_dgt_c_var[s, y, t] == m.p_scenario_weighting[s] * (m.v_dgt_q_heat_in[s, y, t] * 0.1 * m.p_c_elec[s, y, t])
+        return m.v_dgt_c_var[s, y, t] == m.v_dgt_q_heat_in[s, y, t] * 0.1 * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y])
 
     m.con_dgt_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                 rule = dgt_feed_in_max_bound)
@@ -56,19 +57,19 @@ def add_dgt_variables(m=None):
     
     m.v_dgt_Q_inv = py.Var(m.set_scenarios, m.set_years,
                            domain = py.NonNegativeReals,
-                           doc = 'new istalled dgt capacity per scenario and year in EUR')
+                           doc = 'new istalled dgt capacity per scenario and year')
 
     m.v_dgt_c_inv = py.Var(m.set_scenarios, m.set_years,
                            domain = py.NonNegativeReals,
-                           doc = 'inv costs of dgt per scenario and year in EUR')
+                           doc = 'inv costs of dgt per scenario and year in USD')
     
     m.v_dgt_c_fix = py.Var(m.set_scenarios, m.set_years,
                            domain = py.NonNegativeReals,
-                           doc = 'fix costs of dgt per scenario and year in EUR')
+                           doc = 'fix costs of dgt per scenario and year in USD')
     
     m.v_dgt_c_var = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                            domain = py.Reals,
-                           doc = 'var costs of dgt per scenario, year and hour in EUR')
+                           doc = 'var costs of dgt per scenario, year and hour in USD')
 
 def add_dgt_parameters(m=None):
        
