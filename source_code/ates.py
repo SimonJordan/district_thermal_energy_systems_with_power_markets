@@ -40,12 +40,12 @@ def add_ates_equations(m=None):
     
     def ates_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ates_c_fix[s, y] == m.v_ates_c_fix[s, y-5] + (m.v_ates_k_inv[s, y] * m.p_ates_c_inv[s, y] + m.v_ates_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ates_k_thermal_max[s, y] - m.v_ates_k_thermal_max[s, y-5]) * m.p_c_mean_elec[s, y] * m.p_ates_elec[s, y]
+            return m.v_ates_c_fix[s, y] == m.v_ates_c_fix[s, y-5] + (m.v_ates_k_inv[s, y] * m.p_ates_c_inv[s, y] + m.v_ates_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ates_k_thermal_max[s, y] - m.v_ates_k_thermal_max[s, y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y]
         else:
-            return m.v_ates_c_fix[s, y] == (m.v_ates_k_inv[s, y] * m.p_ates_c_inv[s, y] + m.v_ates_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ates_k_thermal_max[s, y] * m.p_c_mean_elec[s, y] * m.p_ates_elec[s, y]
+            return m.v_ates_c_fix[s, y] == (m.v_ates_k_inv[s, y] * m.p_ates_c_inv[s, y] + m.v_ates_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ates_k_thermal_max[s, y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y]
     
     def ates_c_var(m, s, y, t):
-        return m.v_ates_c_var[s, y, t] == m.v_ates_q_elec_consumption[s, y, t] * m.p_c_elec[s, y, t] + (m.v_ates_q_thermal_in[s, y, t] + m.v_ates_q_thermal_out[s, y, t]) * m.p_ates_c_charge_discharge[s, y]
+        return m.v_ates_c_var[s, y, t] == m.v_ates_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + (m.v_ates_q_thermal_in[s, y, t] + m.v_ates_q_thermal_out[s, y, t]) * m.p_ates_c_charge_discharge[s, y]
 
     m.con_ates_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                  rule = ates_feed_in_max_bound)
@@ -112,23 +112,23 @@ def add_ates_variables(m=None):
    
     m.v_ates_k_inv = py.Var(m.set_scenarios, m.set_years,
                             domain = py.NonNegativeReals,
-                            doc = 'new installed capacity of ATES per scenario and year in EUR')
+                            doc = 'new installed capacity of ATES per scenario and year')
    
     m.v_ates_hp_Q_inv = py.Var(m.set_scenarios, m.set_years,
                                domain = py.NonNegativeReals,
-                               doc = 'new installed capacity of hp for ATES per scenario and year in EUR')
+                               doc = 'new installed capacity of hp for ATES per scenario and year')
     
     m.v_ates_c_inv = py.Var(m.set_scenarios, m.set_years,
                             domain = py.NonNegativeReals,
-                            doc = 'inv costs of ATES per scenario and year in EUR')
+                            doc = 'inv costs of ATES per scenario and year in USD')
     
     m.v_ates_c_fix = py.Var(m.set_scenarios, m.set_years,
                             domain = py.Reals,
-                            doc = 'fix costs of ATES per scenario and year in EUR')
+                            doc = 'fix costs of ATES per scenario and year in USD')
     
     m.v_ates_c_var = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                             domain = py.Reals,
-                            doc = 'var costs of ATES per scenario, year and hour in EUR')
+                            doc = 'var costs of ATES per scenario, year and hour in USD')
     
 def add_ates_parameters(m=None):
     """This section defines the parameters for ATES"""

@@ -31,8 +31,10 @@ years = [2025, 2030, 2035, 2040, 2045, 2050]
 hours = list(range(8760))
 heating_demand = {}
 electricity_price = {}
-gas_price = {}
 electricity_mean_price = {}
+electricity_co2_share = {}
+electricity_mean_co2_share = {}
+gas_price = {}
 co2_price = {}
 data_eb = {}
 data_hp = {}
@@ -58,8 +60,8 @@ path_to_file_demand = os.path.join(path_to_input_folder, 'demand.xlsx')
 path_to_file_electricity_price = os.path.join(path_to_input_folder, 'electricity_price.xlsx')
 path_to_file_gas_price = os.path.join(path_to_input_folder, 'gas_price.xlsx')
 path_to_file_co2_price = os.path.join(path_to_input_folder, 'co2_price.xlsx')
-path_to_file_hp_cop = os.path.join(path_to_input_folder, 'temperature_baltimore.xlsx')
-path_to_file_solar_radiation = os.path.join(path_to_input_folder, 'solar_radiation_baltimore.xlsx')
+path_to_file_hp_cop = os.path.join(path_to_input_folder, 'temperature_washington_dc.xlsx')
+path_to_file_solar_radiation = os.path.join(path_to_input_folder, 'solar_radiation_washington_dc.xlsx')
 path_to_file_ieh_profile = os.path.join(path_to_input_folder, 'ieh_profile.xlsx')
 path_to_file_eb = os.path.join(path_to_input_folder, 'eb.xlsx')
 path_to_file_hp = os.path.join(path_to_input_folder, 'hp.xlsx')
@@ -99,6 +101,8 @@ for year in years:
     heating_demand[year] = df_demand['heating_demand_districts_building'].tolist()
     electricity_price[year] = df_electricity_price['electricity_price'].tolist()
     electricity_mean_price[year] = np.mean(electricity_price[year])
+    electricity_co2_share[year] = df_electricity_price['electricity_co2_share'].tolist()
+    electricity_mean_co2_share[year] = np.mean(electricity_co2_share[year])
     gas_price[year] = df_gas_price['gas_price'].tolist()
     co2_price[year] = df_co2_price['co2_price'].tolist()[0]
     p_eb_eta = df_eb['p_eb_eta'].tolist()[0]
@@ -171,8 +175,8 @@ for year in years:
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-data['0_basic'] = {'demand': heating_demand, 'electricity_price': electricity_price, 'gas_price': gas_price, 'electricity_mean_price': electricity_mean_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-data['1_high_electricity_price'] = {'demand': heating_demand, 'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()}, 'gas_price': gas_price, 'electricity_mean_price': {year: value * 1.5 for year, value in electricity_mean_price.items()}, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
+data['0_basic'] = {'demand': heating_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
+data['1_high_electricity_price'] = {'demand': heating_demand, 'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: value * 1.5 for year, value in electricity_mean_price.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
 data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours}
 model_name = 'FLXenabler'
 
