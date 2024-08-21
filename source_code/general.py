@@ -2,6 +2,9 @@ import pyomo.environ as py
 
 def add_general_parameters(m=None):
     
+    def init_year_expansion_range(m, s, y):
+        return m.data_values[s]['year_expansion_range'][y]
+    
     def init_c_elec(m, s, y, t):
         return m.data_values[s]['electricity_price'][y][t]
     
@@ -22,6 +25,11 @@ def add_general_parameters(m=None):
     
     def init_scenario_weighting(m, s):
         return m.data_values[s]['scenario_weighting']
+    
+    m.p_year_expansion_range = py.Param(m.set_scenarios, m.set_years,
+                                        initialize = init_year_expansion_range,
+                                        within = py.Reals,
+                                        doc = 'scaling the years')
     
     m.p_c_elec = py.Param(m.set_scenarios, m.set_years, m.set_hours,
                           initialize = init_c_elec,
