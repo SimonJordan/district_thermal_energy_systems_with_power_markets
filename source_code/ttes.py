@@ -25,24 +25,24 @@ def add_ttes_equations(m=None):
     
     def ttes_k_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_k_inv[s, y] == (m.v_ttes_k_thermal_max[y] - m.v_ttes_k_thermal_max[y-5])
+            return m.v_ttes_k_inv[y] == (m.v_ttes_k_thermal_max[y] - m.v_ttes_k_thermal_max[y-5])
         else:
-            return m.v_ttes_k_inv[s, y] == m.v_ttes_k_thermal_max[y]
+            return m.v_ttes_k_inv[y] == m.v_ttes_k_thermal_max[y]
     
     def ttes_hp_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_hp_Q_inv[s, y] == (m.v_ttes_hp_Q_max[y] - m.v_ttes_hp_Q_max[y-5])
+            return m.v_ttes_hp_Q_inv[y] == (m.v_ttes_hp_Q_max[y] - m.v_ttes_hp_Q_max[y-5])
         else:
-            return m.v_ttes_hp_Q_inv[s, y] == m.v_ttes_hp_Q_max[y]
+            return m.v_ttes_hp_Q_inv[y] == m.v_ttes_hp_Q_max[y]
    
     def ttes_c_inv(m, s, y):
-        return m.v_ttes_c_inv[s, y] == m.p_scenario_weighting[s] * (m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y])
+        return m.v_ttes_c_inv[s, y] == m.p_scenario_weighting[s] * (m.v_ttes_k_inv[y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[y] * m.p_hp_c_inv[s, y])
     
     def ttes_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_c_fix[s, y] == m.v_ttes_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ttes_k_thermal_max[y] - m.v_ttes_k_thermal_max[y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ttes_elec[s, y])
+            return m.v_ttes_c_fix[s, y] == m.v_ttes_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_ttes_k_inv[y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ttes_k_thermal_max[y] - m.v_ttes_k_thermal_max[y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ttes_elec[s, y])
         else:
-            return m.v_ttes_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ttes_k_thermal_max[y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ttes_elec[s, y])
+            return m.v_ttes_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_ttes_k_inv[y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ttes_k_thermal_max[y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ttes_elec[s, y])
     
     def ttes_c_var(m, s, y, t):
         return m.v_ttes_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ttes_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + (m.v_ttes_q_thermal_in[s, y, t] + m.v_ttes_q_thermal_out[s, y, t]) * m.p_ttes_c_charge_discharge[s, y])
@@ -110,11 +110,11 @@ def add_ttes_variables(m=None):
                                          domain = py.NonNegativeReals,
                                          doc = 'electricity input of heat pump per scenario, year and hour')
    
-    m.v_ttes_k_inv = py.Var(m.set_scenarios, m.set_years,
+    m.v_ttes_k_inv = py.Var(m.set_years,
                             domain = py.NonNegativeReals,
                             doc = 'new installed capacity of TTES per scenario and year')
    
-    m.v_ttes_hp_Q_inv = py.Var(m.set_scenarios, m.set_years,
+    m.v_ttes_hp_Q_inv = py.Var(m.set_years,
                                domain = py.NonNegativeReals,
                                doc = 'new installed capacity of hp for TTES per scenario and year')
     
