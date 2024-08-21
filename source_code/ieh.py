@@ -19,16 +19,12 @@ def add_ieh_equations(m=None):
    
     def ieh_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ieh_c_fix[s, y] == m.v_ieh_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * (m.v_ieh_Q_inv[s, y] * m.p_ieh_c_inv[s, y] * 0.02)
-            return m.v_ieh_c_fix[s, y] == m.p_scenario_weighting[s] * (m.v_ieh_c_fix[s, y-5] + m.v_ieh_Q_inv[s, y] * m.p_ieh_c_inv[s, y] * 0.02)
+            return m.v_ieh_c_fix[s, y] == m.v_ieh_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ieh_Q_inv[s, y] * m.p_ieh_c_inv[s, y] * 0.02)
         else:
-            return m.v_ieh_c_fix[s, y] == m.p_year_expansion_range[s, y] * (m.v_ieh_Q_inv[s, y] * m.p_ieh_c_inv[s, y] * 0.02)
-            return m.v_ieh_c_fix[s, y] == m.p_scenario_weighting[s] * (m.v_ieh_Q_inv[s, y] * m.p_ieh_c_inv[s, y] * 0.02)
+            return m.v_ieh_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ieh_Q_inv[s, y] * m.p_ieh_c_inv[s, y] * 0.02)
     
     def ieh_c_var(m, s, y, t):
-        return m.v_ieh_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_elec[s, y] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_c_in[s, y])
-    def ieh_c_var(m, s, y, t): # OPAM = operational and maintanance, förderung?
-        return m.v_ieh_c_var[s, y, t] == m.p_scenario_weighting[s] * (m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_elec[s, y] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_c_in[s, y])
+        return m.v_ieh_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_elec[s, y] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_c_in[s, y])
     
     m.con_ieh_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                  rule = ieh_feed_in_max_bound)
