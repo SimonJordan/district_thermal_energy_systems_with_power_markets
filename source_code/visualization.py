@@ -93,4 +93,28 @@ fig.update_layout(
 # Plot anzeigen
 fig.show()
 
+#%%
+
+
+import plotly.graph_objects as go
+
+# Beispiel-Daten
+categories = ['A', 'B', 'C', 'D']
+values_1 = [10, 20, 30, 40]
+values_2 = [15, 25, 35, 20]
+values_3 = [25, 10, 15, 30]
+
+# Erstellen des gestapelten Balkendiagramms
+fig = go.Figure()
+
+# Füge die einzelnen Kategorien hinzu
+fig.add_trace(go.Bar(x=categories, y=values_1, name='Serie 1'))
+fig.add_trace(go.Bar(x=categories, y=values_2, name='Serie 2'))
+fig.add_trace(go.Bar(x=categories, y=values_3, name='Serie 3'))
+
+# Konfiguration für gestapeltes Diagramm
+fig.update_layout(barmode='stack')
+
+# Zeige das Diagramm
+fig.show()
 
