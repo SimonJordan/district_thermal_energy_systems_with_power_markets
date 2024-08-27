@@ -481,7 +481,7 @@ fig.add_trace(go.Scatter(x=df['hour'], y=df['ttes+'], mode='lines', name='TTES i
 fig.add_trace(go.Scatter(x=df['hour'], y=df['ttes-'], mode='lines', name='TTES out', stackgroup='two'))
 
 
-fig.update_layout(title='Load Curve', xaxis_title='time in h', yaxis_title='energy in MWh', legend_title='Technologies')
+fig.update_layout(title='Load Curve', xaxis_title='time in h', yaxis_title='energy per hour in MWh/h', legend_title='Technologies')
 
 fig.show()
 
