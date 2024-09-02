@@ -23,13 +23,13 @@ def add_ttes_equations(m=None):
     def ttes_elec_heat(m, s, y, t):
         return m.v_ttes_q_thermal_in[s, y, t] == m.v_ttes_q_elec_consumption[s, y, t] * m.p_ttes_cop[s, y]
     
-    def ttes_k_inv(m, s, y):
+    def ttes_k_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_ttes_k_inv[y] == (m.v_ttes_k_thermal_max[y] - m.v_ttes_k_thermal_max[y-5])
         else:
             return m.v_ttes_k_inv[y] == m.v_ttes_k_thermal_max[y]
     
-    def ttes_hp_Q_inv(m, s, y):
+    def ttes_hp_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_ttes_hp_Q_inv[y] == (m.v_ttes_hp_Q_max[y] - m.v_ttes_hp_Q_max[y-5])
         else:
@@ -65,10 +65,10 @@ def add_ttes_equations(m=None):
     m.con_ttes_soc_final = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                          rule = ttes_soc_final)
         
-    m.con_ttes_k_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_ttes_k_inv = py.Constraint(m.set_years,
                                      rule = ttes_k_inv)
     
-    m.con_ttes_hp_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_ttes_hp_Q_inv = py.Constraint(m.set_years,
                                         rule = ttes_hp_Q_inv)
     
     m.con_ttes_c_inv = py.Constraint(m.set_scenarios, m.set_years,

@@ -11,7 +11,7 @@ def add_chp_equations(m=None):
     def chp_gas_elec(m, s, y, t):
         return m.v_chp_q_elec_in[s, y, t] == m.v_chp_q_gas[s, y, t] * m.p_chp_eta[s, y] * m.p_chp_elec[s, y]
     
-    def chp_Q_inv(m, s, y):
+    def chp_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_chp_Q_inv[y] == (m.v_chp_Q_mix_max[y] - m.v_chp_Q_mix_max[y-5])
         else:
@@ -38,7 +38,7 @@ def add_chp_equations(m=None):
     m.con_chp_gas_elec = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                        rule = chp_gas_elec)
             
-    m.con_chp_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_chp_Q_inv = py.Constraint(m.set_years,
                                     rule = chp_Q_inv)
     
     m.con_chp_c_inv = py.Constraint(m.set_scenarios, m.set_years,

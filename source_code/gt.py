@@ -11,7 +11,7 @@ def add_gt_equations(m=None):
     def gt_elec_heat(m, s, y, t): 
         return m.v_gt_q_heat_in[s, y, t] == m.v_gt_q_elec_consumption[s, y, t] * m.p_gt_cop[s, y]
      
-    def gt_Q_inv(m, s, y):
+    def gt_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_gt_Q_inv[y] == (m.v_gt_Q_heat_max[y] - m.v_gt_Q_heat_max[y-5])
         else:
@@ -35,7 +35,7 @@ def add_gt_equations(m=None):
     m.con_gt_elec_heat = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                        rule = gt_elec_heat)
     
-    m.con_gt_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_gt_Q_inv = py.Constraint(m.set_years,
                                    rule = gt_Q_inv)
     
     m.con_gt_c_inv = py.Constraint(m.set_scenarios, m.set_years,

@@ -23,13 +23,13 @@ def add_ates_equations(m=None):
     def ates_elec_heat(m, s, y, t):
         return m.v_ates_q_thermal_in[s, y, t] == m.v_ates_q_elec_consumption[s, y, t] * m.p_ates_cop[s, y]
     
-    def ates_k_inv(m, s, y):
+    def ates_k_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_ates_k_inv[y] == (m.v_ates_k_thermal_max[y] - m.v_ates_k_thermal_max[y-5])
         else:
             return m.v_ates_k_inv[y] == m.v_ates_k_thermal_max[y]
     
-    def ates_hp_Q_inv(m, s, y):
+    def ates_hp_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_ates_hp_Q_inv[y] == (m.v_ates_hp_Q_max[y] - m.v_ates_hp_Q_max[y-5])
         else:
@@ -65,10 +65,10 @@ def add_ates_equations(m=None):
     m.con_ates_soc_final = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                          rule = ates_soc_final)
         
-    m.con_ates_k_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_ates_k_inv = py.Constraint(m.set_years,
                                      rule = ates_k_inv)
     
-    m.con_ates_hp_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_ates_hp_Q_inv = py.Constraint(m.set_years,
                                         rule = ates_hp_Q_inv)
     
     m.con_ates_c_inv = py.Constraint(m.set_scenarios, m.set_years,

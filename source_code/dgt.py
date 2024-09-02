@@ -8,7 +8,7 @@ def add_dgt_equations(m=None):
     def dgt_limit(m, s, y):
         return m.v_dgt_Q_heat_max[y] <= 0
      
-    def dgt_Q_inv(m, s, y):
+    def dgt_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_dgt_Q_inv[y] == (m.v_dgt_Q_heat_max[y] - m.v_dgt_Q_heat_max[y-5])
         else:
@@ -28,7 +28,7 @@ def add_dgt_equations(m=None):
     m.con_dgt_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                 rule = dgt_feed_in_max_bound)
     
-    m.con_dgt_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_dgt_Q_inv = py.Constraint(m.set_years,
                                     rule = dgt_Q_inv)
     
     m.con_dgt_c_inv = py.Constraint(m.set_scenarios, m.set_years,

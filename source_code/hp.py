@@ -11,7 +11,7 @@ def add_hp_equations(m=None):
     def hp_elec_heat(m, s, y, t): 
         return m.v_hp_q_heat_in[s, y, t] == m.v_hp_q_elec_consumption[s, y, t] * m.p_hp_cop[s, y, t]
      
-    def hp_Q_inv(m, s, y):
+    def hp_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_hp_Q_inv[y] == (m.v_hp_Q_heat_max[y] - m.v_hp_Q_heat_max[y-5])
         else:
@@ -35,7 +35,7 @@ def add_hp_equations(m=None):
     m.con_hp_elec_heat = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                        rule = hp_elec_heat)
     
-    m.con_hp_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_hp_Q_inv = py.Constraint(m.set_years,
                                    rule = hp_Q_inv)
     
     m.con_hp_c_inv = py.Constraint(m.set_scenarios, m.set_years,

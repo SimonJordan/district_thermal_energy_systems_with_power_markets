@@ -11,7 +11,7 @@ def add_eb_equations(m=None):
     def eb_elec_heat(m, s, y, t):
         return m.v_eb_q_heat_in[s, y, t] == m.v_eb_q_elec_consumption[s, y, t] * m.p_eb_eta[s, y]
     
-    def eb_Q_inv(m, s, y):
+    def eb_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_eb_Q_inv[y] == (m.v_eb_Q_heat_max[y] - m.v_eb_Q_heat_max[y-5])
         else:
@@ -35,7 +35,7 @@ def add_eb_equations(m=None):
     m.con_eb_elec_heat = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                        rule = eb_elec_heat)
     
-    m.con_eb_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_eb_Q_inv = py.Constraint(m.set_years,
                                    rule = eb_Q_inv)
     
     m.con_eb_c_inv = py.Constraint(m.set_scenarios, m.set_years,

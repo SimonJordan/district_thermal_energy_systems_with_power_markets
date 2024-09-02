@@ -8,7 +8,7 @@ def add_ieh_equations(m=None):
     def ieh_limit(m, s, y, t):
         return m.v_ieh_q_heat_in[s, y, t] <= m.p_ieh_in[s, y, t]
     
-    def ieh_Q_inv(m, s, y):
+    def ieh_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_ieh_Q_inv[y] == (m.v_ieh_Q_heat_max[y] - m.v_ieh_Q_heat_max[y-5])
         else:
@@ -32,7 +32,7 @@ def add_ieh_equations(m=None):
     m.con_ieh_limit = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                      rule = ieh_limit)
     
-    m.con_ieh_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_ieh_Q_inv = py.Constraint(m.set_years,
                                      rule = ieh_Q_inv)   
         
     m.con_ieh_c_inv = py.Constraint(m.set_scenarios, m.set_years,

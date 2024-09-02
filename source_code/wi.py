@@ -14,7 +14,7 @@ def add_wi_equations(m=None):
     def wi_p_scale(m, s, y, t):
         return m.v_wi_p_scale[s, y, t] <= 1
     
-    def wi_Q_inv(m, s, y):
+    def wi_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_wi_Q_inv[y] == (m.v_wi_Q_mix_max[y] - m.v_wi_Q_mix_max[y-5])
         else:
@@ -44,7 +44,7 @@ def add_wi_equations(m=None):
     m.con_wi_p_scale = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                      rule = wi_p_scale)
         
-    m.con_wi_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_wi_Q_inv = py.Constraint(m.set_years,
                                    rule = wi_Q_inv)
     
     m.con_wi_c_inv = py.Constraint(m.set_scenarios, m.set_years,

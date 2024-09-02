@@ -625,16 +625,16 @@ ates_inv = []
 ttes_inv = []
 
 for year in years:
-    eb_inv.append(py.value(model.v_eb_Q_inv[visualize_scenario, year]))
-    hp_inv.append(py.value(model.v_hp_Q_inv[visualize_scenario, year]))
-    st_inv.append(py.value(model.v_st_P_inv[visualize_scenario, year]))
-    wi_inv.append(py.value(model.v_wi_Q_inv[visualize_scenario, year]))
-    gt_inv.append(py.value(model.v_gt_Q_inv[visualize_scenario, year]))
-    dgt_inv.append(py.value(model.v_dgt_Q_inv[visualize_scenario, year]))
-    ieh_inv.append(py.value(model.v_ieh_Q_inv[visualize_scenario, year]))
-    chp_inv.append(py.value(model.v_chp_Q_inv[visualize_scenario, year]))
-    ates_inv.append(py.value(model.v_ates_k_inv[visualize_scenario, year]))
-    ttes_inv.append(py.value(model.v_ttes_k_inv[visualize_scenario, year]))
+    eb_inv.append(py.value(model.v_eb_Q_inv[year]))
+    hp_inv.append(py.value(model.v_hp_Q_inv[year]))
+    st_inv.append(py.value(model.v_st_P_inv[year]))
+    wi_inv.append(py.value(model.v_wi_Q_inv[year]))
+    gt_inv.append(py.value(model.v_gt_Q_inv[year]))
+    dgt_inv.append(py.value(model.v_dgt_Q_inv[year]))
+    ieh_inv.append(py.value(model.v_ieh_Q_inv[year]))
+    chp_inv.append(py.value(model.v_chp_Q_inv[year]))
+    ates_inv.append(py.value(model.v_ates_k_inv[year]))
+    ttes_inv.append(py.value(model.v_ttes_k_inv[year]))
 
 technologies = ['Electric Boiler', 'Heat Pump', 'Solar Thermal', 'Waste Incineration', 'Geothermal', 'Deep Geothermal', 'Industrial Excess Heat', 'Combined Heat and Power']
 technologies_map = {'Electric Boiler': eb_inv, 'Heat Pump': hp_inv, 'Solar Thermal': st_inv, 'Waste Incineration': wi_inv, 'Geothermal': gt_inv, 'Deep Geothermal': dgt_inv, 'Industrial Excess Heat': ieh_inv, 'Combined Heat and Power': chp_inv}
@@ -795,7 +795,7 @@ for scenario in scenarios:
                              py.value(model.v_ates_c_inv[scenario, y]) + py.value(model.v_ates_c_fix[scenario, y]) + \
                              py.value(model.v_ttes_c_inv[scenario, y]) + py.value(model.v_ttes_c_fix[scenario, y])
         
-    lcoh[scenario] = sum_cost_scenario / sum_demand_scenario
+    lcoh[scenario] = sum_cost_scenario / scenarios_weighting[scenario] / sum_demand_scenario
 
 fig = go.Figure()
 
