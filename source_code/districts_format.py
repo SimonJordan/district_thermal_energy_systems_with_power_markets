@@ -4,9 +4,19 @@ import pandas as pd
 cur_dir = os.path.dirname(__file__)
 path_to_input_folder = os.path.join(cur_dir, 'data')
 path_to_text_files = os.path.join(path_to_input_folder, 'Districts', 'sum')
-path_to_output_file_heating = os.path.join(path_to_input_folder, 'districts_heating_demand.xlsx')
-path_to_output_file_cooling = os.path.join(path_to_input_folder, 'districts_cooling_demand.xlsx')
+# path_to_output_file_heating = os.path.join(path_to_input_folder, 'districts_heating_demand.xlsx')
+# path_to_output_file_cooling = os.path.join(path_to_input_folder, 'districts_cooling_demand.xlsx')
+# file_names = [f'Building_{i}.txt' for i in range(1, 40)]
+# path_to_output_file_heating = os.path.join(path_to_input_folder, 'districts_heating_demand_phase0.xlsx')
+# path_to_output_file_cooling = os.path.join(path_to_input_folder, 'districts_cooling_demand_phase0.xlsx')
+# file_names = [f'Building_{i}.txt' for i in [1, 2, 3, 4, 5, 6, 8, 9, 12, 14, 19, 23, 26, 27, 32, 33, 36, 38]]
+# path_to_output_file_heating = os.path.join(path_to_input_folder, 'districts_heating_demand_phase1.xlsx')
+# path_to_output_file_cooling = os.path.join(path_to_input_folder, 'districts_cooling_demand_phase1.xlsx')
+# file_names = [f'Building_{i}.txt' for i in [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 16, 18, 19, 20, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 36, 38]]
+path_to_output_file_heating = os.path.join(path_to_input_folder, 'districts_heating_demand_phase2.xlsx')
+path_to_output_file_cooling = os.path.join(path_to_input_folder, 'districts_cooling_demand_phase2.xlsx')
 file_names = [f'Building_{i}.txt' for i in range(1, 40)]
+
 data_heating = {'hour': list(range(8760))}
 data_cooling = {'hour': list(range(8760))}
 

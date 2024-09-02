@@ -8,6 +8,10 @@ import pandas as pd
 import pyomo.environ as py
 import plotly.io as pio
 import plotly.graph_objects as go
+import plotly.subplots as sp
+
+# SERVER !!!
+# import gurobipy
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -160,7 +164,7 @@ for year in years:
     p_ates_elec = df_ates['p_ates_elec'].tolist()[0]
     p_ates_cop = df_ates['p_ates_cop'].tolist()[0]
     p_ates_c_charge_discharge = df_ates['p_ates_c_charge_discharge'].tolist()[0]
-    data_ates[year] = {'p_ates_losses' : p_ates_losses, 'p_ates_eta' : p_ates_eta, 'p_ates_init' : p_ates_init, 'p_ates_end' : p_ates_end, 'p_ates_c_inv' : p_ates_c_inv, 'p_ates_elec' : p_ates_elec, 'p_ates_cop': p_ates_cop, 'p_ates_c_charge_discharge': p_ates_c_charge_discharge}
+    data_ates[year] = {'p_ates_losses': p_ates_losses, 'p_ates_eta': p_ates_eta, 'p_ates_init': p_ates_init, 'p_ates_end': p_ates_end, 'p_ates_c_inv': p_ates_c_inv, 'p_ates_elec': p_ates_elec, 'p_ates_cop': p_ates_cop, 'p_ates_c_charge_discharge': p_ates_c_charge_discharge}
     p_ttes_losses = df_ttes['p_ttes_losses'].tolist()[0]
     p_ttes_eta = df_ttes['p_ttes_eta'].tolist()[0]
     p_ttes_init = df_ttes['p_ttes_init'].tolist()[0]
@@ -169,7 +173,7 @@ for year in years:
     p_ttes_elec = df_ttes['p_ttes_elec'].tolist()[0]
     p_ttes_cop = df_ttes['p_ttes_cop'].tolist()[0]
     p_ttes_c_charge_discharge = df_ttes['p_ttes_c_charge_discharge'].tolist()[0]
-    data_ttes[year] = {'p_ttes_losses' : p_ttes_losses, 'p_ttes_eta' : p_ttes_eta, 'p_ttes_init' : p_ttes_init, 'p_ttes_end' : p_ttes_end, 'p_ttes_c_inv' : p_ttes_c_inv, 'p_ttes_elec' : p_ttes_elec, 'p_ttes_cop': p_ttes_cop, 'p_ttes_c_charge_discharge': p_ttes_c_charge_discharge}
+    data_ttes[year] = {'p_ttes_losses': p_ttes_losses, 'p_ttes_eta': p_ttes_eta, 'p_ttes_init': p_ttes_init, 'p_ttes_end': p_ttes_end, 'p_ttes_c_inv': p_ttes_c_inv, 'p_ttes_elec': p_ttes_elec, 'p_ttes_cop': p_ttes_cop, 'p_ttes_c_charge_discharge': p_ttes_c_charge_discharge}
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -327,6 +331,8 @@ print('Script initializing time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hour
 #-----------------------------------------------------------------------------#
 
 solver = py.SolverFactory('gurobi')
+# SERVER !!!
+# solver.options['threads'] = 40
 #solver.options['NonConvex'] = 2
 solution = solver.solve(model)
 
@@ -488,18 +494,6 @@ fig.show()
 
 # FIG 1
 
-eb_in_scenario = []
-hp_in_scenario = []
-st_in_scenario = []
-wi_in_scenario = []
-gt_in_scenario = []
-dgt_in_scenario = []
-ieh_in_scenario = []
-chp_in_scenario = []
-ates_in_scenario = []
-ates_out_scenario = []
-ttes_in_scenario = []
-ttes_out_scenario = []
 eb_in_all = []
 hp_in_all = []
 st_in_all = []
@@ -514,6 +508,19 @@ ttes_in_all = []
 ttes_out_all = []
 
 for scenario in scenarios:
+    eb_in_scenario = []
+    hp_in_scenario = []
+    st_in_scenario = []
+    wi_in_scenario = []
+    gt_in_scenario = []
+    dgt_in_scenario = []
+    ieh_in_scenario = []
+    chp_in_scenario = []
+    ates_in_scenario = []
+    ates_out_scenario = []
+    ttes_in_scenario = []
+    ttes_out_scenario = []
+    
     for hour in visualize_hours:
         eb_in_scenario.append(py.value(model.v_eb_q_heat_in[scenario, visualize_year, hour]))
         hp_in_scenario.append(py.value(model.v_hp_q_heat_in[scenario, visualize_year, hour]))
@@ -550,13 +557,60 @@ for technology in technologies_abb:
     fig = go.Figure()
     
     for scenario_index in range(len(scenarios)):
-        fig.add_trace(go.Scatter(x=df_2['hour'][scenario_index], y=df_2[technology][scenario_index], mode='lines', name=scenarios[scenario_index], stackgroup='one'))
+        fig.add_trace(go.Scatter(x=df_2['hour'][scenario_index], y=df_2[technology][scenario_index], mode='lines', name=scenarios[scenario_index]))
 
     fig.update_layout(title=technologies_name[technology], xaxis_title='time in h', yaxis_title='energy per hour in MWh/h', legend_title='Scenarios')
     
     fig.show()
 
 # FIG 2
+
+# eb_inv = []
+# hp_inv = []
+# st_inv = []
+# wi_inv = []
+# gt_inv = []
+# dgt_inv = []
+# ieh_inv = []
+# chp_inv = []
+# ates_inv = []
+# ttes_inv = []
+
+# for year in years:
+#     eb_inv.append(py.value(model.v_eb_Q_inv[visualize_scenario, year]))
+#     hp_inv.append(py.value(model.v_hp_Q_inv[visualize_scenario, year]))
+#     st_inv.append(py.value(model.v_st_P_inv[visualize_scenario, year]))
+#     wi_inv.append(py.value(model.v_wi_Q_inv[visualize_scenario, year]))
+#     gt_inv.append(py.value(model.v_gt_Q_inv[visualize_scenario, year]))
+#     dgt_inv.append(py.value(model.v_dgt_Q_inv[visualize_scenario, year]))
+#     ieh_inv.append(py.value(model.v_ieh_Q_inv[visualize_scenario, year]))
+#     chp_inv.append(py.value(model.v_chp_Q_inv[visualize_scenario, year]))
+#     ates_inv.append(py.value(model.v_ates_k_inv[visualize_scenario, year]))
+#     ttes_inv.append(py.value(model.v_ttes_k_inv[visualize_scenario, year]))
+
+# technologies = ['Electric Boiler', 'Heat Pump', 'Solar Thermal', 'Waste Incineration', 'Geothermal', 'Deep Geothermal', 'Industrial Excess Heat', 'Combined Heat and Power', 'ATES', 'TTES']
+# technologies_map = {'Electric Boiler': eb_inv, 'Heat Pump': hp_inv, 'Solar Thermal': st_inv, 'Waste Incineration': wi_inv, 'Geothermal': gt_inv, 'Deep Geothermal': dgt_inv, 'Industrial Excess Heat': ieh_inv, 'Combined Heat and Power': chp_inv, 'ATES': ates_inv, 'TTES': ttes_inv}
+# technologies_inv = []
+
+# for year_index in range(len(years)):
+#     year_inv = []
+#     for technology in technologies:
+#         year_inv.append(technologies_map[technology][year_index])
+        
+#     technologies_inv.append(year_inv)
+
+# fig = go.Figure()
+
+# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[0], name='2025'))
+# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[1], name='2030'))
+# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[2], name='2035'))
+# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[3], name='2040'))
+# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[4], name='2045'))
+# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[5], name='2050'))
+
+# fig.update_layout(title='Investments', legend_title='Years', barmode='stack')
+
+# fig.show()
 
 eb_inv = []
 hp_inv = []
@@ -581,27 +635,223 @@ for year in years:
     ates_inv.append(py.value(model.v_ates_k_inv[visualize_scenario, year]))
     ttes_inv.append(py.value(model.v_ttes_k_inv[visualize_scenario, year]))
 
-technologies = ['Electric Boiler', 'Heat Pump', 'Solar Thermal', 'Waste Incineration', 'Geothermal', 'Deep Geothermal', 'Industrial Excess Heat', 'Combined Heat and Power', 'ATES', 'TTES']
-technologies_map = {'Electric Boiler': eb_inv, 'Heat Pump': hp_inv, 'Solar Thermal': st_inv, 'Waste Incineration': wi_inv, 'Geothermal': gt_inv, 'Deep Geothermal': dgt_inv, 'Industrial Excess Heat': ieh_inv, 'Combined Heat and Power': chp_inv, 'ATES': ates_inv, 'TTES': ttes_inv}
-technologies_inv = []
+technologies = ['Electric Boiler', 'Heat Pump', 'Solar Thermal', 'Waste Incineration', 'Geothermal', 'Deep Geothermal', 'Industrial Excess Heat', 'Combined Heat and Power']
+technologies_map = {'Electric Boiler': eb_inv, 'Heat Pump': hp_inv, 'Solar Thermal': st_inv, 'Waste Incineration': wi_inv, 'Geothermal': gt_inv, 'Deep Geothermal': dgt_inv, 'Industrial Excess Heat': ieh_inv, 'Combined Heat and Power': chp_inv}
+storages = ['ATES', 'TTES']
+storages_map = {'ATES': ates_inv, 'TTES': ttes_inv}
 
-for year_index in range(len(years)):
-    year_inv = []
-    for technology in technologies:
-        year_inv.append(technologies_map[technology][year_index])
+# fig = go.Figure()
+fig = sp.make_subplots(rows=1, cols=2, subplot_titles=('Heating Technology Investments', 'Storage Technology Investments'))
+
+for technology in technologies:
+    fig.add_trace(go.Bar(x=years, y=technologies_map[technology], name=technology), row=1, col=1)
+    
+for storage in storages:
+    fig.add_trace(go.Bar(x=years, y=storages_map[storage], name=storage), row=1, col=2)
+
+fig.update_xaxes(title_text='Investment years', row=1, col=1)
+fig.update_xaxes(title_text='Investment years', row=1, col=2)
+
+fig.update_yaxes(title_text='Installed power in MW', row=1, col=1)
+fig.update_yaxes(title_text='Installed capacity in MWh', row=1, col=2)
+
+fig.update_layout(title='Investments', legend_title='Technologies', barmode='stack')
+
+fig.show()
+
+# FIG 3
+
+buildings_gas = []
+buildings_electricity = [11, 16, 19, 30, 37]
+
+for building in range(1, 40):
+    if building not in buildings_electricity:
+        buildings_gas.append(building)
+
+buildings = {1: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             2: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             3: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             4: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             5: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             6: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             7: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             8: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             9: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             10: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             11: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             12: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             13: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             14: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             15: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             16: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             17: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             18: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             19: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             20: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             21: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             22: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             23: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             24: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             25: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             26: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             27: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             28: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             29: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             30: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             31: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             32: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             33: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             34: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             35: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             36: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             37: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             38: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
+             39: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1}}
+
+buildings_demand = {}
+buildings_demand_sum = {}
+buildings_lcoh = {}
+
+path_to_file_heating_demand_building = os.path.join(path_to_input_folder, 'districts_heating_demand_phase2.xlsx')
+df_heating_demand_building = pd.read_excel(path_to_file_heating_demand_building)
+
+for building in range(1, 40):
+    heating_demand_building = df_heating_demand_building[f'heating_demand_building_{building}'].tolist()
+    buildings_demand[building] = heating_demand_building
+    buildings_demand_sum[building] = sum(heating_demand_building)
+
+# assumptions
+eta_gas = 0.9
+co2_conversion = 0.2
+eta_electricity = 0.99
+
+for building in range(1, 40):
+    buildings_lcoh_scenario = []
+    for scenario in scenarios:
+        building_c_sum = 0
         
-    technologies_inv.append(year_inv)
+        for year in years:
+            for hour in hours:
+                if building in buildings_gas:
+                    building_c_sum += buildings[building][year] * buildings_demand[building][hour] / eta_gas * (data[scenario]['gas_price'][year][hour] + co2_conversion * data[scenario]['co2_price'][year])
+                    
+                else:
+                    building_c_sum += buildings[building][year] * buildings_demand[building][hour] / eta_electricity * (data[scenario]['electricity_price'][year][hour] + data[scenario]['electricity_co2_share'][year][hour] * data[scenario]['co2_price'][year])
+            
+        buildings_lcoh_scenario.append(building_c_sum / (buildings_demand_sum[building] * sum(buildings[building].values())))
+
+    buildings_lcoh[building] = buildings_lcoh_scenario
+
+x_bar = []
+y_bar = []
+widths = []
+bases = []
+labels = []
+
+for building in range(1, 40):
+    if building == 1:
+        x_bar.append(buildings_demand_sum[building] / 2)
+        
+    else:
+        x_bar.append(x_bar[building-2] + buildings_demand_sum[building-1] / 2 + buildings_demand_sum[building] / 2)
+    
+    y_bar.append(max(buildings_lcoh[building]) - min(buildings_lcoh[building]))
+    widths.append(buildings_demand_sum[building])
+    bases.append(min(buildings_lcoh[building]))
+    labels.append(f'Building_{building}')
+
+lcoh = {}
+
+for scenario in scenarios:
+    sum_cost_scenario = 0
+    sum_demand_scenario = 0
+    for y in years:
+        sum_demand = 0
+        
+        for t in hours:
+            sum_cost_scenario +=  py.value(model.v_eb_c_var[scenario, y, t]) + \
+                                  py.value(model.v_hp_c_var[scenario, y, t]) + \
+                                  py.value(model.v_st_c_var[scenario, y, t]) + \
+                                  py.value(model.v_wi_c_var[scenario, y, t]) + \
+                                  py.value(model.v_gt_c_var[scenario, y, t]) + \
+                                  py.value(model.v_dgt_c_var[scenario, y, t]) + \
+                                  py.value(model.v_ieh_c_var[scenario, y, t]) + \
+                                  py.value(model.v_chp_c_var[scenario, y, t]) + \
+                                  py.value(model.v_ates_c_var[scenario, y, t]) + \
+                                  py.value(model.v_ttes_c_var[scenario, y, t])
+
+            sum_demand += py.value(model.data_values[scenario]['demand'][y][t])
+        sum_demand_scenario += sum_demand * year_expansion_range[y]
+        
+        sum_cost_scenario += py.value(model.v_eb_c_inv[scenario, y]) + py.value(model.v_eb_c_fix[scenario, y]) + \
+                             py.value(model.v_hp_c_inv[scenario, y]) + py.value(model.v_hp_c_fix[scenario, y]) + \
+                             py.value(model.v_st_c_inv[scenario, y]) + py.value(model.v_st_c_fix[scenario, y]) + \
+                             py.value(model.v_wi_c_inv[scenario, y]) + py.value(model.v_wi_c_fix[scenario, y]) + \
+                             py.value(model.v_gt_c_inv[scenario, y]) + py.value(model.v_gt_c_fix[scenario, y]) + \
+                             py.value(model.v_dgt_c_inv[scenario, y]) + py.value(model.v_dgt_c_fix[scenario, y]) + \
+                             py.value(model.v_ieh_c_inv[scenario, y]) + py.value(model.v_ieh_c_fix[scenario, y]) + \
+                             py.value(model.v_chp_c_inv[scenario, y]) + py.value(model.v_chp_c_fix[scenario, y]) + \
+                             py.value(model.v_ates_c_inv[scenario, y]) + py.value(model.v_ates_c_fix[scenario, y]) + \
+                             py.value(model.v_ttes_c_inv[scenario, y]) + py.value(model.v_ttes_c_fix[scenario, y])
+        
+    lcoh[scenario] = sum_cost_scenario / sum_demand_scenario
 
 fig = go.Figure()
 
-fig.add_trace(go.Bar(x=technologies, y=technologies_inv[0], name='2025'))
-fig.add_trace(go.Bar(x=technologies, y=technologies_inv[1], name='2030'))
-fig.add_trace(go.Bar(x=technologies, y=technologies_inv[2], name='2035'))
-fig.add_trace(go.Bar(x=technologies, y=technologies_inv[3], name='2040'))
-fig.add_trace(go.Bar(x=technologies, y=technologies_inv[4], name='2045'))
-fig.add_trace(go.Bar(x=technologies, y=technologies_inv[5], name='2050'))
+lcoh_min = min(lcoh, key=lcoh.get)
+lcoh_max = max(lcoh, key=lcoh.get)
 
-fig.update_layout(title='Investments', legend_title='Years', barmode='stack')
+# for scenario in scenarios:
+#     fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[scenario], lcoh[scenario]], mode='lines', name=scenario))
+
+fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_min], lcoh[lcoh_min]], mode='lines', name=lcoh_min))
+fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_max], lcoh[lcoh_max]], mode='lines', name=lcoh_max))
+fig.add_trace(go.Scatter(x=[0, sum_demand, sum_demand, 0], y=[lcoh[lcoh_min], lcoh[lcoh_min], lcoh[lcoh_max], lcoh[lcoh_max]],  fill='toself', fillcolor='gray', opacity=0.5, line=dict(color='gray'), showlegend=False))
+# , fillpattern=dict(shape="x",  fgcolor="black")
+
+for i in range(len(x_bar)):
+    fig.add_trace(go.Bar(x=[x_bar[i]], y=[y_bar[i]], width=widths[i], base=bases[i], text=labels[i], textposition='outside', textangle=0, name=labels[i]))
+
+
+fig.update_xaxes(range=[0, sum_demand])
+
+fig.update_layout(title='Levelized costs of heating', xaxis_title='Annual building heat demand in MWh', yaxis_title='LCOH in $/MWh', barmode='overlay', bargap=0)
+
+fig.show()
+
+# FIG 4
+
+# visualize_year = 2035
+
+load_duration_curve_demand = heating_demand[visualize_year]
+load_duration_curve_demand = [value / eta_electricity for value in load_duration_curve_demand]
+load_duration_curve_demand.sort(reverse=True)
+load_duration_curve = {}
+
+for scenario in scenarios:
+    load_duration_curve_scenario = []
+    
+    for t in hours:
+        load_duration_curve_value = py.value(model.v_eb_q_elec_consumption[scenario, visualize_year, t]) + \
+                                    py.value(model.v_hp_q_elec_consumption[scenario, visualize_year, t]) + \
+                                    py.value(model.v_st_q_elec_consumption[scenario, visualize_year, t]) + \
+                                    py.value(model.v_gt_q_elec_consumption[scenario, visualize_year, t]) + \
+                                    py.value(model.v_dgt_q_heat_in[scenario, visualize_year, t] * 0.1) + \
+                                    py.value(model.v_ieh_q_heat_in[scenario, visualize_year, t] * model.p_ieh_elec[scenario, visualize_year]) + \
+                                    py.value(model.v_ates_q_elec_consumption[scenario, visualize_year, t]) + \
+                                    py.value(model.v_ttes_q_elec_consumption[scenario, visualize_year, t])
+    
+        load_duration_curve_scenario.append(load_duration_curve_value)
+        load_duration_curve_scenario.sort(reverse=True)
+        
+    load_duration_curve[scenario] = load_duration_curve_scenario
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(x=df_1['hour'], y=load_duration_curve_demand, mode='lines', fill='tozeroy', name='buildings'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=load_duration_curve[visualize_scenario], mode='lines', fill='tozeroy', name=visualize_scenario))
+
+fig.update_layout(title='Load duration curve', xaxis_title='time in h', yaxis_title='energy per hour in MWh/h', legend_title='Profiles')
 
 fig.show()
 
