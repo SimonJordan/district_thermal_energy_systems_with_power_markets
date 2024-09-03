@@ -476,20 +476,20 @@ fig = go.Figure()
 # fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes-'], fill='tonexty', name='TTES out'))
 
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['demand'], mode='lines', name='Demand', line=dict(color='black', width=2)))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['eb'], mode='lines', name='Electric Boiler', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['hp'], mode='lines', name='Heat Pump', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['st'], mode='lines', name='Solar Thermal', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['wi'], mode='lines', name='Waste Incineration', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['eb'], mode='lines', name='Electric boiler', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['hp'], mode='lines', name='Heat pump', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['st'], mode='lines', name='Solar thermal', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['wi'], mode='lines', name='Waste incineration', stackgroup='one'))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['gt'], mode='lines', name='Geothermal', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['dgt'], mode='lines', name='Deep Geothermal', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ieh'], mode='lines', name='Industrial Excess Heat', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['chp'], mode='lines', name='Combined Heat and Power', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates+'], mode='lines', name='ATES in', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates-'], mode='lines', name='ATES out', stackgroup='two'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes+'], mode='lines', name='TTES in', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes-'], mode='lines', name='TTES out', stackgroup='two'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['dgt'], mode='lines', name='Deep geothermal', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['chp'], mode='lines', name='Combined heat and power', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates+'], mode='lines', name='ATES feed in', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates-'], mode='lines', name='ATES store', stackgroup='two'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes+'], mode='lines', name='TTES feed in', stackgroup='one'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes-'], mode='lines', name='TTES store', stackgroup='two'))
 
-fig.update_layout(title='Load Curve', xaxis_title='time in h', yaxis_title='energy per hour in MWh/h', legend_title='Technologies')
+fig.update_layout(title='Load curve', xaxis_title='time in h', yaxis_title='thermal heating energy per hour in MWh/h', legend_title='Technologies')
 
 fig.show()
 
@@ -552,7 +552,7 @@ for scenario in scenarios:
 df_2 = pd.DataFrame({'hour': [hours]*len(scenarios), 'eb': eb_in_all, 'hp': hp_in_all, 'st': st_in_all, 'wi': wi_in_all, 'gt': gt_in_all, 'dgt': dgt_in_all, 'ieh': ieh_in_all, 'chp': chp_in_all, 'ates+': ates_in_all, 'ates-': ates_out_all, 'ttes+': ttes_in_all, 'ttes-': ttes_out_all})
 
 technologies_abb = ['eb', 'hp', 'st', 'wi', 'gt', 'dgt', 'ieh', 'chp', 'ates+', 'ates-', 'ttes+', 'ttes-']
-technologies_name = {'eb': 'Electric Boiler', 'hp': 'Heat Pump', 'st': 'Solar Thermal', 'wi': 'Waste Incineration', 'gt': 'Geothermal', 'dgt': 'Deep Geothermal', 'ieh': 'Industrial Excess Heat', 'chp': 'Combined Heat and Power', 'ates+': 'ATES+', 'ates-': 'ATES-', 'ttes+': 'TTES+', 'ttes-': 'TTES-'}
+technologies_name = {'eb': 'Electric boiler', 'hp': 'Heat pump', 'st': 'Solar thermal', 'wi': 'Waste incineration', 'gt': 'Geothermal', 'dgt': 'Deep geothermal', 'ieh': 'Industrial excess heat', 'chp': 'Combined heat and power', 'ates+': 'ATES feed in', 'ates-': 'ATES store', 'ttes+': 'TTES feed in', 'ttes-': 'TTES store'}
 
 for technology in technologies_abb: 
     fig = go.Figure()
@@ -560,7 +560,7 @@ for technology in technologies_abb:
     for scenario_index in range(len(scenarios)):
         fig.add_trace(go.Scatter(x=df_2['hour'][scenario_index], y=df_2[technology][scenario_index], mode='lines', name=scenarios[scenario_index]))
 
-    fig.update_layout(title=technologies_name[technology], xaxis_title='time in h', yaxis_title='energy per hour in MWh/h', legend_title='Scenarios')
+    fig.update_layout(title=technologies_name[technology], xaxis_title='time in h', yaxis_title='thermal heating energy per hour in MWh/h', legend_title='Scenarios')
     
     fig.show()
 
@@ -636,13 +636,13 @@ for year in years:
     ates_inv.append(py.value(model.v_ates_k_inv[year]))
     ttes_inv.append(py.value(model.v_ttes_k_inv[year]))
 
-technologies = ['Electric Boiler', 'Heat Pump', 'Solar Thermal', 'Waste Incineration', 'Geothermal', 'Deep Geothermal', 'Industrial Excess Heat', 'Combined Heat and Power']
-technologies_map = {'Electric Boiler': eb_inv, 'Heat Pump': hp_inv, 'Solar Thermal': st_inv, 'Waste Incineration': wi_inv, 'Geothermal': gt_inv, 'Deep Geothermal': dgt_inv, 'Industrial Excess Heat': ieh_inv, 'Combined Heat and Power': chp_inv}
+technologies = ['Electric boiler', 'Heat pump', 'Solar thermal', 'Waste incineration', 'Geothermal', 'Deep geothermal', 'Industrial excess heat', 'Combined heat and power']
+technologies_map = {'Electric boiler': eb_inv, 'Heat pump': hp_inv, 'Solar thermal': st_inv, 'Waste incineration': wi_inv, 'Geothermal': gt_inv, 'Deep geothermal': dgt_inv, 'Industrial excess heat': ieh_inv, 'Combined heat and power': chp_inv}
 storages = ['ATES', 'TTES']
 storages_map = {'ATES': ates_inv, 'TTES': ttes_inv}
 
 # fig = go.Figure()
-fig = sp.make_subplots(rows=1, cols=2, subplot_titles=('Heating Technology Investments', 'Storage Technology Investments'))
+fig = sp.make_subplots(rows=1, cols=2, subplot_titles=('Heating technology investments', 'Storage technology investments'))
 
 for technology in technologies:
     fig.add_trace(go.Bar(x=years, y=technologies_map[technology], name=technology), row=1, col=1)
@@ -650,11 +650,11 @@ for technology in technologies:
 for storage in storages:
     fig.add_trace(go.Bar(x=years, y=storages_map[storage], name=storage), row=1, col=2)
 
-fig.update_xaxes(title_text='Investment years', row=1, col=1)
-fig.update_xaxes(title_text='Investment years', row=1, col=2)
+fig.update_xaxes(title_text='investment years', row=1, col=1)
+fig.update_xaxes(title_text='investment years', row=1, col=2)
 
-fig.update_yaxes(title_text='Installed power in MW', row=1, col=1)
-fig.update_yaxes(title_text='Installed capacity in MWh', row=1, col=2)
+fig.update_yaxes(title_text='installed power in MW', row=1, col=1)
+fig.update_yaxes(title_text='installed capacity in MWh', row=1, col=2)
 
 fig.update_layout(title='Investments', legend_title='Technologies', barmode='stack')
 
@@ -805,8 +805,8 @@ lcoh_max = max(lcoh, key=lcoh.get)
 # for scenario in scenarios:
 #     fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[scenario], lcoh[scenario]], mode='lines', name=scenario))
 
-fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_min], lcoh[lcoh_min]], mode='lines', name=lcoh_min))
-fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_max], lcoh[lcoh_max]], mode='lines', name=lcoh_max))
+fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_min], lcoh[lcoh_min]], mode='lines', line=dict(color='black'), name=lcoh_min, showlegend=False))
+fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_max], lcoh[lcoh_max]], mode='lines', line=dict(color='black'), name=lcoh_max, showlegend=False))
 fig.add_trace(go.Scatter(x=[0, sum_demand, sum_demand, 0], y=[lcoh[lcoh_min], lcoh[lcoh_min], lcoh[lcoh_max], lcoh[lcoh_max]],  fill='toself', fillcolor='gray', opacity=0.5, line=dict(color='gray'), showlegend=False))
 # , fillpattern=dict(shape="x",  fgcolor="black")
 
@@ -816,7 +816,7 @@ for i in range(len(x_bar)):
 
 fig.update_xaxes(range=[0, sum_demand])
 
-fig.update_layout(title='Levelized costs of heating', xaxis_title='Annual building heat demand in MWh', yaxis_title='LCOH in $/MWh', barmode='overlay', bargap=0)
+fig.update_layout(title='Levelized costs of heating', legend_title='Buildings', xaxis_title='annual building heat demand in MWh', yaxis_title='LCOH in $/MWh', barmode='overlay', bargap=0)
 
 fig.show()
 
@@ -825,6 +825,17 @@ fig.show()
 # visualize_year = 2035
 
 load_duration_curve_demand = heating_demand[visualize_year]
+
+# load_duration_curve_demand = []
+
+# for hour in hours:
+#     load_duration_curve_demand_building = 0
+    
+#     for building in buildings_electricity:
+#         load_duration_curve_demand_building += buildings_demand[building][hour] * buildings[building][visualize_year] / year_expansion_range[visualize_year]
+    
+#     load_duration_curve_demand.append(load_duration_curve_demand_building)
+
 load_duration_curve_demand = [value / eta_electricity for value in load_duration_curve_demand]
 load_duration_curve_demand.sort(reverse=True)
 load_duration_curve = {}
@@ -849,10 +860,10 @@ for scenario in scenarios:
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=df_1['hour'], y=load_duration_curve_demand, mode='lines', fill='tozeroy', name='buildings'))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=load_duration_curve_demand, mode='lines', fill='tozeroy', name='Buildings'))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=load_duration_curve[visualize_scenario], mode='lines', fill='tozeroy', name=visualize_scenario))
 
-fig.update_layout(title='Load duration curve', xaxis_title='time in h', yaxis_title='energy per hour in MWh/h', legend_title='Profiles')
+fig.update_layout(title='Load duration curve', xaxis_title='hours', yaxis_title='electric energy per hour in MWh/h', legend_title='Profiles')
 
 fig.show()
 
