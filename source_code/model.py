@@ -824,6 +824,49 @@ fig.update_layout(title=dict(text='Investments', font=dict(size=30)), annotation
 
 fig.show()
 
+fig = go.Figure()
+
+fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Heating technology investments', 'Storage technology investments'))
+
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Combined heat and power'], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Waste incineration'], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Deep geothermal'], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Solar thermal'], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Geothermal'], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Heat pump'], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Industrial excess heat'], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Electric boiler'], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
+
+fig.add_trace(go.Bar(x=years[:3], y=storages_map['Tank thermal energy storage'], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
+fig.add_trace(go.Bar(x=years[:3], y=storages_map['Aquifer thermal energy storage'], name='Aquifer thermal energy storage', marker=dict(color='grey')), row=1, col=2)
+
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=1)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=2)
+
+fig.update_yaxes(title_text='Newly installed capacity in MW', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
+fig.update_yaxes(title_text='Newly installed capacity in MWh', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
+
+fig.update_layout(title=dict(text='Investments', font=dict(size=30)), annotations=[dict(font=dict(size=25))], legend=dict(font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), barmode='stack')
+
+fig.show()
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_gt_inv, name='Ratio geothermal', line=dict(width=4, color='#00CC96')))
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_hp_inv, name='Ratio heat pump', line=dict(width=4, color='#19D3F3')))
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_ieh_inv, name='Ratio industrial excess heat', line=dict(width=4, color='#B6E880')))
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_eb_inv, name='Ratio electric boiler', line=dict(width=4, color='#FF6692')))
+
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3])
+
+fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20))
+
+fig.update_yaxes(range=[0, 6])
+
+fig.update_layout(title=dict(text='Investments', font=dict(size=30)), legend=dict(font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)))
+
+fig.show()
+
 # FIG 3
 
 buildings_gas = []
@@ -1026,13 +1069,13 @@ lcoh_max = max(lcoh, key=lcoh.get)
 # for scenario in scenarios:
 #     fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[scenario], lcoh[scenario]], mode='lines', name=scenario))
 
-fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_min], lcoh[lcoh_min]], mode='lines', line=dict(color='black'), name=lcoh_min, showlegend=False))
-fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_max], lcoh[lcoh_max]], mode='lines', line=dict(color='black'), name=lcoh_max, showlegend=False))
-fig.add_trace(go.Scatter(x=[0, sum_demand, sum_demand, 0], y=[lcoh[lcoh_min], lcoh[lcoh_min], lcoh[lcoh_max], lcoh[lcoh_max]],  fill='toself', fillcolor='gray', opacity=0.5, line=dict(color='gray'), showlegend=False))
+fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_min], lcoh[lcoh_min]], mode='lines', line=dict(color='rgb(253, 180, 98)'), name=lcoh_min, showlegend=False))
+fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_max], lcoh[lcoh_max]], mode='lines', line=dict(color='rgb(253, 180, 98)'), name=lcoh_max, showlegend=False))
+fig.add_trace(go.Scatter(x=[0, sum_demand, sum_demand, 0], y=[lcoh[lcoh_min], lcoh[lcoh_min], lcoh[lcoh_max], lcoh[lcoh_max]],  fill='toself', fillcolor='rgb(253, 180, 98)', opacity=0.5, line=dict(color='rgb(253, 180, 98)'), showlegend=False))
 # , fillpattern=dict(shape="x",  fgcolor="black")
 
 for i in range(len(x_bar)):
-    fig.add_trace(go.Bar(x=[x_bar[i]], y=[y_bar[i]], width=widths[i], base=bases[i], marker=dict(color='#FECB52'), showlegend=False))
+    fig.add_trace(go.Bar(x=[x_bar[i]], y=[y_bar[i]], width=widths[i], base=bases[i], marker=dict(color='rgb(128, 177, 211)'), showlegend=False))
 
 fig.update_xaxes(range=[0, sum_demand])
 fig.update_yaxes(range=[0, bases[0]+y_bar[0]+20])
