@@ -714,7 +714,7 @@ index = 0
 heating_technology_inv_sum = 0
 storage_technology_inv_sum = 0
 
-for year in years:
+for year in years[:3]:
     eb_inv.append(py.value(model.v_eb_Q_inv[year]))
     hp_inv.append(py.value(model.v_hp_Q_inv[year]))
     st_inv.append(py.value(model.v_st_P_inv[year]))
@@ -725,17 +725,6 @@ for year in years:
     chp_inv.append(py.value(model.v_chp_Q_inv[year]))
     ates_inv.append(py.value(model.v_ates_k_inv[year]))
     ttes_inv.append(py.value(model.v_ttes_k_inv[year]))
-for year in years[:3]:
-    eb_inv.append(py.value(model.v_eb_Q_inv[visualize_scenario, year]))
-    hp_inv.append(py.value(model.v_hp_Q_inv[visualize_scenario, year]))
-    st_inv.append(py.value(model.v_st_P_inv[visualize_scenario, year]))
-    wi_inv.append(py.value(model.v_wi_Q_inv[visualize_scenario, year]))
-    gt_inv.append(py.value(model.v_gt_Q_inv[visualize_scenario, year]))
-    dgt_inv.append(py.value(model.v_dgt_Q_inv[visualize_scenario, year]))
-    ieh_inv.append(py.value(model.v_ieh_Q_inv[visualize_scenario, year]))
-    chp_inv.append(py.value(model.v_chp_Q_inv[visualize_scenario, year]))
-    ates_inv.append(py.value(model.v_ates_k_inv[visualize_scenario, year]))
-    ttes_inv.append(py.value(model.v_ttes_k_inv[visualize_scenario, year]))
     
     heating_technology_inv_sum += eb_inv[index] + hp_inv[index] + st_inv[index] + wi_inv[index] + gt_inv[index] + dgt_inv[index] + ieh_inv[index] + chp_inv[index]
     storage_technology_inv_sum += ates_inv[index] + ttes_inv[index]
