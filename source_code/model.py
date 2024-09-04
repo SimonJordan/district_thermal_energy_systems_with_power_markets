@@ -526,7 +526,7 @@ fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates-'], mode='lines', name='AT
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates+'], mode='lines', name='ATES feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
 
-fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
+fig.update_layout(title=dict(text='Load duration curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
 
 fig.show()
 
@@ -708,8 +708,16 @@ ieh_inv = []
 chp_inv = []
 ates_inv = []
 ttes_inv = []
+ratio_eb_inv = []
+ratio_hp_inv = []
+ratio_gt_inv = []
+ratio_ieh_inv = []
 ratio_inv = []
 index = 0
+heating_eb_inv_sum = 0
+heating_hp_inv_sum = 0
+heating_gt_inv_sum = 0
+heating_ieh_inv_sum = 0
 heating_technology_inv_sum = 0
 storage_technology_inv_sum = 0
 
@@ -725,10 +733,18 @@ for year in years[:3]:
     ates_inv.append(py.value(model.v_ates_k_inv[visualize_scenario, year]))
     ttes_inv.append(py.value(model.v_ttes_k_inv[visualize_scenario, year]))
     
+    heating_eb_inv_sum += eb_inv[index]
+    heating_hp_inv_sum += hp_inv[index]
+    heating_gt_inv_sum += gt_inv[index]
+    heating_ieh_inv_sum += ieh_inv[index]
     heating_technology_inv_sum += eb_inv[index] + hp_inv[index] + st_inv[index] + wi_inv[index] + gt_inv[index] + dgt_inv[index] + ieh_inv[index] + chp_inv[index]
     storage_technology_inv_sum += ates_inv[index] + ttes_inv[index]
     index +=1
     
+    ratio_eb_inv.append(heating_eb_inv_sum / storage_technology_inv_sum * 100)
+    ratio_hp_inv.append(heating_hp_inv_sum / storage_technology_inv_sum * 100)
+    ratio_gt_inv.append(heating_gt_inv_sum / storage_technology_inv_sum * 100)
+    ratio_ieh_inv.append(heating_ieh_inv_sum / storage_technology_inv_sum * 100)
     ratio_inv.append(heating_technology_inv_sum / storage_technology_inv_sum * 100)
 
 technologies = ['Electric boiler', 'Heat pump', 'Solar thermal', 'Waste incineration', 'Geothermal', 'Deep geothermal', 'Industrial excess heat', 'Combined heat and power']
@@ -765,6 +781,46 @@ fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict
 fig.update_yaxes(range=[0, 20], row=2, col=1)
 
 fig.update_layout(title=dict(text='Investments', font=dict(size=30)), annotations=[dict(font=dict(size=25))], legend=dict(x=0.7, y=0, traceorder='normal', font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), barmode='stack', width=1200, height=900)
+
+fig.show()
+
+fig = go.Figure()
+
+fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Heating technology investments', 'Storage technology investments', 'Ratio heating to storage capacity', 'Ratio heating to storage capacity'))
+
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_inv, name='Ratio total', line=dict(color='#EF553B')), row=2, col=2)
+
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_gt_inv, name='Ratio geothermal', line=dict(color='#00CC96')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_hp_inv, name='Ratio heat pump', line=dict(color='#19D3F3')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_ieh_inv, name='Ratio industrial excess heat', line=dict(color='#B6E880')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_eb_inv, name='Ratio electric boiler', line=dict(color='#FF6692')), row=2, col=1)
+
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Combined heat and power'], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Waste incineration'], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Deep geothermal'], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Solar thermal'], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Geothermal'], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Heat pump'], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Industrial excess heat'], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Electric boiler'], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
+
+fig.add_trace(go.Bar(x=years[:3], y=storages_map['Tank thermal energy storage'], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
+fig.add_trace(go.Bar(x=years[:3], y=storages_map['Aquifer thermal energy storage'], name='Aquifer thermal energy storage', marker=dict(color='grey')), row=1, col=2)
+
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=1)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=2)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=2, col=1)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=2, col=2)
+
+fig.update_yaxes(title_text='Newly installed capacity in MW', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
+fig.update_yaxes(title_text='Newly installed capacity in MWh', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
+fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20), row=2, col=1)
+fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20), row=2, col=2)
+
+fig.update_yaxes(range=[0, 10], row=2, col=1)
+fig.update_yaxes(range=[0, 20], row=2, col=2)
+
+fig.update_layout(title=dict(text='Investments', font=dict(size=30)), annotations=[dict(font=dict(size=25))], legend=dict(font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), barmode='stack')
 
 fig.show()
 
@@ -976,9 +1032,10 @@ fig.add_trace(go.Scatter(x=[0, sum_demand, sum_demand, 0], y=[lcoh[lcoh_min], lc
 # , fillpattern=dict(shape="x",  fgcolor="black")
 
 for i in range(len(x_bar)):
-    fig.add_trace(go.Bar(x=[x_bar[i]], y=[y_bar[i]], width=widths[i], base=bases[i], text=labels[i], textposition='outside', textangle=-90, name=labels[i], showlegend=False))
+    fig.add_trace(go.Bar(x=[x_bar[i]], y=[y_bar[i]], width=widths[i], base=bases[i], marker=dict(color='#FECB52'), showlegend=False))
 
 fig.update_xaxes(range=[0, sum_demand])
+fig.update_yaxes(range=[0, bases[0]+y_bar[0]+20])
 
 fig.update_layout(title=dict(text='Levelized costs of heating', font=dict(size=30)), uniformtext_minsize=10, uniformtext_mode='show', xaxis=dict(title='Annual building heat demand in MWh', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='LCOH in $/MWh', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Buildings', font=dict(size=20)), legend=dict(font=dict(size=20)), barmode='overlay', bargap=0)
 
