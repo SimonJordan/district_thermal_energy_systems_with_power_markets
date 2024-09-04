@@ -424,7 +424,7 @@ pio.renderers.default = 'browser'
 # FIG 0
 
 visualize_hours = hours
-visualize_year = 2025
+visualize_year = 2035
 visualize_scenario = '0_basic'
 
 eb_in = []
@@ -456,39 +456,77 @@ for hour in visualize_hours:
     ttes_in.append(py.value(model.v_ttes_q_thermal_in[visualize_scenario, visualize_year, hour]))
     ttes_out.append(-py.value(model.v_ttes_q_thermal_out[visualize_scenario, visualize_year, hour]))
 
-df_1 = pd.DataFrame({'hour': hours, 'demand': demand, 'eb': eb_in, 'hp': hp_in, 'st': st_in, 'wi': wi_in, 'gt': gt_in, 'dgt': dgt_in, 'ieh': ieh_in, 'chp': chp_in, 'ates+': ates_in, 'ates-': ates_out, 'ttes+': ttes_in, 'ttes-': ttes_out})
+df_0 = pd.DataFrame({'hour': hours, 'demand': demand, 'eb': eb_in, 'hp': hp_in, 'st': st_in, 'wi': wi_in, 'gt': gt_in, 'dgt': dgt_in, 'ieh': ieh_in, 'chp': chp_in, 'ates+': ates_in, 'ates-': ates_out, 'ttes+': ttes_in, 'ttes-': ttes_out})
+
+demand_sorted = sorted(demand, reverse=True)
+eb_in_sorted = sorted(eb_in, reverse=True)
+hp_in_sorted = sorted(hp_in, reverse=True)
+st_in_sorted = sorted(st_in, reverse=True)
+wi_in_sorted = sorted(wi_in, reverse=True)
+gt_in_sorted = sorted(gt_in, reverse=True)
+dgt_in_sorted = sorted(dgt_in, reverse=True)
+ieh_in_sorted = sorted(ieh_in, reverse=True)
+chp_in_sorted = sorted(chp_in, reverse=True)
+ates_in_sorted = sorted(ates_in, reverse=True)
+ates_out_sorted = sorted(ates_out)
+ttes_in_sorted = sorted(ttes_in, reverse=True)
+ttes_out_sorted = sorted(ttes_out)
+
+df_1 = pd.DataFrame({'hour': hours, 'demand': demand_sorted, 'eb': eb_in_sorted, 'hp': hp_in_sorted, 'st': st_in_sorted, 'wi': wi_in_sorted, 'gt': gt_in_sorted, 'dgt': dgt_in_sorted, 'ieh': ieh_in_sorted, 'chp': chp_in_sorted, 'ates+': ates_in_sorted, 'ates-': ates_out_sorted, 'ttes+': ttes_in_sorted, 'ttes-': ttes_out_sorted})
 
 fig = go.Figure()
 
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['demand'], fill='tozeroy', name='Demand'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['eb'], fill='tonexty', name='Electric Boiler'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['hp'], fill='tonexty', name='Heat Pump'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['st'], fill='tonexty', name='Solar Thermal'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['wi'], fill='tonexty', name='Waste Incineration'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['gt'], fill='tonexty', name='Geothermal'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['dgt'], fill='tonexty', name='Deep Geothermal'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ieh'], fill='tonexty', name='Industrial Excess Heat'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['chp'], fill='tonexty', name='Combined Heat and Power'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates+'], fill='tonexty', name='ATES in'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates-'], fill='tonexty', name='ATES out'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes+'], fill='tonexty', name='TTES in'))
-# fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes-'], fill='tonexty', name='TTES out'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['demand'], fill='tozeroy', name='Demand'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['eb'], fill='tonexty', name='Electric Boiler'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['hp'], fill='tonexty', name='Heat Pump'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['st'], fill='tonexty', name='Solar Thermal'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['wi'], fill='tonexty', name='Waste Incineration'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['gt'], fill='tonexty', name='Geothermal'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['dgt'], fill='tonexty', name='Deep Geothermal'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ieh'], fill='tonexty', name='Industrial Excess Heat'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['chp'], fill='tonexty', name='Combined Heat and Power'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ates+'], fill='tonexty', name='ATES in'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ates-'], fill='tonexty', name='ATES out'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ttes+'], fill='tonexty', name='TTES in'))
+# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ttes-'], fill='tonexty', name='TTES out'))
 
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['demand'], mode='lines', name='Demand', line=dict(color='black', width=2)))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['eb'], mode='lines', name='Electric boiler', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['hp'], mode='lines', name='Heat pump', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['st'], mode='lines', name='Solar thermal', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['wi'], mode='lines', name='Waste incineration', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['gt'], mode='lines', name='Geothermal', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['dgt'], mode='lines', name='Deep geothermal', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['chp'], mode='lines', name='Combined heat and power', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates+'], mode='lines', name='ATES feed in', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates-'], mode='lines', name='ATES store', stackgroup='two'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes+'], mode='lines', name='TTES feed in', stackgroup='one'))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes-'], mode='lines', name='TTES store', stackgroup='two'))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['chp'], mode='lines', name='Combined heat and power', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['wi'], mode='lines', name='Waste incineration', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ttes-'], mode='lines', name='TTES store', stackgroup='two', line=dict(color='#FFA15A')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ttes+'], mode='lines', name='TTES feed in', stackgroup='one', line=dict(color='#FFA15A')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ates-'], mode='lines', name='ATES store', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ates+'], mode='lines', name='ATES feed in', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
 
-fig.update_layout(title='Load curve', xaxis_title='time in h', yaxis_title='thermal heating energy per hour in MWh/h', legend_title='Technologies')
+# fig.update_layout(title='Load curve', xaxis_title='time in h', yaxis_title='thermal heating energy per hour in MWh/h', legend_title='Technologies')
+
+fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
+
+fig.show()
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['chp'], mode='lines', name='Combined heat and power', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['wi'], mode='lines', name='Waste incineration', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes-'], mode='lines', name='TTES store', stackgroup='two', line=dict(color='#FFA15A')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ttes+'], mode='lines', name='TTES feed in', stackgroup='one', line=dict(color='#FFA15A')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates-'], mode='lines', name='ATES store', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ates+'], mode='lines', name='ATES feed in', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
+
+fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
 
 fig.show()
 
@@ -559,9 +597,57 @@ for technology in technologies_abb:
     for scenario_index in range(len(scenarios)):
         fig.add_trace(go.Scatter(x=df_2['hour'][scenario_index], y=df_2[technology][scenario_index], mode='lines', name=scenarios[scenario_index]))
 
-    fig.update_layout(title=technologies_name[technology], xaxis_title='time in h', yaxis_title='thermal heating energy per hour in MWh/h', legend_title='Scenarios')
-    
+    fig.update_layout(title=dict(text=technologies_name[technology], font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Scenarios', font=dict(size=20)), legend=dict(font=dict(size=20)))
+
     fig.show()
+
+fig = go.Figure()
+
+fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Winter week', 'Summer week'))
+
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_2['gt'][0][:168], mode='lines', name='Scenario 0: basic', line=dict(color='#636EFA')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_2['gt'][1][:168], mode='lines', name='Scenario 1: high electricity price', line=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_2['gt'][0][:168] + df_2['gt'][1][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
+
+#fig.add_trace(go.Scatter(x=list(range(168)), y=df_2['gt'][1], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
+
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_2['gt'][0][4380:4548], mode='lines', name='Scenario 0: basic', line=dict(color='#636EFA'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_2['gt'][1][4380:4548], mode='lines', name='Scenario 1: high electricity price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_2['gt'][0][4380:4548] + df_2['gt'][1][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
+
+fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=1)
+fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=2)
+
+fig.update_yaxes(title_text='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
+fig.update_yaxes(title_text='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
+
+fig.update_layout(title=dict(text='Geothermal', font=dict(size=30)), annotations=[dict(font=dict(size=25))], legend_title=dict(text='Scenarios', font=dict(size=20)), legend=dict(font=dict(size=20)))
+
+fig.show()
+
+fig = go.Figure()
+
+fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Winter week', 'Summer week'))
+
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_2['ieh'][0][:168], mode='lines', name='Scenario 0: basic', line=dict(color='#636EFA')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_2['ieh'][1][:168], mode='lines', name='Scenario 1: high electricity price', line=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_2['ieh'][0][:168] + df_2['ieh'][1][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
+
+#fig.add_trace(go.Scatter(x=list(range(168)), y=df_2['gt'][1], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
+
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_2['ieh'][0][4380:4548], mode='lines', name='Scenario 0: basic', line=dict(color='#636EFA'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_2['ieh'][1][4380:4548], mode='lines', name='Scenario 1: high electricity price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_2['ieh'][0][4380:4548] + df_2['ieh'][1][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
+
+fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=1)
+fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=2)
+
+fig.update_yaxes(title_text='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
+fig.update_yaxes(title_text='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
+
+fig.update_layout(title=dict(text='Industrial excess heat', font=dict(size=30)), annotations=[dict(font=dict(size=25))], legend_title=dict(text='Scenarios', font=dict(size=20)), legend=dict(font=dict(size=20)))
+
+fig.show()
 
 # FIG 2
 
@@ -622,8 +708,12 @@ ieh_inv = []
 chp_inv = []
 ates_inv = []
 ttes_inv = []
+ratio_inv = []
+index = 0
+heating_technology_inv_sum = 0
+storage_technology_inv_sum = 0
 
-for year in years:
+for year in years[:3]:
     eb_inv.append(py.value(model.v_eb_Q_inv[visualize_scenario, year]))
     hp_inv.append(py.value(model.v_hp_Q_inv[visualize_scenario, year]))
     st_inv.append(py.value(model.v_st_P_inv[visualize_scenario, year]))
@@ -634,28 +724,47 @@ for year in years:
     chp_inv.append(py.value(model.v_chp_Q_inv[visualize_scenario, year]))
     ates_inv.append(py.value(model.v_ates_k_inv[visualize_scenario, year]))
     ttes_inv.append(py.value(model.v_ttes_k_inv[visualize_scenario, year]))
+    
+    heating_technology_inv_sum += eb_inv[index] + hp_inv[index] + st_inv[index] + wi_inv[index] + gt_inv[index] + dgt_inv[index] + ieh_inv[index] + chp_inv[index]
+    storage_technology_inv_sum += ates_inv[index] + ttes_inv[index]
+    index +=1
+    
+    ratio_inv.append(heating_technology_inv_sum / storage_technology_inv_sum * 100)
 
 technologies = ['Electric boiler', 'Heat pump', 'Solar thermal', 'Waste incineration', 'Geothermal', 'Deep geothermal', 'Industrial excess heat', 'Combined heat and power']
 technologies_map = {'Electric boiler': eb_inv, 'Heat pump': hp_inv, 'Solar thermal': st_inv, 'Waste incineration': wi_inv, 'Geothermal': gt_inv, 'Deep geothermal': dgt_inv, 'Industrial excess heat': ieh_inv, 'Combined heat and power': chp_inv}
-storages = ['ATES', 'TTES']
-storages_map = {'ATES': ates_inv, 'TTES': ttes_inv}
+storages = ['Aquifer thermal energy storage', 'Tank thermal energy storage']
+storages_map = {'Aquifer thermal energy storage': ates_inv, 'Tank thermal energy storage': ttes_inv}
 
-# fig = go.Figure()
-fig = sp.make_subplots(rows=1, cols=2, subplot_titles=('Heating technology investments', 'Storage technology investments'))
+fig = go.Figure()
 
-for technology in technologies:
-    fig.add_trace(go.Bar(x=years, y=technologies_map[technology], name=technology), row=1, col=1)
+fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, None]], subplot_titles=('Heating technology investments', 'Storage technology investments', 'Ratio heating to storage capacity'))
+
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_inv, name='Ratio'), row=2, col=1)
+
+fig.add_trace(go.Bar(x=years[:3], y=storages_map['Aquifer thermal energy storage'], name='Aquifer thermal energy storage', marker=dict(color='grey')), row=1, col=2)
+fig.add_trace(go.Bar(x=years[:3], y=storages_map['Tank thermal energy storage'], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
+
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Electric boiler'], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Industrial excess heat'], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Heat pump'], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Geothermal'], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Solar thermal'], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Deep geothermal'], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Waste incineration'], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=technologies_map['Combined heat and power'], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
     
-for storage in storages:
-    fig.add_trace(go.Bar(x=years, y=storages_map[storage], name=storage), row=1, col=2)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=1)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=2)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=2, col=1)
 
-fig.update_xaxes(title_text='investment years', row=1, col=1)
-fig.update_xaxes(title_text='investment years', row=1, col=2)
+fig.update_yaxes(title_text='Newly installed capacity in MW', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
+fig.update_yaxes(title_text='Newly installed capacity in MWh', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
+fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20), row=2, col=1)
 
-fig.update_yaxes(title_text='installed power in MW', row=1, col=1)
-fig.update_yaxes(title_text='installed capacity in MWh', row=1, col=2)
+fig.update_yaxes(range=[0, 20], row=2, col=1)
 
-fig.update_layout(title='Investments', legend_title='Technologies', barmode='stack')
+fig.update_layout(title=dict(text='Investments', font=dict(size=30)), annotations=[dict(font=dict(size=25))], legend=dict(x=0.7, y=0, traceorder='normal', font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), barmode='stack', width=1200, height=900)
 
 fig.show()
 
@@ -742,6 +851,20 @@ for building in range(1, 40):
 
     buildings_lcoh[building] = buildings_lcoh_scenario
 
+
+building_lcoh_max = []
+building_lcoh_min = []
+building_lcoh_avg = []
+
+for building in range(1, 40):
+    building_lcoh_max.append(max(buildings_lcoh[building]))
+    building_lcoh_min.append(min(buildings_lcoh[building]))
+    building_lcoh_avg.append(np.mean([min(buildings_lcoh[building]), max(buildings_lcoh[building])]))
+
+building_lcoh_max_index = [i + 1 for i in sorted(range(len(building_lcoh_max)), key=lambda i: building_lcoh_max[i], reverse=True)]
+building_lcoh_min_index = [i + 1 for i in sorted(range(len(building_lcoh_min)), key=lambda i: building_lcoh_min[i], reverse=True)]
+building_lcoh_avg_index = [i + 1 for i in sorted(range(len(building_lcoh_avg)), key=lambda i: building_lcoh_avg[i], reverse=True)]
+
 x_bar = []
 y_bar = []
 widths = []
@@ -815,7 +938,49 @@ for i in range(len(x_bar)):
 
 fig.update_xaxes(range=[0, sum_demand])
 
-fig.update_layout(title='Levelized costs of heating', legend_title='Buildings', xaxis_title='annual building heat demand in MWh', yaxis_title='LCOH in $/MWh', barmode='overlay', bargap=0)
+fig.update_layout(title=dict(text='Levelized costs of heating', font=dict(size=30)), xaxis=dict(title='Annual building heat demand in MWh', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='LCOH in $/MWh', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Buildings', font=dict(size=20)), legend=dict(font=dict(size=20)), barmode='overlay', bargap=0)
+
+fig.show()
+
+x_bar = []
+y_bar = []
+widths = []
+bases = []
+labels = []
+index = 0
+
+for building in building_lcoh_max_index:
+    if building == building_lcoh_max_index[0]:
+        x_bar.append(buildings_demand_sum[building] / 2)
+        
+    else:
+        x_bar.append(x_bar[index-1] + buildings_demand_sum[building_lcoh_max_index[index-1]] / 2 + buildings_demand_sum[building] / 2)
+    
+    y_bar.append(max(buildings_lcoh[building]) - min(buildings_lcoh[building]))
+    widths.append(buildings_demand_sum[building])
+    bases.append(min(buildings_lcoh[building]))
+    labels.append(f'{building}')
+    index += 1
+
+fig = go.Figure()
+
+lcoh_min = min(lcoh, key=lcoh.get)
+lcoh_max = max(lcoh, key=lcoh.get)
+
+# for scenario in scenarios:
+#     fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[scenario], lcoh[scenario]], mode='lines', name=scenario))
+
+fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_min], lcoh[lcoh_min]], mode='lines', line=dict(color='black'), name=lcoh_min, showlegend=False))
+fig.add_trace(go.Scatter(x=[0, sum_demand], y=[lcoh[lcoh_max], lcoh[lcoh_max]], mode='lines', line=dict(color='black'), name=lcoh_max, showlegend=False))
+fig.add_trace(go.Scatter(x=[0, sum_demand, sum_demand, 0], y=[lcoh[lcoh_min], lcoh[lcoh_min], lcoh[lcoh_max], lcoh[lcoh_max]],  fill='toself', fillcolor='gray', opacity=0.5, line=dict(color='gray'), showlegend=False))
+# , fillpattern=dict(shape="x",  fgcolor="black")
+
+for i in range(len(x_bar)):
+    fig.add_trace(go.Bar(x=[x_bar[i]], y=[y_bar[i]], width=widths[i], base=bases[i], text=labels[i], textposition='outside', textangle=-90, name=labels[i], showlegend=False))
+
+fig.update_xaxes(range=[0, sum_demand])
+
+fig.update_layout(title=dict(text='Levelized costs of heating', font=dict(size=30)), uniformtext_minsize=10, uniformtext_mode='show', xaxis=dict(title='Annual building heat demand in MWh', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='LCOH in $/MWh', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Buildings', font=dict(size=20)), legend=dict(font=dict(size=20)), barmode='overlay', bargap=0)
 
 fig.show()
 
@@ -862,7 +1027,7 @@ fig = go.Figure()
 fig.add_trace(go.Scatter(x=df_1['hour'], y=load_duration_curve_demand, mode='lines', fill='tozeroy', name='Buildings'))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=load_duration_curve[visualize_scenario], mode='lines', fill='tozeroy', name=visualize_scenario))
 
-fig.update_layout(title='Load duration curve', xaxis_title='hours', yaxis_title='electric energy per hour in MWh/h', legend_title='Profiles')
+fig.update_layout(title=dict(text='Load duration curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Electric energy per hour in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Profiles', font=dict(size=20)), legend=dict(font=dict(size=20)))
 
 fig.show()
 

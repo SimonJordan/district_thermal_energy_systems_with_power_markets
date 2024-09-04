@@ -238,3 +238,149 @@ fig.update_layout(
 # Zeige das Diagramm
 fig.show()
 
+#%%
+
+import plotly.graph_objects as go
+
+# Beispiel-Daten
+x = [1000, 2000, 3000, 4000, 5000]
+y = [10, 15, 13, 17, 19]
+
+# Erstellen des Plots
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x=x,
+    y=y,
+    mode='lines+markers',
+    name='Beispieldaten'
+))
+
+# Layout anpassen, um Tausender-Trennzeichen hinzuzufügen
+fig.update_layout(
+    xaxis=dict(
+        tickformat=',',  # Fügt Tausender-Trennzeichen hinzu
+    ),
+    title="Plot mit Tausender-Trennzeichen auf der x-Achse",
+    xaxis_title="X-Werte",
+    yaxis_title="Y-Werte"
+)
+
+# Plot anzeigen
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Erstellen der Subplots
+fig = make_subplots(
+    rows=2, cols=2,
+    specs=[[{"colspan": 2}, None],
+           [{"colspan": 1}, {"colspan": 1}]],
+    subplot_titles=("Plot 1", "Plot 2", "Plot 3")
+)
+
+# Hinzufügen der Plots
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[4, 5, 6], name="Plot 1"), row=1, col=1)
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[6, 5, 4], name="Plot 2"), row=2, col=1)
+fig.add_trace(go.Bar(x=[1, 2, 3], y=[5, 6, 7], name="Plot 3", marker=dict(color='blue')), row=2, col=2)
+
+# Positionieren der Legende
+fig.update_layout(
+    legend=dict(
+        x=1, y=0.5,
+        traceorder="normal",
+        font=dict(
+            family="sans-serif",
+            size=12,
+            color="black"
+        ),
+        bgcolor="LightSteelBlue",
+        bordercolor="Black",
+        borderwidth=2
+    ),
+    width=1000,  # Hier die Breite der gesamten Figur anpassen
+    height=1000  # Hier die Höhe der gesamten Figur anpassen
+)
+
+# Anzeigen der Grafik
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+
+# Beispiel-Daten
+x_values = [1, 2, 3, 4, 5]
+y_values_1 = [10, 15, 13, 17, 20]  # Erste Linie
+y_values_2 = [5, 10, 8, 12, 15]    # Zweite Linie
+
+fig = go.Figure()
+
+# Erster Trace (obere Linie)
+fig.add_trace(go.Scatter(
+    x=x_values, 
+    y=y_values_1, 
+    mode='lines',
+    name='Line 1',
+    line=dict(color='blue')
+))
+
+# Zweiter Trace (untere Linie)
+fig.add_trace(go.Scatter(
+    x=x_values, 
+    y=y_values_2, 
+    mode='lines',
+    name='Line 2',
+    line=dict(color='red'),
+    fill='tonexty',  # Füllt die Fläche bis zur vorherigen Linie aus
+    fillcolor='rgba(0, 100, 80, 0.2)'  # Füllfarbe
+))
+
+# Plot anzeigen
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+
+# Beispiel-Daten
+x_values = [1, 2, 3, 4, 5]
+y_values_1 = [10, 15, 13, 17, 20]  # Erste Linie (obere Linie)
+y_values_2 = [5, 10, 8, 12, 15]    # Zweite Linie (untere Linie)
+
+fig = go.Figure()
+
+# Erster Trace (obere Linie)
+fig.add_trace(go.Scatter(
+    x=x_values, 
+    y=y_values_1, 
+    mode='lines',
+    name='Line 1',
+    line=dict(color='blue')
+))
+
+# Zweiter Trace (untere Linie)
+fig.add_trace(go.Scatter(
+    x=x_values, 
+    y=y_values_2, 
+    mode='lines',
+    name='Line 2',
+    line=dict(color='red')
+))
+
+# Separater Trace für die Füllung zwischen den Linien
+fig.add_trace(go.Scatter(
+    x=x_values + x_values[::-1],  # x-Werte für beide Linien (oben und unten)
+    y=y_values_1 + y_values_2[::-1],  # y-Werte für obere und untere Linie
+    fill='toself',  # Füllt die Fläche zwischen den beiden Linien
+    fillcolor='rgba(0, 100, 80, 0.2)',  # Füllfarbe
+    line=dict(color='rgba(255,255,255,0)'),  # Keine sichtbare Linie
+    showlegend=False,  # Keine Legende für den Füll-Trace
+    name='Filled Area'
+))
+
+# Plot anzeigen
+fig.show()
