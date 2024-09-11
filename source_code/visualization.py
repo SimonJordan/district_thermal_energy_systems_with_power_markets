@@ -16,6 +16,7 @@ path_to_file_scenarios = os.path.join(path_to_result_folder, 'scenarios.txt')
 with open(path_to_file_scenarios, 'r') as file:
     scenarios = [line.strip() for line in file]
     
+scenarios_weighting = {'0_basic': 1, '1_high_electricity_price': 1}
 years = [2025, 2030, 2035, 2040, 2045, 2050]
 year_expansion_range = {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}
 hours = list(range(8760))
@@ -803,7 +804,7 @@ for scenario in scenarios:
                             eb_c_inv[scenario][year] + hp_c_inv[scenario][year] + st_c_inv[scenario][year] + wi_c_inv[scenario][year] + gt_c_inv[scenario][year] + dgt_c_inv[scenario][year] + ieh_c_inv[scenario][year] + chp_c_inv[scenario][year] + ates_c_inv[scenario][year] + ttes_c_inv[scenario][year] + \
                             eb_c_fix[scenario][year] + hp_c_fix[scenario][year] + st_c_fix[scenario][year] + wi_c_fix[scenario][year] + gt_c_fix[scenario][year] + dgt_c_fix[scenario][year] + ieh_c_fix[scenario][year] + chp_c_fix[scenario][year] + ates_c_fix[scenario][year] + ttes_c_fix[scenario][year]
                             
-    lcoh[scenario] = sum_heating_cost / sum_heating_demand
+    lcoh[scenario] = sum_heating_cost / scenarios_weighting[scenario] / sum_heating_demand
 
 fig = go.Figure()
 
