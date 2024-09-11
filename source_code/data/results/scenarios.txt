@@ -1,0 +1,2 @@
+0_basic
+1_high_electricity_price

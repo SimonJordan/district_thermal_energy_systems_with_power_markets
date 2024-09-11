@@ -3,7 +3,7 @@ import pandas as pd
 
 cur_dir = os.path.dirname(__file__)
 path_to_input_folder = os.path.join(cur_dir, 'data')
-path_to_text_files = os.path.join(path_to_input_folder, 'Districts', 'sum')
+path_to_text_files = os.path.join(path_to_input_folder, 'districts', 'sum')
 # path_to_output_file_heating = os.path.join(path_to_input_folder, 'districts_heating_demand.xlsx')
 # path_to_output_file_cooling = os.path.join(path_to_input_folder, 'districts_cooling_demand.xlsx')
 # file_names = [f'Building_{i}.txt' for i in range(1, 40)]

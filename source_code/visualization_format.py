@@ -1,0 +1,386 @@
+import pandas as pd
+import plotly.io as pio
+import plotly.graph_objects as go
+
+# Setze den Renderer auf 'browser'
+pio.renderers.default = 'browser'
+
+# Beispiel-Daten erstellen
+hours = list(range(8760))  # 8760 Stunden im Jahr
+demand = [100] * 8760  # Konstanter Demand für Einfachheit (ersetze dies mit deinen echten Daten)
+tech1 = [30] * 8760  # Beispiel-Daten für Technologie 1 (ersetze dies mit deinen echten Daten)
+tech2 = [50] * 8760  # Beispiel-Daten für Technologie 2 (ersetze dies mit deinen echten Daten)
+tech3 = [20] * 8760  # Beispiel-Daten für Technologie 3 (ersetze dies mit deinen echten Daten)
+
+# DataFrame erstellen
+df = pd.DataFrame({
+    'hour': hours,
+    'demand': demand,
+    'tech1': tech1,
+    'tech2': tech2,
+    'tech3': tech3
+})
+
+# Plotly-Figur erstellen
+fig = go.Figure()
+
+# Gestapelte Flächen für jede Technologie hinzufügen
+fig.add_trace(go.Scatter(x=df['hour'], y=df['tech1'], fill='tozeroy', name='Technologie 1'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['tech2'], fill='tonexty', name='Technologie 2'))
+fig.add_trace(go.Scatter(x=df['hour'], y=df['tech3'], fill='tonexty', name='Technologie 3'))
+
+# Diagramm-Layout anpassen
+fig.update_layout(
+    title='Beitrag der Technologien zur Deckung des Demand',
+    xaxis_title='Stunden',
+    yaxis_title='Leistung',
+    legend_title='Technologien'
+)
+
+# Diagramm anzeigen
+fig.show()
+
+#%%
+import plotly.graph_objects as go
+import pandas as pd
+
+# Beispiel-Daten
+data = {
+    'Datetime': pd.date_range(start='2023-01-01', periods=10, freq='H'),
+    'Demand': [100, 120, 150, 130, 140, 170, 160, 180, 190, 200],
+    'Renewable': [30, 40, 45, 35, 50, 55, 60, 65, 70, 75],
+    'Non-Renewable': [70, 80, 105, 95, 90, 115, 100, 115, 120, 125]
+}
+
+df = pd.DataFrame(data)
+
+# Erstellen des gestapelten Flächenplots
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x=df['Datetime'], 
+    y=df['Renewable'], 
+    mode='lines', 
+    name='Renewable',
+    stackgroup='one'  # Diese Option sorgt für das Stapeln der Flächen
+))
+
+fig.add_trace(go.Scatter(
+    x=df['Datetime'], 
+    y=df['Non-Renewable'], 
+    mode='lines', 
+    name='Non-Renewable',
+    stackgroup='one'  # Gleiche stackgroup, um die Flächen zu stapeln
+))
+
+# Hinzufügen der Demand-Linie
+fig.add_trace(go.Scatter(
+    x=df['Datetime'], 
+    y=df['Demand'], 
+    mode='lines', 
+    name='Demand',
+    line=dict(color='black', width=2, dash='dash')
+))
+
+# Layout-Anpassungen
+fig.update_layout(
+    title='Energiebedarf und Erzeugung',
+    xaxis_title='Datum',
+    yaxis_title='Energie (MWh)',
+    legend_title='Legende'
+)
+
+# Plot anzeigen
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+
+# Beispiel-Daten
+x = list(range(10))
+y1 = [2 * i + 1 for i in x]  # Erste Gerade
+y2 = [3 * i + 2 for i in x]  # Zweite Gerade
+
+# Erstellen der Linien und der gefüllten Fläche
+fig = go.Figure()
+
+# Erste Linie
+fig.add_trace(go.Scatter(
+    x=x, y=y1,
+    mode='lines',
+    name='y1 = 2x + 1'
+))
+
+# Zweite Linie
+fig.add_trace(go.Scatter(
+    x=x, y=y2,
+    mode='lines',
+    name='y2 = 3x + 2'
+))
+
+# Fläche zwischen den Linien füllen
+fig.add_trace(go.Scatter(
+    x=x + x[::-1],  # x-Koordinaten für die Fläche (hin und zurück)
+    y=y1 + y2[::-1],  # y1 gefolgt von y2 in umgekehrter Reihenfolge
+    fill='toself',
+    fillcolor='gray',
+    opacity=0.5,
+    line=dict(color='gray'),
+    showlegend=False
+))
+
+# Layout anpassen
+fig.update_layout(
+    title="Gefüllte Fläche zwischen zwei Geraden",
+    xaxis_title="x",
+    yaxis_title="y"
+)
+
+# Plot anzeigen
+fig.show()
+
+
+#%%
+
+
+import plotly.graph_objects as go
+
+# Beispiel-Daten
+categories = ['A', 'B', 'C', 'D']
+values_1 = [10, 20, 30, 40]
+values_2 = [15, 25, 35, 20]
+values_3 = [25, 10, 15, 30]
+
+# Erstellen des gestapelten Balkendiagramms
+fig = go.Figure()
+
+# Füge die einzelnen Kategorien hinzu
+fig.add_trace(go.Bar(x=categories, y=values_1, name='Serie 1'))
+fig.add_trace(go.Bar(x=categories, y=values_2, name='Serie 2'))
+fig.add_trace(go.Bar(x=categories, y=values_3, name='Serie 3'))
+
+# Konfiguration für gestapeltes Diagramm
+fig.update_layout(barmode='stack')
+
+# Zeige das Diagramm
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Erstellen der Subplots
+fig = make_subplots(rows=2, cols=2, subplot_titles=("Plot 1", "Plot 2", "Plot 3", "Plot 4"))
+
+# Hinzufügen der Daten zu den Subplots
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[4, 5, 6], mode='lines', name='Plot 1'), row=1, col=1)
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[6, 5, 4], mode='lines', name='Plot 2'), row=1, col=2)
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[2, 3, 4], mode='lines', name='Plot 3'), row=2, col=1)
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[4, 3, 2], mode='lines', name='Plot 4'), row=2, col=2)
+
+# Layout anpassen
+fig.update_layout(height=600, width=600, title_text="Subplots Example")
+
+# Zeige das Diagramm
+fig.show()
+
+fig = make_subplots(
+    rows=2, cols=2,
+    specs=[[{"colspan": 2}, None], [{"colspan": 1}, {"colspan": 1}]],
+    subplot_titles=("Breiter Plot", "Plot 2", "Plot 3")
+)
+
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[4, 5, 6], mode='lines', name='Breiter Plot'), row=1, col=1)
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[6, 5, 4], mode='lines', name='Plot 2'), row=2, col=1)
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[2, 3, 4], mode='lines', name='Plot 3'), row=2, col=2)
+
+fig.update_layout(height=600, width=800, title_text="Flexible Subplots Example")
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+
+# Daten für den Plot
+x = [0.5, 2, 4, 10]  # x-Position der Balken (die Mitte des Balkens)
+y = [10, 20, 15, 25]  # Höhe der Balken
+widths = [1, 2, 2, 6]  # Individuelle Breiten der Balken
+bases = [5, 10, 7, 15]  # Startpunkte der Balken auf der y-Achse
+labels = ['Balken 1', 'Balken 2', 'Balken 3', 'Balken 4']  # Namen der Balken
+
+# Erstellen der Balken mit unterschiedlicher Breite und benutzerdefinierten Startpunkten
+fig = go.Figure()
+
+# Schleife über die Balken, um sie individuell hinzuzufügen
+for i in range(len(x)):
+    fig.add_trace(go.Bar(
+        x=[x[i]],  # Einzelne x-Position
+        y=[y[i]],  # Einzelne Höhe
+        width=widths[i],  # Breite des Balkens
+        base=bases[i],  # Startpunkt des Balkens
+        text=labels[i],  # Textlabel des Balkens
+        textposition='outside',  # Position des Textes (außerhalb unterhalb des Balkens)
+        textangle=0,  # Winkel des Textes (horizontal)
+        name=labels[i]  # Optional: Name des Balkens
+    ))
+
+# Layout anpassen
+fig.update_layout(
+    title="Balken mit unterschiedlichen Breiten und benutzerdefinierten Startpunkten",
+    xaxis=dict(title='X-Achse'),
+    yaxis=dict(title='Y-Achse'),
+    barmode='overlay',  # Balken übereinander legen, aber mit unterschiedlichen Positionen
+    bargap=0,  # Kein Abstand zwischen den Balken
+)
+
+# Zeige das Diagramm
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+
+# Beispiel-Daten
+x = [1000, 2000, 3000, 4000, 5000]
+y = [10, 15, 13, 17, 19]
+
+# Erstellen des Plots
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x=x,
+    y=y,
+    mode='lines+markers',
+    name='Beispieldaten'
+))
+
+# Layout anpassen, um Tausender-Trennzeichen hinzuzufügen
+fig.update_layout(
+    xaxis=dict(
+        tickformat=',',  # Fügt Tausender-Trennzeichen hinzu
+    ),
+    title="Plot mit Tausender-Trennzeichen auf der x-Achse",
+    xaxis_title="X-Werte",
+    yaxis_title="Y-Werte"
+)
+
+# Plot anzeigen
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Erstellen der Subplots
+fig = make_subplots(
+    rows=2, cols=2,
+    specs=[[{"colspan": 2}, None],
+           [{"colspan": 1}, {"colspan": 1}]],
+    subplot_titles=("Plot 1", "Plot 2", "Plot 3")
+)
+
+# Hinzufügen der Plots
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[4, 5, 6], name="Plot 1"), row=1, col=1)
+fig.add_trace(go.Scatter(x=[1, 2, 3], y=[6, 5, 4], name="Plot 2"), row=2, col=1)
+fig.add_trace(go.Bar(x=[1, 2, 3], y=[5, 6, 7], name="Plot 3", marker=dict(color='blue')), row=2, col=2)
+
+# Positionieren der Legende
+fig.update_layout(
+    legend=dict(
+        x=1, y=0.5,
+        traceorder="normal",
+        font=dict(
+            family="sans-serif",
+            size=12,
+            color="black"
+        ),
+        bgcolor="LightSteelBlue",
+        bordercolor="Black",
+        borderwidth=2
+    ),
+    width=1000,  # Hier die Breite der gesamten Figur anpassen
+    height=1000  # Hier die Höhe der gesamten Figur anpassen
+)
+
+# Anzeigen der Grafik
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+
+# Beispiel-Daten
+x_values = [1, 2, 3, 4, 5]
+y_values_1 = [10, 15, 13, 17, 20]  # Erste Linie
+y_values_2 = [5, 10, 8, 12, 15]    # Zweite Linie
+
+fig = go.Figure()
+
+# Erster Trace (obere Linie)
+fig.add_trace(go.Scatter(
+    x=x_values, 
+    y=y_values_1, 
+    mode='lines',
+    name='Line 1',
+    line=dict(color='blue')
+))
+
+# Zweiter Trace (untere Linie)
+fig.add_trace(go.Scatter(
+    x=x_values, 
+    y=y_values_2, 
+    mode='lines',
+    name='Line 2',
+    line=dict(color='red'),
+    fill='tonexty',  # Füllt die Fläche bis zur vorherigen Linie aus
+    fillcolor='rgba(0, 100, 80, 0.2)'  # Füllfarbe
+))
+
+# Plot anzeigen
+fig.show()
+
+#%%
+
+import plotly.graph_objects as go
+
+# Beispiel-Daten
+x_values = [1, 2, 3, 4, 5]
+y_values_1 = [10, 15, 13, 17, 20]  # Erste Linie (obere Linie)
+y_values_2 = [5, 10, 8, 12, 15]    # Zweite Linie (untere Linie)
+
+fig = go.Figure()
+
+# Erster Trace (obere Linie)
+fig.add_trace(go.Scatter(
+    x=x_values, 
+    y=y_values_1, 
+    mode='lines',
+    name='Line 1',
+    line=dict(color='blue')
+))
+
+# Zweiter Trace (untere Linie)
+fig.add_trace(go.Scatter(
+    x=x_values, 
+    y=y_values_2, 
+    mode='lines',
+    name='Line 2',
+    line=dict(color='red')
+))
+
+# Separater Trace für die Füllung zwischen den Linien
+fig.add_trace(go.Scatter(
+    x=x_values + x_values[::-1],  # x-Werte für beide Linien (oben und unten)
+    y=y_values_1 + y_values_2[::-1],  # y-Werte für obere und untere Linie
+    fill='toself',  # Füllt die Fläche zwischen den beiden Linien
+    fillcolor='rgba(0, 100, 80, 0.2)',  # Füllfarbe
+    line=dict(color='rgba(255,255,255,0)'),  # Keine sichtbare Linie
+    showlegend=False,  # Keine Legende für den Füll-Trace
+    name='Filled Area'
+))
+
+# Plot anzeigen
+fig.show()
