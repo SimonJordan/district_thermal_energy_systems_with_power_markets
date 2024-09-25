@@ -174,7 +174,6 @@ for scenario in scenarios:
     path_to_co2_price = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_co2_price.xlsx')
     
     for year in years:
-        
         df_heat_supply = pd.read_excel(path_to_heat_supply, sheet_name=str(year))
         df_inv_capacity = pd.read_excel(path_to_inv_capacity, sheet_name=str(year))
         df_inv_cost = pd.read_excel(path_to_inv_cost, sheet_name=str(year))

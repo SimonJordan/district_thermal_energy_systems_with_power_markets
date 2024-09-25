@@ -35,6 +35,7 @@ years = [2025, 2030, 2035, 2040, 2045, 2050]
 year_expansion_range = {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}
 hours = list(range(8760))
 heating_demand = {}
+cooling_demand = {}
 electricity_price = {}
 electricity_mean_price = {}
 electricity_co2_share = {}
@@ -49,6 +50,9 @@ data_gt = {}
 data_dgt = {}
 data_ieh = {}
 data_chp = {}
+data_ac = {}
+data_ab = {}
+data_cp = {}
 data_ates = {}
 data_ttes = {}
 data = {}
@@ -68,6 +72,7 @@ path_to_file_co2_price = os.path.join(path_to_input_folder, 'co2_price.xlsx')
 path_to_file_hp_cop = os.path.join(path_to_input_folder, 'temperature_washington_dc.xlsx')
 path_to_file_solar_radiation = os.path.join(path_to_input_folder, 'solar_radiation_washington_dc.xlsx')
 path_to_file_ieh_profile = os.path.join(path_to_input_folder, 'ieh_profile.xlsx')
+path_to_file_ac_eer = os.path.join(path_to_input_folder, 'ac_eer.xlsx')
 path_to_file_eb = os.path.join(path_to_input_folder, 'eb.xlsx')
 path_to_file_hp = os.path.join(path_to_input_folder, 'hp.xlsx')
 path_to_file_st = os.path.join(path_to_input_folder, 'st.xlsx')
@@ -76,6 +81,9 @@ path_to_file_gt = os.path.join(path_to_input_folder, 'gt.xlsx')
 path_to_file_dgt = os.path.join(path_to_input_folder, 'dgt.xlsx')
 path_to_file_ieh = os.path.join(path_to_input_folder, 'ieh.xlsx')
 path_to_file_chp = os.path.join(path_to_input_folder, 'chp.xlsx')
+path_to_file_ac = os.path.join(path_to_input_folder, 'ac.xlsx')
+path_to_file_ab = os.path.join(path_to_input_folder, 'ab.xlsx')
+path_to_file_cp = os.path.join(path_to_input_folder, 'cp.xlsx')
 path_to_file_ates = os.path.join(path_to_input_folder, 'ates.xlsx')
 path_to_file_ttes = os.path.join(path_to_input_folder, 'ttes.xlsx')
 path_to_result_folder = os.path.join(path_to_input_folder, 'results')
@@ -94,6 +102,7 @@ for year in years:
     df_hp_cop = pd.read_excel(path_to_file_hp_cop, sheet_name=str(year))
     df_solar_radiation = pd.read_excel(path_to_file_solar_radiation, sheet_name=str(year))
     df_ieh_profile = pd.read_excel(path_to_file_ieh_profile, sheet_name=str(year))
+    df_ac_eer = pd.read_excel(path_to_file_ac_eer, sheet_name=str(year))
     df_eb = pd.read_excel(path_to_file_eb, sheet_name=str(year))
     df_hp = pd.read_excel(path_to_file_hp, sheet_name=str(year))
     df_st = pd.read_excel(path_to_file_st, sheet_name=str(year))
@@ -102,9 +111,13 @@ for year in years:
     df_dgt = pd.read_excel(path_to_file_dgt, sheet_name=str(year))
     df_ieh = pd.read_excel(path_to_file_ieh, sheet_name=str(year))
     df_chp = pd.read_excel(path_to_file_chp, sheet_name=str(year))
+    df_ac = pd.read_excel(path_to_file_ac, sheet_name=str(year))
+    df_ab = pd.read_excel(path_to_file_ab, sheet_name=str(year))
+    df_cp = pd.read_excel(path_to_file_cp, sheet_name=str(year))
     df_ates = pd.read_excel(path_to_file_ates, sheet_name=str(year))
     df_ttes = pd.read_excel(path_to_file_ttes, sheet_name=str(year))
     heating_demand[year] = df_demand['heating_demand_districts_building'].tolist()
+    cooling_demand[year] = df_demand['cooling_demand_districts_building'].tolist()
     electricity_price[year] = df_electricity_price['electricity_price'].tolist()
     electricity_mean_price[year] = np.mean(electricity_price[year])
     electricity_co2_share[year] = df_electricity_price['electricity_co2_share'].tolist()
@@ -148,6 +161,20 @@ for year in years:
     p_chp_co2_share = df_chp['p_chp_co2_share'].tolist()[0]
     p_chp_c_inv = df_chp['p_chp_c_inv'].tolist()[0]
     data_chp[year] = {'p_chp_eta': p_chp_eta, 'p_chp_h_gas': p_chp_h_gas, 'p_chp_heat': p_chp_heat, 'p_chp_elec': p_chp_elec, 'p_chp_co2_share': p_chp_co2_share, 'p_chp_c_inv': p_chp_c_inv}
+    p_ac_eer = df_ac_eer['p_ac_eer'].tolist()
+    p_ac_c_inv = df_ac['p_ac_c_inv'].tolist()[0]
+    data_ac[year] = {'p_ac_eer': p_ac_eer, 'p_ac_c_inv': p_ac_c_inv}
+    p_ab_eer = df_ab['p_ab_eer'].tolist()[0]
+    p_ab_hp_cop = df_ab['p_ab_hp_cop'].tolist()[0]
+    p_ab_c_inv = df_ab['p_ab_c_inv'].tolist()[0]
+    p_ct_ab_c_inv = df_ab['p_ct_ab_c_inv'].tolist()[0]
+    data_ab[year] = {'p_ab_eer': p_ab_eer, 'p_ab_hp_cop': p_ab_hp_cop, 'p_ab_c_inv': p_ab_c_inv, 'p_ct_ab_c_inv': p_ct_ab_c_inv}
+    p_cp_ct_seer = df_cp['p_cp_ct_seer'].tolist()[0]
+    p_cp_hp_seer = df_cp['p_cp_hp_seer'].tolist()[0]
+    p_cp_hp_cop = df_cp['p_cp_hp_cop'].tolist()[0]
+    p_cp_c_inv = df_cp['p_cp_c_inv'].tolist()[0]
+    p_ct_cp_c_inv = df_cp['p_ct_cp_c_inv'].tolist()[0]
+    data_cp[year] = {'p_cp_ct_seer': p_cp_ct_seer, 'p_cp_hp_seer': p_cp_hp_seer, 'p_cp_hp_cop': p_cp_hp_cop, 'p_cp_c_inv': p_cp_c_inv, 'p_ct_cp_c_inv': p_ct_cp_c_inv}
     p_ates_losses = df_ates['p_ates_losses'].tolist()[0]
     p_ates_eta = df_ates['p_ates_eta'].tolist()[0]
     p_ates_init = df_ates['p_ates_init'].tolist()[0]
@@ -166,23 +193,24 @@ for year in years:
     p_ttes_cop = df_ttes['p_ttes_cop'].tolist()[0]
     p_ttes_c_charge_discharge = df_ttes['p_ttes_c_charge_discharge'].tolist()[0]
     data_ttes[year] = {'p_ttes_losses': p_ttes_losses, 'p_ttes_eta': p_ttes_eta, 'p_ttes_init': p_ttes_init, 'p_ttes_end': p_ttes_end, 'p_ttes_c_inv': p_ttes_c_inv, 'p_ttes_elec': p_ttes_elec, 'p_ttes_cop': p_ttes_cop, 'p_ttes_c_charge_discharge': p_ttes_c_charge_discharge}
-
+    
 #-----------------------------------------------------------------------------#
 #                                                                             #
 # creating the basic data structure                                           #
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-data['0_basic'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-data['1_high_electricity_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: value * 1.5 for year, value in electricity_mean_price.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-# data['2_low_electricity_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': {year: [value * 0.5 for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: value * 0.5 for year, value in electricity_mean_price.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-# data['3_non_neg_electricity_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': {year: [max(0, value) for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: sum(values)/len(values) for year, values in {year: [max(0, value) for value in values] for year, values in electricity_price.items()}.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-# data['4_high_gas_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': {year: [value * 1.3 for value in values] for year, values in gas_price.items()}, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-# data['5_zero_co2_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': {year: value * 0 for year, value in co2_price.items()}, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-# data['6_high_co2_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': {year: value * 1.5 for year, value in co2_price.items()}, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-# data['7_half_investment_c'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': {year: {name: (value * 0.5 if name == 'p_eb_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_eb.items()}, 'hp': {year: {name: (value * 0.5 if name == 'p_hp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_hp.items()}, 'st': {year: {name: (value * 0.5 if name == 'p_st_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_st.items()}, 'wi': {year: {name: (value * 0.5 if name == 'p_wi_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_wi.items()}, 'gt': {year: {name: (value * 0.5 if name == 'p_gt_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_gt.items()}, 'dgt': {year: {name: (value * 0.5 if name == 'p_dgt_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_dgt.items()}, 'ieh': {year: {name: (value * 0.5 if name == 'p_ieh_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ieh.items()}, 'chp': {year: {name: (value * 0.5 if name == 'p_chp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_chp.items()}, 'ates': {year: {name: (value * 0.5 if name == 'p_ates_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ates.items()}, 'ttes': {year: {name: (value * 0.5 if name == 'p_ttes_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()}}
-# data['8_low_electricity_price_high_co2_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': {year: [value * 0.5 for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: value * 0.5 for year, value in electricity_mean_price.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': {year: value * 1.5 for year, value in co2_price.items()}, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
-# data['9_high_electricity_price_high_gas_price_high_co2_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: value * 1.5 for year, value in electricity_mean_price.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': {year: [value * 1.3 for value in values] for year, values in gas_price.items()}, 'co2_price': {year: value * 1.5 for year, value in co2_price.items()}, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ates': data_ates, 'ttes': data_ttes}
+# SERVER !!!
+data['0_basic'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ac': data_ac, 'ab': data_ab, 'cp': data_cp, 'ates': data_ates, 'ttes': data_ttes}
+data['1_high_electricity_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: value * 1.5 for year, value in electricity_mean_price.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ac': data_ac, 'ab': data_ab, 'cp': data_cp, 'ates': data_ates, 'ttes': data_ttes}
+# data['2_low_electricity_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': {year: [value * 0.5 for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: value * 0.5 for year, value in electricity_mean_price.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ac': data_ac, 'ab': data_ab, 'cp': data_cp, 'ates': data_ates, 'ttes': data_ttes}
+# data['3_non_neg_electricity_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': {year: [max(0, value) for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: sum(values)/len(values) for year, values in {year: [max(0, value) for value in values] for year, values in electricity_price.items()}.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ac': data_ac, 'ab': data_ab, 'cp': data_cp, 'ates': data_ates, 'ttes': data_ttes}
+# data['4_high_gas_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': {year: [value * 1.3 for value in values] for year, values in gas_price.items()}, 'co2_price': co2_price, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ac': data_ac, 'ab': data_ab, 'cp': data_cp, 'ates': data_ates, 'ttes': data_ttes}
+# data['5_zero_co2_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': {year: value * 0 for year, value in co2_price.items()}, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ac': data_ac, 'ab': data_ab, 'cp': data_cp, 'ates': data_ates, 'ttes': data_ttes}
+# data['6_high_co2_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': {year: value * 1.5 for year, value in co2_price.items()}, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ac': data_ac, 'ab': data_ab, 'cp': data_cp, 'ates': data_ates, 'ttes': data_ttes}
+# data['7_half_investment_c'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': electricity_price, 'electricity_mean_price': electricity_mean_price, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': co2_price, 'eb': {year: {name: (value * 0.5 if name == 'p_eb_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_eb.items()}, 'hp': {year: {name: (value * 0.5 if name == 'p_hp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_hp.items()}, 'st': {year: {name: (value * 0.5 if name == 'p_st_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_st.items()}, 'wi': {year: {name: (value * 0.5 if name == 'p_wi_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_wi.items()}, 'gt': {year: {name: (value * 0.5 if name == 'p_gt_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_gt.items()}, 'dgt': {year: {name: (value * 0.5 if name == 'p_dgt_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_dgt.items()}, 'ieh': {year: {name: (value * 0.5 if name == 'p_ieh_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ieh.items()}, 'chp': {year: {name: (value * 0.5 if name == 'p_chp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_chp.items()}, 'ac': {year: {name: (value * 0.5 if name == 'p_ac_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ac.items()}, 'ab': {year: {name: (value * 0.5 if name == 'p_ab_c_inv' or 'p_ct_ab_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ab.items()}, 'cp': {year: {name: (value * 0.5 if name == 'p_cp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_cp.items()}, 'ates': {year: {name: (value * 0.5 if name == 'p_ates_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ates.items()}, 'ttes': {year: {name: (value * 0.5 if name == 'p_ttes_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()}}
+# data['8_low_electricity_price_high_co2_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': {year: [value * 0.5 for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: value * 0.5 for year, value in electricity_mean_price.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': gas_price, 'co2_price': {year: value * 1.5 for year, value in co2_price.items()}, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ac': data_ac, 'ab': data_ab, 'cp': data_cp, 'ates': data_ates, 'ttes': data_ttes}
+# data['9_high_electricity_price_high_gas_price_high_co2_price'] = {'year_expansion_range': year_expansion_range,'heating': heating_demand, 'cooling': cooling_demand, 'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()}, 'electricity_mean_price': {year: value * 1.5 for year, value in electricity_mean_price.items()}, 'electricity_co2_share': electricity_co2_share, 'electricity_mean_co2_share': electricity_mean_co2_share, 'gas_price': {year: [value * 1.3 for value in values] for year, values in gas_price.items()}, 'co2_price': {year: value * 1.5 for year, value in co2_price.items()}, 'eb': data_eb, 'hp': data_hp, 'st': data_st, 'wi': data_wi, 'gt': data_gt, 'dgt': data_dgt, 'ieh': data_ieh, 'chp': data_chp, 'ac': data_ac, 'ab': data_ad, 'cp': data_cp, 'ates': data_ates, 'ttes': data_ttes}
 data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours}
 model_name = 'FLXenabler'
 
@@ -201,7 +229,7 @@ model.data_values = data
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
-# adding the general parameters for the model                                 #
+# abding the general parameters for the model                                 #
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
@@ -214,45 +242,76 @@ add_general_parameters(model)
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-from eb import add_eb_variables, add_eb_parameters, add_eb_equations
+from eb import add_eb_parameters, add_eb_variables, add_eb_equations
 add_eb_parameters(model)
 add_eb_variables(model)
 add_eb_equations(model)
 
-from hp import add_hp_variables, add_hp_parameters, add_hp_equations
+from hp import add_hp_parameters, add_hp_variables, add_hp_equations
 add_hp_parameters(model)
 add_hp_variables(model)
 add_hp_equations(model)
 
-from st import add_st_variables, add_st_parameters, add_st_equations
+from st import add_st_parameters, add_st_variables, add_st_equations
 add_st_parameters(model)
 add_st_variables(model)
 add_st_equations(model)
 
-from wi import add_wi_variables, add_wi_parameters, add_wi_equations
+from wi import add_wi_parameters, add_wi_variables, add_wi_equations
 add_wi_parameters(model)
 add_wi_variables(model)
 add_wi_equations(model)
 
-from gt import add_gt_variables, add_gt_parameters, add_gt_equations
+from gt import add_gt_parameters, add_gt_variables, add_gt_equations
 add_gt_parameters(model)
 add_gt_variables(model)
 add_gt_equations(model)
 
-from dgt import add_dgt_variables, add_dgt_parameters, add_dgt_equations
+from dgt import add_dgt_parameters, add_dgt_variables, add_dgt_equations
 add_dgt_parameters(model)
 add_dgt_variables(model)
 add_dgt_equations(model)
 
-from ieh import add_ieh_variables, add_ieh_parameters, add_ieh_equations
+from ieh import add_ieh_parameters, add_ieh_variables, add_ieh_equations
 add_ieh_parameters(model)
 add_ieh_variables(model)
 add_ieh_equations(model)
 
-from chp import add_chp_variables, add_chp_parameters, add_chp_equations
+from chp import add_chp_parameters, add_chp_variables, add_chp_equations
 add_chp_parameters(model)
 add_chp_variables(model)
 add_chp_equations(model)
+
+#-----------------------------------------------------------------------------#
+#                                                                             #
+# adding the parameters, variables and equations of the cooling technologies  #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+from ac import add_ac_parameters, add_ac_variables, add_ac_equations
+add_ac_parameters(model)
+add_ac_variables(model)
+add_ac_equations(model)
+
+from ab_ct import add_ab_ct_parameters, add_ab_ct_variables, add_ab_ct_equations
+add_ab_ct_parameters(model)
+add_ab_ct_variables(model)
+add_ab_ct_equations(model)
+
+from ab_hp import add_ab_hp_parameters, add_ab_hp_variables, add_ab_hp_equations
+add_ab_hp_parameters(model)
+add_ab_hp_variables(model)
+add_ab_hp_equations(model)
+
+from cp_ct import add_cp_ct_parameters, add_cp_ct_variables, add_cp_ct_equations
+add_cp_ct_parameters(model)
+add_cp_ct_variables(model)
+add_cp_ct_equations(model)
+
+from cp_hp import add_cp_hp_parameters, add_cp_hp_variables, add_cp_hp_equations
+add_cp_hp_parameters(model)
+add_cp_hp_variables(model)
+add_cp_hp_equations(model)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -260,26 +319,30 @@ add_chp_equations(model)
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-from ates import add_ates_variables, add_ates_parameters, add_ates_equations
+from ates import add_ates_parameters, add_ates_variables, add_ates_equations
 add_ates_parameters(model)
 add_ates_variables(model)
 add_ates_equations(model)
 
-from ttes import add_ttes_variables, add_ttes_parameters, add_ttes_equations
+from ttes import add_ttes_parameters, add_ttes_variables, add_ttes_equations
 add_ttes_parameters(model)
 add_ttes_variables(model)
 add_ttes_equations(model)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
-# setting the demand balance equation                                         #
+# setting the demand balance equations                                        #
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-def demand_balance(m, s, y, t):
-    return m.v_eb_q_heat_in[s, y, t] + m.v_hp_q_heat_in[s, y, t] + m.v_st_q_heat_in[s, y, t] + m.v_wi_q_heat_in[s, y, t] + m.v_gt_q_heat_in[s, y, t] + m.v_dgt_q_heat_in[s, y, t] + m.v_ieh_q_heat_in[s, y, t] + m.v_chp_q_heat_in[s, y, t] + m.v_ttes_q_thermal_in[s, y, t] - m.v_ttes_q_thermal_out[s, y, t]  + m.v_ates_q_thermal_in[s, y, t] - m.v_ates_q_thermal_out[s, y, t] == model.data_values[s]['heating'][y][t]
+def demand_balance_heating(m, s, y, t):
+    return m.v_eb_q_heat_in[s, y, t] + m.v_hp_q_heat_in[s, y, t] + m.v_st_q_heat_in[s, y, t] + m.v_wi_q_heat_in[s, y, t] + m.v_gt_q_heat_in[s, y, t] + m.v_dgt_q_heat_in[s, y, t] + m.v_ieh_q_heat_in[s, y, t] + m.v_chp_q_heat_in[s, y, t] - m.v_ab_ct_q_heat_out[s, y, t] + m.v_ab_hp_q_heat_in[s, y, t] - m.v_ab_hp_q_heat_out[s, y, t] + m.v_cp_hp_q_heat_in[s, y, t] + m.v_ates_q_heat_in[s, y, t] - m.v_ates_q_heat_out[s, y, t] + m.v_ttes_q_heat_in[s, y, t] - m.v_ttes_q_heat_out[s, y, t] == model.data_values[s]['heating'][y][t]
 
-model.con_demand_balance = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance)
+def demand_balance_cooling(m, s, y, t):
+    return m.v_ac_q_cool_in[s, y, t] + m.v_ab_ct_q_cool_in[s, y, t] + m.v_ab_hp_q_cool_in[s, y, t] + m.v_cp_ct_q_cool_in[s, y, t] + m.v_cp_hp_q_cool_in[s, y, t] + m.v_ates_q_cool_in[s, y, t] - m.v_ates_q_cool_out[s, y, t] == model.data_values[s]['cooling'][y][t]
+
+model.con_demand_balance_heating = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance_heating)
+model.con_demand_balance_cooling = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance_cooling)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -296,6 +359,11 @@ def objective_function(m):
            sum(m.v_dgt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_ieh_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_chp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_ac_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ac_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ac_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_ab_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_ct_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_ab_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_cp_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_cp_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_ates_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours)
 
@@ -525,10 +593,10 @@ for scenario in scenarios:
             dgt_in.append(py.value(model.v_dgt_q_heat_in[scenario, year, hour]))
             ieh_in.append(py.value(model.v_ieh_q_heat_in[scenario, year, hour]))
             chp_in.append(py.value(model.v_chp_q_heat_in[scenario, year, hour]))
-            ates_in.append(py.value(model.v_ates_q_thermal_in[scenario, year, hour]))
-            ates_out.append(-py.value(model.v_ates_q_thermal_out[scenario, year, hour]))
-            ttes_in.append(py.value(model.v_ttes_q_thermal_in[scenario, year, hour]))
-            ttes_out.append(-py.value(model.v_ttes_q_thermal_out[scenario, year, hour]))
+            ates_in.append(py.value(model.v_ates_q_heat_in[scenario, year, hour]))
+            ates_out.append(-py.value(model.v_ates_q_heat_out[scenario, year, hour]))
+            ttes_in.append(py.value(model.v_ttes_q_heat_in[scenario, year, hour]))
+            ttes_out.append(-py.value(model.v_ttes_q_heat_out[scenario, year, hour]))
             
             eb_c_var.append(py.value(model.v_eb_c_var[scenario, year, hour]))
             hp_c_var.append(py.value(model.v_hp_c_var[scenario, year, hour]))
