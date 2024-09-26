@@ -2,21 +2,52 @@ import pyomo.environ as py
 
 def add_ates_equations(m=None):
     
+    def ates_feed_in_heat_max_bound(m, s, y, t):
+        return m.v_ates_q_heat_in[s, y, t] <= m.v_ates_hp_Q_max[s, y]# * m.v_ates_b_heat[s, y, t]
     def ates_feed_in_max_bound(m, s, y, t):
         return m.v_ates_q_thermal_in[s, y, t] <= m.v_ates_Q_thermal_max[y]
 
+    def ates_feed_in_cool_max_bound(m, s, y, t):
+        return m.v_ates_q_cool_in[s, y, t] <= m.v_ates_hp_Q_max[s, y]# * m.v_ates_b_cool[s, y, t]
     def ates_storage_max_bound(m, s, y, t):
         return m.v_ates_q_thermal_out[s, y, t] <= m.v_ates_hp_Q_max[y]
 
+    def ates_limit_1(m, s, y):
+        return m.v_ates_hp_Q_max[s, y] <= 0
+    
+    def ates_limit_2(m, s, y):
+        return m.v_ates_k_max[s, y] <= 0
     def ates_soc_max_bound(m, s, y, t):
         return m.v_ates_k_thermal[s, y, t] <= m.v_ates_k_thermal_max[y]
 
-    def ates_soc(m, s, y, t):
+    # def ates_b(m, s, y, t):
+    #     return m.v_ates_b_heat[s, y, t] + m.v_ates_b_cool[s, y, t] <= 1
+
+    def ates_soc_heat_max_bound(m, s, y, t):
+        return m.v_ates_k_heat[s, y, t] <= m.v_ates_k_max[s, y]
+
+    def ates_soc_cool_max_bound(m, s, y, t):
+        return m.v_ates_k_cool[s, y, t] <= m.v_ates_k_max[s, y]
+
+    def ates_soc_heat(m, s, y, t):
         if t == 0:
+            return m.v_ates_k_heat[s, y, t] == m.v_ates_k_max[s, y] * m.p_ates_losses[s, y] * m.p_ates_init[s, y] + m.v_ates_q_heat_out[s, y, t] * m.p_ates_eta[s, y] - m.v_ates_q_heat_in[s, y, t] / m.p_ates_eta[s, y] + m.v_ates_q_cool_in[s, y, t] * m.p_ates_eta[s, y]
+        elif t == 8759:
+            return m.v_ates_k_heat[s, y, t] == m.v_ates_k_max[s, y] * m.p_ates_end[s, y]
             return m.v_ates_k_thermal[s, y, 0] == m.v_ates_k_thermal_max[y] * m.p_ates_losses[s, y] * m.p_ates_init[s, y] + m.v_ates_q_thermal_out[s, y, 0] * m.p_ates_eta[s, y] - m.v_ates_q_thermal_in[s, y, 0] / m.p_ates_eta[s, y]
         else:
-            return m.v_ates_k_thermal[s, y, t] == m.v_ates_k_thermal[s, y, t-1] * m.p_ates_losses[s, y] + m.v_ates_q_thermal_out[s, y, t] * m.p_ates_eta[s, y] - m.v_ates_q_thermal_in[s, y, t] / m.p_ates_eta[s, y]
+            return m.v_ates_k_heat[s, y, t] == m.v_ates_k_heat[s, y, t-1] * m.p_ates_losses[s, y] + m.v_ates_q_heat_out[s, y, t] * m.p_ates_eta[s, y] - m.v_ates_q_heat_in[s, y, t] / m.p_ates_eta[s, y] + m.v_ates_q_cool_in[s, y, t] * m.p_ates_eta[s, y]
     
+    def ates_soc_cool(m, s, y, t):
+            if t == 0:
+                return m.v_ates_k_cool[s, y, t] == m.v_ates_k_max[s, y] * m.p_ates_losses[s, y] * m.p_ates_init[s, y] + m.v_ates_q_cool_out[s, y, t] * m.p_ates_eta[s, y] - m.v_ates_q_cool_in[s, y, t] / m.p_ates_eta[s, y] + m.v_ates_q_heat_in[s, y, t] * m.p_ates_eta[s, y]
+            elif t == 8759:
+                return m.v_ates_k_cool[s, y, t] == m.v_ates_k_max[s, y] * m.p_ates_end[s, y]
+            else:
+                return m.v_ates_k_cool[s, y, t] == m.v_ates_k_cool[s, y, t-1] * m.p_ates_losses[s, y] + m.v_ates_q_cool_out[s, y, t] * m.p_ates_eta[s, y] - m.v_ates_q_cool_in[s, y, t] / m.p_ates_eta[s, y] + m.v_ates_q_heat_in[s, y, t] * m.p_ates_eta[s, y]
+        
+    def ates_elec(m, s, y, t):
+        return m.v_ates_q_elec_consumption[s, y, t] == (m.v_ates_q_heat_in[s, y, t] + m.v_ates_q_cool_in[s, y, t]) / m.p_ates_cop[s, y]
     def ates_soc_final(m, s, y, t):
         return m.v_ates_k_thermal[s, y, 8759] == m.v_ates_k_thermal_max[y] * m.p_ates_end[s, y]
 
@@ -25,8 +56,10 @@ def add_ates_equations(m=None):
     
     def ates_k_inv(m, y):
         if (y - 5) in m.set_years:
+            return m.v_ates_k_inv[s, y] == (m.v_ates_k_max[s, y] - m.v_ates_k_max[s, y-5])
             return m.v_ates_k_inv[y] == (m.v_ates_k_thermal_max[y] - m.v_ates_k_thermal_max[y-5])
         else:
+            return m.v_ates_k_inv[s, y] == m.v_ates_k_max[s, y]
             return m.v_ates_k_inv[y] == m.v_ates_k_thermal_max[y]
     
     def ates_hp_Q_inv(m, y):
@@ -40,30 +73,48 @@ def add_ates_equations(m=None):
     
     def ates_c_fix(m, s, y):
         if (y - 5) in m.set_years:
+            return m.v_ates_c_fix[s, y] == m.v_ates_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * ((m.v_ates_k_inv[s, y] * m.p_ates_c_inv[s, y] + m.v_ates_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ates_k_max[s, y] - m.v_ates_k_max[s, y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y])
             return m.v_ates_c_fix[s, y] == m.v_ates_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_ates_k_inv[y] * m.p_ates_c_inv[s, y] + m.v_ates_hp_Q_inv[y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ates_k_thermal_max[y] - m.v_ates_k_thermal_max[y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y])
         else:
+            return m.v_ates_c_fix[s, y] == m.p_year_expansion_range[s, y] * ((m.v_ates_k_inv[s, y] * m.p_ates_c_inv[s, y] + m.v_ates_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ates_k_max[s, y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y])
             return m.v_ates_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_ates_k_inv[y] * m.p_ates_c_inv[s, y] + m.v_ates_hp_Q_inv[y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ates_k_thermal_max[y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y])
     
     def ates_c_var(m, s, y, t):
+        return m.v_ates_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ates_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + (m.v_ates_q_heat_in[s, y, t] + m.v_ates_q_heat_out[s, y, t]) * m.p_ates_c_charge_discharge[s, y])
+
+    m.con_ates_feed_in_heat_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+                                                      rule = ates_feed_in_heat_max_bound)
         return m.v_ates_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ates_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + (m.v_ates_q_thermal_in[s, y, t] + m.v_ates_q_thermal_out[s, y, t]) * m.p_ates_c_charge_discharge[s, y])
     
     m.con_ates_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                  rule = ates_feed_in_max_bound)
     
-    m.con_ates_storage_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
-                                                 rule = ates_storage_max_bound)
+    m.con_ates_feed_in_cool_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+                                                      rule = ates_feed_in_cool_max_bound)
     
-    m.con_ates_elec_heat = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
-                                         rule = ates_elec_heat)
+    m.con_ates_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = ates_limit_1)
     
-    m.con_ates_soc_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
-                                             rule = ates_soc_max_bound)
+    m.con_ates_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = ates_limit_2)
     
-    m.con_ates_soc = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
-                                   rule = ates_soc)
+    # m.con_ates_b = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+    #                              rule = ates_b)
+    
+    m.con_ates_elec = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+                                    rule = ates_elec)
+    
+    m.con_ates_soc_heat_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+                                                  rule = ates_soc_heat_max_bound)
+    
+    m.con_ates_soc_cool_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+                                                  rule = ates_soc_cool_max_bound)
+    
+    m.con_ates_soc_heat = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+                                        rule = ates_soc_heat)
         
-    m.con_ates_soc_final = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
-                                         rule = ates_soc_final)
+    m.con_ates_soc_cool = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+                                        rule = ates_soc_cool)
         
     m.con_ates_k_inv = py.Constraint(m.set_years,
                                      rule = ates_k_inv)
@@ -82,29 +133,52 @@ def add_ates_equations(m=None):
 
 def add_ates_variables(m=None):
     """This section defines the variables for ATES"""
-    m.v_ates_q_thermal_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
-                                   domain = py.NonNegativeReals,
-                                   doc = 'thermal energy feed in per scenario, year and hour')
+    m.v_ates_q_heat_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
+                                domain = py.NonNegativeReals,
+                                doc = 'heat energy feed in per scenario, year and hour')
     
-    m.v_ates_q_thermal_out = py.Var(m.set_scenarios, m.set_years, m.set_hours,
-                                    domain = py.NonNegativeReals,
-                                    doc = 'thermal energy storing per scenario, year and hour')
+    m.v_ates_q_heat_out = py.Var(m.set_scenarios, m.set_years, m.set_hours,
+                                 domain = py.NonNegativeReals,
+                                 doc = 'heat energy storing per scenario, year and hour')
     
+    m.v_ates_q_cool_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
+                                domain = py.NonNegativeReals,
+                                doc = 'cool energy feed in per scenario, year and hour')
     m.v_ates_Q_thermal_max = py.Var(m.set_years,
                                     domain = py.NonNegativeReals,
                                     doc = 'maximum thermal energy feed in per scenario and year')
     
+    m.v_ates_q_cool_out = py.Var(m.set_scenarios, m.set_years, m.set_hours,
+                                 domain = py.NonNegativeReals,
+                                 doc = 'cool energy storing per scenario, year and hour')
+    
+    m.v_ates_b_heat = py.Var(m.set_scenarios, m.set_years, m.set_hours,
+                             domain = py.Binary,
+                             doc = 'binary variable for heat well per scenario, year and hour')
+    
+    m.v_ates_b_cool = py.Var(m.set_scenarios, m.set_years, m.set_hours,
+                             domain = py.Binary,
+                             doc = 'binary variable for cool well per scenario, year and hour')
+    
+    m.v_ates_hp_Q_max = py.Var(m.set_scenarios, m.set_years,
     m.v_ates_hp_Q_max = py.Var(m.set_years,
                                domain = py.NonNegativeReals,
-                               doc = 'maximum thermal energy storing per scenario and year')
+                               doc = 'maximum heat energy storing per scenario and year')
     
-    m.v_ates_k_thermal = py.Var(m.set_scenarios, m.set_years, m.set_hours,
-                                domain = py.NonNegativeReals,
-                                doc = 'state of charge per scenario, year and hour')
+    m.v_ates_k_heat = py.Var(m.set_scenarios, m.set_years, m.set_hours,
+                             domain = py.NonNegativeReals,
+                             doc = 'state of charge heat well per scenario, year and hour')
     
+    m.v_ates_k_cool = py.Var(m.set_scenarios, m.set_years, m.set_hours,
+                             domain = py.NonNegativeReals,
+                             doc = 'state of charge cool well per scenario, year and hour')
     m.v_ates_k_thermal_max = py.Var(m.set_years,
                                     domain = py.NonNegativeReals,
                                     doc = 'maximum state of charge per scenario, year and hour')
+    
+    m.v_ates_k_max = py.Var(m.set_scenarios, m.set_years,
+                             domain = py.NonNegativeReals,
+                             doc = 'maximum state of charge per scenario, year and hour')
     
     m.v_ates_q_elec_consumption = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                                          domain = py.NonNegativeReals,
@@ -185,7 +259,7 @@ def add_ates_parameters(m=None):
     m.p_ates_elec = py.Param(m.set_scenarios, m.set_years,
                              initialize = init_ates_elec,
                              within = py.NonNegativeReals,
-                             doc = 'electricity share of thermal energy')
+                             doc = 'electricity share of heat energy')
     
     m.p_ates_cop = py.Param(m.set_scenarios, m.set_years,
                             initialize = init_ates_cop,

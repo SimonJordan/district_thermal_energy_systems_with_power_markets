@@ -99,7 +99,7 @@ def add_hp_parameters(m=None):
     m.p_hp_c_inv =py.Param(m.set_scenarios, m.set_years,
                            initialize = init_hp_c_inv,
                            within = py.NonNegativeReals,
-                           doc = 'specific inv cost of heatpumps')
+                           doc = 'specific inv cost of the large-scale heat pump')
     
     # m.p_hp_c_fix = py.Param(m.set_scenarios, m.set_years,
     #                         initialize = init_hp_c_fix,
