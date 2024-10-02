@@ -293,25 +293,15 @@ add_ac_parameters(model)
 add_ac_variables(model)
 add_ac_equations(model)
 
-from ab_ct import add_ab_ct_parameters, add_ab_ct_variables, add_ab_ct_equations
-add_ab_ct_parameters(model)
-add_ab_ct_variables(model)
-add_ab_ct_equations(model)
+from ab import add_ab_parameters, add_ab_variables, add_ab_equations
+add_ab_parameters(model)
+add_ab_variables(model)
+add_ab_equations(model)
 
-from ab_hp import add_ab_hp_parameters, add_ab_hp_variables, add_ab_hp_equations
-add_ab_hp_parameters(model)
-add_ab_hp_variables(model)
-add_ab_hp_equations(model)
-
-from cp_ct import add_cp_ct_parameters, add_cp_ct_variables, add_cp_ct_equations
-add_cp_ct_parameters(model)
-add_cp_ct_variables(model)
-add_cp_ct_equations(model)
-
-from cp_hp import add_cp_hp_parameters, add_cp_hp_variables, add_cp_hp_equations
-add_cp_hp_parameters(model)
-add_cp_hp_variables(model)
-add_cp_hp_equations(model)
+from cp import add_cp_parameters, add_cp_variables, add_cp_equations
+add_cp_parameters(model)
+add_cp_variables(model)
+add_cp_equations(model)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
