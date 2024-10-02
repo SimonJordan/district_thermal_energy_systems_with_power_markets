@@ -6,8 +6,7 @@ def add_st_equations(m=None):
         return m.v_st_q_heat_in[s, y, t] <= m.v_st_Q_heat_max[y]
     
     # def st_limit(m, s, y):
-    #     return m.v_st_Q_heat_max[s, y] <= 0
-    #     return m.v_st_Q_heat_max[y] <= 200
+    #     return m.v_st_Q_heat_max[y] <= 0
     
     def st_solar_radiation(m, s, y, t):
         return m.v_st_q_heat_in[s, y, t] == m.p_st_solar_radiation[s, y, t] * m.v_st_p[y, t] / 1000 * m.p_st_eta[s, y]
@@ -20,15 +19,13 @@ def add_st_equations(m=None):
      
     def st_P_inv(m, y):
         if (y - 5) in m.set_years:
-            return m.v_st_P_inv[s, y] == m.v_st_P_max[s, y] - m.v_st_P_max[s, y-5]
-            return m.v_st_P_inv[y] == (m.v_st_P_max[y] - m.v_st_P_max[y-5])
+            return m.v_st_P_inv[y] == m.v_st_P_max[y] - m.v_st_P_max[y-5]
         else:
             return m.v_st_P_inv[y] == m.v_st_P_max[y]
         
     def st_hp_Q_inv(m, y):
         if (y - 5) in m.set_years:
-            return m.v_st_hp_Q_inv[s, y] == m.v_st_Q_heat_max[s, y] - m.v_st_Q_heat_max[s, y-5]
-            return m.v_st_hp_Q_inv[y] == (m.v_st_Q_heat_max[y] - m.v_st_Q_heat_max[y-5])
+            return m.v_st_hp_Q_inv[y] == m.v_st_Q_heat_max[y] - m.v_st_Q_heat_max[y-5]
         else:
             return m.v_st_hp_Q_inv[y] == m.v_st_Q_heat_max[y]
        
@@ -37,12 +34,9 @@ def add_st_equations(m=None):
    
     def st_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_st_c_fix[s, y] == m.v_st_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * m.v_st_c_inv[s, y] * 0.02
-            return m.v_st_c_fix[s, y] == m.v_st_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_st_P_inv[y] * m.p_st_c_inv[s, y] + m.v_st_hp_Q_inv[y] * m.p_hp_c_inv[s, y]) * 0.02)
+            return m.v_st_c_fix[s, y] == m.v_st_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * m.v_st_c_inv[s, y] * 0.02
         else:
-            return m.v_st_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_st_c_inv[s, y] * 0.02
-    
-            return m.v_st_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_st_P_inv[y] * m.p_st_c_inv[s, y] + m.v_st_hp_Q_inv[y] * m.p_hp_c_inv[s, y]) * 0.02)
+            return m.v_st_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * m.v_st_c_inv[s, y] * 0.02
             
     def st_c_var(m, s, y, t):
         return m.v_st_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_st_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
@@ -87,11 +81,6 @@ def add_st_variables(m=None):
     m.v_st_q_elec_consumption = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                                        domain = py.NonNegativeReals,
                                        doc = 'electricity input of solar thermal per scenario, year and hour')
-    
-    m.v_st_p = py.Var(m.set_scenarios, m.set_years, m.set_hours,
-    # m.v_st_eta_avg = py.Var(m.set_scenarios, m.set_years,
-    #                         domain = py.NonNegativeReals,
-    #                         doc = 'average eta of solar thermal per scenario and year')
     
     m.v_st_p = py.Var(m.set_years, m.set_hours,
                       domain = py.NonNegativeReals,

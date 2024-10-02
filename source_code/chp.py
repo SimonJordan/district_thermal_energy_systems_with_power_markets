@@ -16,21 +16,18 @@ def add_chp_equations(m=None):
     
     def chp_Q_inv(m, y):
         if (y - 5) in m.set_years:
-            return m.v_chp_Q_inv[s, y] == m.v_chp_Q_mix_max[s, y] - m.v_chp_Q_mix_max[s, y-5]
-            return m.v_chp_Q_inv[y] == (m.v_chp_Q_mix_max[y] - m.v_chp_Q_mix_max[y-5])
+            return m.v_chp_Q_inv[y] == m.v_chp_Q_mix_max[y] - m.v_chp_Q_mix_max[y-5]
         else:
             return m.v_chp_Q_inv[y] == m.v_chp_Q_mix_max[y]
     
     def chp_c_inv(m, s, y):
-        return m.v_chp_c_inv[s, y] == m.p_scenario_weighting[s] * (m.v_chp_Q_inv[y] * m.p_chp_c_inv[s, y])
+        return m.v_chp_c_inv[s, y] == m.p_scenario_weighting[s] * m.v_chp_Q_inv[y] * m.p_chp_c_inv[s, y]
    
     def chp_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_chp_c_fix[s, y] == m.v_chp_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * m.v_chp_c_inv[s, y] * 0.02
-            return m.v_chp_c_fix[s, y] == m.v_chp_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_chp_Q_inv[y] * m.p_chp_c_inv[s, y] * 0.02)
+            return m.v_chp_c_fix[s, y] == m.v_chp_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * m.v_chp_c_inv[s, y] * 0.02
         else:
-            return m.v_chp_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_chp_c_inv[s, y] * 0.02
-            return m.v_chp_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_chp_Q_inv[y] * m.p_chp_c_inv[s, y] * 0.02)
+            return m.v_chp_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * m.v_chp_c_inv[s, y] * 0.02
     
     def chp_c_var(m, s, y, t):
         return m.v_chp_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_chp_q_gas[s, y, t] * m.p_c_gas[s, y, t] + m.v_chp_q_gas[s, y, t] / m.p_chp_h_gas[s, y] * m.p_chp_co2_share[s, y] * m.p_c_co2[s, y] - m.v_chp_q_elec_in[s, y, t] * m.p_c_elec[s, y, t])
