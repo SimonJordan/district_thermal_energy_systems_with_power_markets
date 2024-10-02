@@ -4,7 +4,13 @@ def add_ttes_equations(m=None):
     
     def ttes_feed_in_max_bound(m, s, y, t):
         return m.v_ttes_q_heat_out[s, y, t] <= m.v_ttes_hp_Q_max[s, y]
-
+    
+    # def ttes_limit_1(m, s, y):
+    #     return m.v_ttes_hp_Q_max[s, y] <= 0
+    
+    # def ttes_limit_2(m, s, y):
+    #     return m.v_ttes_k_heat_max[s, y] <= 0
+    
     def ttes_soc_max_bound(m, s, y, t):
         return m.v_ttes_k_heat[s, y, t] <= m.v_ttes_k_heat_max[s, y]
 
@@ -21,13 +27,13 @@ def add_ttes_equations(m=None):
     
     def ttes_k_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_k_inv[s, y] == (m.v_ttes_k_heat_max[s, y] - m.v_ttes_k_heat_max[s, y-5])
+            return m.v_ttes_k_inv[s, y] == m.v_ttes_k_heat_max[s, y] - m.v_ttes_k_heat_max[s, y-5]
         else:
             return m.v_ttes_k_inv[s, y] == m.v_ttes_k_heat_max[s, y]
     
     def ttes_hp_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_hp_Q_inv[s, y] == (m.v_ttes_hp_Q_max[s, y] - m.v_ttes_hp_Q_max[s, y-5])
+            return m.v_ttes_hp_Q_inv[s, y] == m.v_ttes_hp_Q_max[s, y] - m.v_ttes_hp_Q_max[s, y-5]
         else:
             return m.v_ttes_hp_Q_inv[s, y] == m.v_ttes_hp_Q_max[s, y]
    
@@ -36,9 +42,9 @@ def add_ttes_equations(m=None):
     
     def ttes_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ttes_c_fix[s, y] == m.v_ttes_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * ((m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + (m.v_ttes_k_heat_max[s, y] - m.v_ttes_k_heat_max[s, y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ttes_elec[s, y])
+            return m.v_ttes_c_fix[s, y] == m.v_ttes_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * (m.v_ttes_c_inv[s, y] * 0.02 + (m.v_ttes_k_heat_max[s, y] - m.v_ttes_k_heat_max[s, y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ttes_elec[s, y])
         else:
-            return m.v_ttes_c_fix[s, y] == m.p_year_expansion_range[s, y] * ((m.v_ttes_k_inv[s, y] * m.p_ttes_c_inv[s, y] + m.v_ttes_hp_Q_inv[s, y] * m.p_hp_c_inv[s, y]) * 0.02 + m.v_ttes_k_heat_max[s, y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ttes_elec[s, y])
+            return m.v_ttes_c_fix[s, y] == m.p_year_expansion_range[s, y] * (m.v_ttes_c_inv[s, y] * 0.02 + m.v_ttes_k_heat_max[s, y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ttes_elec[s, y])
     
     def ttes_c_var(m, s, y, t):
         return m.v_ttes_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ttes_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + (m.v_ttes_q_heat_in[s, y, t] + m.v_ttes_q_heat_out[s, y, t]) * m.p_ttes_c_charge_discharge[s, y])
@@ -69,6 +75,12 @@ def add_ttes_equations(m=None):
     
     m.con_ttes_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                      rule = ttes_c_var)
+    
+    # m.con_ttes_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
+    #                                   rule = ttes_limit_1)
+    
+    # m.con_ttes_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
+    #                                   rule = ttes_limit_2)
 
 def add_ttes_variables(m=None):
     """This section defines the variables for TTES"""

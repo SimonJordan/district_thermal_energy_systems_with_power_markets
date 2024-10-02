@@ -16,7 +16,7 @@ def add_cp_hp_equations(m=None):
     
     def cp_hp_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_cp_hp_Q_inv[s, y] == (m.v_cp_hp_Q_cool_max[s, y] - m.v_cp_hp_Q_cool_max[s, y-5])
+            return m.v_cp_hp_Q_inv[s, y] == m.v_cp_hp_Q_cool_max[s, y] - m.v_cp_hp_Q_cool_max[s, y-5]
         else:
             return m.v_cp_hp_Q_inv[s, y] == m.v_cp_hp_Q_cool_max[s, y]
     
@@ -25,9 +25,9 @@ def add_cp_hp_equations(m=None):
   
     def cp_hp_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_cp_hp_c_fix[s, y] == m.v_cp_hp_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * ((m.v_cp_hp_Q_inv[s, y] * (m.p_cp_c_inv[s, y] + m.p_hp_c_inv[s, y] * (1 + 1 / m.p_cp_hp_seer[s, y]))) * 0.02)
+            return m.v_cp_hp_c_fix[s, y] == m.v_cp_hp_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * m.v_cp_hp_c_inv[s, y] * 0.02
         else:
-            return m.v_cp_hp_c_fix[s, y] == m.p_year_expansion_range[s, y] * ((m.v_cp_hp_Q_inv[s, y] * (m.p_cp_c_inv[s, y] + m.p_hp_c_inv[s, y] * (1 + 1 / m.p_cp_hp_seer[s, y]))) * 0.02)
+            return m.v_cp_hp_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_cp_hp_c_inv[s, y] * 0.02
 
     def cp_hp_c_var(m, s, y, t):
         return m.v_cp_hp_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_cp_hp_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
@@ -97,9 +97,6 @@ def add_cp_hp_parameters(m=None):
     
     def init_cp_hp_cop(m, s, y):
         return m.data_values[s]['cp'][y]['p_cp_hp_cop']
-        
-    # def init_cp_hp_c_fix(m, s, y):
-    #     return m.data_values[s]['cp_hp'][y]['p_cp_hp_c_fix']
     
     m.p_cp_hp_seer = py.Param(m.set_scenarios, m.set_years,
                            initialize = init_cp_hp_seer,
@@ -110,9 +107,4 @@ def add_cp_hp_parameters(m=None):
                              initialize = init_cp_hp_cop,
                              within = py.NonNegativeReals,
                              doc = 'coeffiecent of perfomance of the heat pump for the large-scale compressor')
-    
-    # m.p_cp_hp_c_fix = py.Param(m.set_scenarios, m.set_years,
-    #                         initialize = init_cp_hp_c_fix,
-    #                         within = py.NonNegativeReals,
-    #                         doc = 'fixed cost of cp_hp')
     

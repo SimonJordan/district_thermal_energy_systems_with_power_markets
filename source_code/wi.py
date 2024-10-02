@@ -5,6 +5,9 @@ def add_wi_equations(m=None):
     def wi_feed_in_max_bound(m, s, y, t):
         return m.v_wi_q_heat_in[s, y, t] + m.v_wi_q_elec_in[s, y, t] <= m.v_wi_Q_mix_max[s, y]
     
+    # def wi_limit(m, s, y):
+    #     return m.v_wi_Q_mix_max[s, y] <= 0
+    
     def wi_waste_heat(m, s, y, t):
         return m.v_wi_q_heat_in[s, y, t] == m.p_wi_q_waste[s, y] * m.p_wi_eta[s, y] * m.p_wi_h_waste[s, y] * m.p_wi_heat[s, y] * m.v_wi_p_scale[s, y, t]
         
@@ -16,7 +19,7 @@ def add_wi_equations(m=None):
     
     def wi_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_wi_Q_inv[s, y] == (m.v_wi_Q_mix_max[s, y] - m.v_wi_Q_mix_max[s, y-5])
+            return m.v_wi_Q_inv[s, y] == m.v_wi_Q_mix_max[s, y] - m.v_wi_Q_mix_max[s, y-5]
         else:
             return m.v_wi_Q_inv[s, y] == m.v_wi_Q_mix_max[s, y]
     
@@ -25,9 +28,9 @@ def add_wi_equations(m=None):
    
     def wi_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_wi_c_fix[s, y] == m.v_wi_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * (m.v_wi_Q_inv[s, y] * m.p_wi_c_inv[s, y] * 0.02)
+            return m.v_wi_c_fix[s, y] == m.v_wi_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * m.v_wi_c_inv[s, y] * 0.02
         else:
-            return m.v_wi_c_fix[s, y] == m.p_year_expansion_range[s, y] * (m.v_wi_Q_inv[s, y] * m.p_wi_c_inv[s, y] * 0.02)
+            return m.v_wi_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_wi_c_inv[s, y] * 0.02
     
     def wi_c_var(m, s, y, t):
         return m.v_wi_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.p_wi_q_waste[s, y] * m.p_wi_c_waste[s, y] * m.v_wi_p_scale[s, y, t] + m.p_wi_q_waste[s, y] * m.p_wi_co2_share[s, y] * m.p_c_co2[s, y] * m.v_wi_p_scale[s, y, t] - m.v_wi_q_elec_in[s, y, t] * m.p_c_elec[s, y, t])
@@ -55,6 +58,9 @@ def add_wi_equations(m=None):
     
     m.con_wi_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = wi_c_var)
+    
+    # m.con_wi_limit = py.Constraint(m.set_scenarios, m.set_years,
+    #                                rule = wi_limit)
 
 def add_wi_variables(m=None):
     

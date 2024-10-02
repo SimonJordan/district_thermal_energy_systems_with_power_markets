@@ -16,18 +16,18 @@ def add_ab_ct_equations(m=None):
      
     def ab_ct_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ab_ct_Q_inv[s, y] == (m.v_ab_ct_Q_cool_max[s, y] - m.v_ab_ct_Q_cool_max[s, y-5])
+            return m.v_ab_ct_Q_inv[s, y] == m.v_ab_ct_Q_cool_max[s, y] - m.v_ab_ct_Q_cool_max[s, y-5]
         else:
             return m.v_ab_ct_Q_inv[s, y] == m.v_ab_ct_Q_cool_max[s, y]
     
     def ab_ct_c_inv(m, s, y):
         return m.v_ab_ct_c_inv[s, y] == m.v_ab_ct_Q_inv[s, y] * m.p_ab_c_inv[s, y] + m.v_ab_ct_Q_inv[s, y] * (1 + 1 / m.p_ab_eer[s, y]) * m.p_ct_ab_c_inv[s, y]
-  
+    
     def ab_ct_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ab_ct_c_fix[s, y] == m.v_ab_ct_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * ((m.v_ab_ct_Q_inv[s, y] * m.p_ab_c_inv[s, y] + m.v_ab_ct_Q_inv[s, y] * (1 + 1 / m.p_ab_eer[s, y]) * m.p_ct_ab_c_inv[s, y]) * 0.02)
+            return m.v_ab_ct_c_fix[s, y] == m.v_ab_ct_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * m.v_ab_ct_c_inv[s, y] * 0.02
         else:
-            return m.v_ab_ct_c_fix[s, y] == m.p_year_expansion_range[s, y] * ((m.v_ab_ct_Q_inv[s, y] * m.p_ab_c_inv[s, y] + m.v_ab_ct_Q_inv[s, y] * (1 + 1 / m.p_ab_eer[s, y]) * m.p_ct_ab_c_inv[s, y]) * 0.02)
+            return m.v_ab_ct_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_ab_ct_c_inv[s, y] * 0.02
 
     def ab_ct_c_var(m, s, y, t):
         return m.v_ab_ct_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ab_ct_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
@@ -100,9 +100,6 @@ def add_ab_ct_parameters(m=None):
     
     def init_ct_ab_c_inv(m, s, y):
         return m.data_values[s]['ab'][y]['p_ct_ab_c_inv']
-    
-    # def init_ab_ct_c_fix(m, s, y):
-    #     return m.data_values[s]['ab_ct'][y]['p_ab_ct_c_fix']
 
     m.p_ab_eer = py.Param(m.set_scenarios, m.set_years,
                           initialize = init_ab_eer,
@@ -118,9 +115,4 @@ def add_ab_ct_parameters(m=None):
                            initialize = init_ct_ab_c_inv,
                            within = py.NonNegativeReals,
                            doc = 'specific inv cost of the large-scale cooling tower')
-    
-    # m.p_ab_ct_c_fix = py.Param(m.set_scenarios, m.set_years,
-    #                         initialize = init_ab_ct_c_fix,
-    #                         within = py.NonNegativeReals,
-    #                         doc = 'fixed cost of ab_ct')
     
