@@ -6,6 +6,7 @@ def add_eb_equations(m=None):
         return m.v_eb_q_heat_in[s, y, t] <= m.v_eb_Q_heat_max[y]
     
     # def eb_limit(m, s, y):
+    #     return m.v_eb_Q_heat_max[s, y] <= 0
     #     return m.v_eb_Q_heat_max[y] <= 350
     
     def eb_elec_heat(m, s, y, t):
@@ -13,6 +14,7 @@ def add_eb_equations(m=None):
     
     def eb_Q_inv(m, y):
         if (y - 5) in m.set_years:
+            return m.v_eb_Q_inv[s, y] == m.v_eb_Q_heat_max[s, y] - m.v_eb_Q_heat_max[s, y-5]
             return m.v_eb_Q_inv[y] == (m.v_eb_Q_heat_max[y] - m.v_eb_Q_heat_max[y-5])
         else:
             return m.v_eb_Q_inv[y] == m.v_eb_Q_heat_max[y]
@@ -22,8 +24,11 @@ def add_eb_equations(m=None):
     
     def eb_c_fix(m, s, y):
         if (y - 5) in m.set_years:
+            return m.v_eb_c_fix[s, y] == m.v_eb_c_fix[s, y-5] +  m.p_year_expansion_range[s, y] * m.v_eb_c_inv[s, y] * 0.02
             return m.v_eb_c_fix[s, y] == m.v_eb_c_fix[s, y-5] +  m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_eb_Q_inv[y] * m.p_eb_c_inv[s, y] * 0.02)
         else:
+            return m.v_eb_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_eb_c_inv[s, y] * 0.02
+    
             return m.v_eb_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_eb_Q_inv[y] * m.p_eb_c_inv[s, y] * 0.02)
             
     def eb_c_var(m, s, y, t):
@@ -88,9 +93,6 @@ def add_eb_parameters(m=None):
     def init_eb_c_inv(m, s, y):
         return m.data_values[s]['eb'][y]['p_eb_c_inv']
     
-    # def init_eb_c_fix(m, s, y):
-    #     return m.data_values[s]['eb'][y]['p_eb_c_fix']
-        
     m.p_eb_eta = py.Param(m.set_scenarios, m.set_years,
                           initialize = init_eb_eta,
                           within = py.NonNegativeReals,
@@ -100,8 +102,3 @@ def add_eb_parameters(m=None):
                             initialize = init_eb_c_inv,
                             within = py.NonNegativeReals,
                             doc = 'specific inv cost of eb')
-    
-    # m.p_eb_c_fix = py.Param(m.set_scenarios, m.set_years,
-    #                         initialize = init_eb_c_fix,
-    #                         within = py.NonNegativeReals,
-    #                         doc = 'fixed cost of eb')

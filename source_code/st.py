@@ -6,6 +6,7 @@ def add_st_equations(m=None):
         return m.v_st_q_heat_in[s, y, t] <= m.v_st_Q_heat_max[y]
     
     # def st_limit(m, s, y):
+    #     return m.v_st_Q_heat_max[s, y] <= 0
     #     return m.v_st_Q_heat_max[y] <= 200
     
     def st_solar_radiation(m, s, y, t):
@@ -19,12 +20,14 @@ def add_st_equations(m=None):
      
     def st_P_inv(m, y):
         if (y - 5) in m.set_years:
+            return m.v_st_P_inv[s, y] == m.v_st_P_max[s, y] - m.v_st_P_max[s, y-5]
             return m.v_st_P_inv[y] == (m.v_st_P_max[y] - m.v_st_P_max[y-5])
         else:
             return m.v_st_P_inv[y] == m.v_st_P_max[y]
         
     def st_hp_Q_inv(m, y):
         if (y - 5) in m.set_years:
+            return m.v_st_hp_Q_inv[s, y] == m.v_st_Q_heat_max[s, y] - m.v_st_Q_heat_max[s, y-5]
             return m.v_st_hp_Q_inv[y] == (m.v_st_Q_heat_max[y] - m.v_st_Q_heat_max[y-5])
         else:
             return m.v_st_hp_Q_inv[y] == m.v_st_Q_heat_max[y]
@@ -34,8 +37,11 @@ def add_st_equations(m=None):
    
     def st_c_fix(m, s, y):
         if (y - 5) in m.set_years:
+            return m.v_st_c_fix[s, y] == m.v_st_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * m.v_st_c_inv[s, y] * 0.02
             return m.v_st_c_fix[s, y] == m.v_st_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_st_P_inv[y] * m.p_st_c_inv[s, y] + m.v_st_hp_Q_inv[y] * m.p_hp_c_inv[s, y]) * 0.02)
         else:
+            return m.v_st_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_st_c_inv[s, y] * 0.02
+    
             return m.v_st_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * ((m.v_st_P_inv[y] * m.p_st_c_inv[s, y] + m.v_st_hp_Q_inv[y] * m.p_hp_c_inv[s, y]) * 0.02)
             
     def st_c_var(m, s, y, t):
@@ -82,6 +88,7 @@ def add_st_variables(m=None):
                                        domain = py.NonNegativeReals,
                                        doc = 'electricity input of solar thermal per scenario, year and hour')
     
+    m.v_st_p = py.Var(m.set_scenarios, m.set_years, m.set_hours,
     # m.v_st_eta_avg = py.Var(m.set_scenarios, m.set_years,
     #                         domain = py.NonNegativeReals,
     #                         doc = 'average eta of solar thermal per scenario and year')
@@ -125,9 +132,6 @@ def add_st_parameters(m=None):
     
     def init_st_c_inv(m, s, y):
         return m.data_values[s]['st'][y]['p_st_c_inv']
-            
-    # def init_st_c_fix(m, s, y):
-    #     return m.data_values[s]['st'][y]['p_st_c_fix']
     
     def init_st_cop(m, s, y):
         return m.data_values[s]['st'][y]['p_st_cop']
@@ -144,11 +148,6 @@ def add_st_parameters(m=None):
                           initialize = init_st_cop,
                           within = py.NonNegativeReals,
                           doc = 'coefficient of performance of the hp for the st')
-    
-    # m.p_st_c_fix = py.Param(m.set_scenarios, m.set_years,
-    #                         initialize = init_st_c_fix,
-    #                         within = py.NonNegativeReals,
-    #                         doc = 'fixed cost of st')
     
     m.p_st_c_inv =py.Param(m.set_scenarios, m.set_years,
                            initialize = init_st_c_inv,

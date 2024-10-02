@@ -19,6 +19,7 @@ def add_ab_hp_equations(m=None):
      
     def ab_hp_Q_inv(m, y):
         if (y - 5) in m.set_years:
+            return m.v_ab_hp_Q_inv[s, y] == m.v_ab_hp_Q_cool_max[s, y] - m.v_ab_hp_Q_cool_max[s, y-5]
             return m.v_ab_hp_Q_inv[y] == (m.v_ab_hp_Q_cool_max[y] - m.v_ab_hp_Q_cool_max[y-5])
         else:
             return m.v_ab_hp_Q_inv[y] == m.v_ab_hp_Q_cool_max[y]
@@ -28,8 +29,10 @@ def add_ab_hp_equations(m=None):
   
     def ab_hp_c_fix(m, s, y):
         if (y - 5) in m.set_years:
+            return m.v_ab_hp_c_fix[s, y] == m.v_ab_hp_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * m.v_ab_hp_c_inv[s, y] * 0.02
             return m.v_ab_hp_c_fix[s, y] == m.v_ab_hp_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * ((m.v_ab_hp_Q_inv[y] * m.p_ab_c_inv[s, y] + m.v_ab_hp_Q_inv[y] * (1 + 1 / m.p_ab_eer[s, y]) * m.p_hp_c_inv[s, y]) * 0.02)
         else:
+            return m.v_ab_hp_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_ab_hp_c_inv[s, y] * 0.02
             return m.v_ab_hp_c_fix[s, y] == m.p_year_expansion_range[s, y] * ((m.v_ab_hp_Q_inv[y] * m.p_ab_c_inv[s, y] + m.v_ab_hp_Q_inv[y] * (1 + 1 / m.p_ab_eer[s, y]) * m.p_hp_c_inv[s, y]) * 0.02)
 
     def ab_hp_c_var(m, s, y, t):
@@ -105,16 +108,8 @@ def add_ab_hp_parameters(m=None):
     def init_ab_hp_cop(m, s, y):
         return m.data_values[s]['ab'][y]['p_ab_hp_cop']
     
-    # def init_ab_hp_c_fix(m, s, y):
-    #     return m.data_values[s]['ab_hp'][y]['p_ab_hp_c_fix']
-
     m.p_ab_hp_cop = py.Param(m.set_scenarios, m.set_years,
                              initialize = init_ab_hp_cop,
                              within = py.NonNegativeReals,
                              doc = 'coeffiecent of perfomance of the heat pump for the large-scale absorber')
-    
-    # m.p_ab_hp_c_fix = py.Param(m.set_scenarios, m.set_years,
-    #                         initialize = init_ab_hp_c_fix,
-    #                         within = py.NonNegativeReals,
-    #                         doc = 'fixed cost of ab_hp')
     
