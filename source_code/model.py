@@ -66,7 +66,7 @@ data = {}
 #-----------------------------------------------------------------------------#
 
 cur_dir = os.path.dirname(__file__)
-path_to_input_folder = os.path.join(cur_dir, 'data')
+path_to_input_folder = os.path.join(cur_dir, '..', 'inputs')
 path_to_file_demand = os.path.join(path_to_input_folder, 'demand.xlsx')
 path_to_file_electricity_price = os.path.join(path_to_input_folder, 'electricity_price.xlsx')
 path_to_file_gas_price = os.path.join(path_to_input_folder, 'gas_price.xlsx')
@@ -88,7 +88,8 @@ path_to_file_ab = os.path.join(path_to_input_folder, 'ab.xlsx')
 path_to_file_cp = os.path.join(path_to_input_folder, 'cp.xlsx')
 path_to_file_ates = os.path.join(path_to_input_folder, 'ates.xlsx')
 path_to_file_ttes = os.path.join(path_to_input_folder, 'ttes.xlsx')
-path_to_result_folder = os.path.join(path_to_input_folder, 'results')
+path_to_output_folder = os.path.join(cur_dir, '..', 'outputs')
+path_to_result_folder = os.path.join(cur_dir, '..', 'results')
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -431,7 +432,7 @@ def write_output_to_files(output, base_filename, max_file_size):
         bytes_written += len(line.encode('utf-8'))
         if bytes_written >= max_file_size:
             file_name = '{}_{}.txt'.format(base_filename, file_index)
-            file_path = os.path.join(path_to_input_folder, 'output', file_name)
+            file_path = os.path.join(path_to_output_folder, file_name)
             with open(file_path, 'w') as f:
                 f.writelines(buffer)
             buffer = []
@@ -439,7 +440,7 @@ def write_output_to_files(output, base_filename, max_file_size):
             file_index += 1
     if buffer:
         file_name = '{}_{}.txt'.format(base_filename, file_index)
-        file_path = os.path.join(path_to_input_folder, 'output', file_name)
+        file_path = os.path.join(path_to_output_folder, file_name)
         with open(file_path, 'w') as f:
             f.writelines(buffer)
 
