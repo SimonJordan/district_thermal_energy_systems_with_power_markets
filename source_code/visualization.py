@@ -8,9 +8,8 @@ import plotly.subplots as sp
 pio.renderers.default = 'browser'
 
 cur_dir = os.path.dirname(__file__)
-path_to_input_folder = os.path.join(cur_dir, 'data')
-path_to_result_folder = os.path.join(path_to_input_folder, 'results')
-
+path_to_input_folder = os.path.join(cur_dir, '..', 'inputs')
+path_to_result_folder = os.path.join(cur_dir, '..', 'results')
 path_to_file_scenarios = os.path.join(path_to_result_folder, 'scenarios.txt')
 
 with open(path_to_file_scenarios, 'r') as file:

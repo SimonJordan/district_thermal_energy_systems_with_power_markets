@@ -1,7 +1,8 @@
-def define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes):
+def define_scenarios(scenarios_weighting, year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes):
     data = {}
     
-    data['0_basic'] = {'year_expansion_range': year_expansion_range,
+    data['0_basic'] = {'scenario_weighting': scenarios_weighting['0_basic'],
+                       'year_expansion_range': year_expansion_range,
                        'heating': heating_demand,
                        'cooling': cooling_demand,
                        'electricity_price': electricity_price,
@@ -24,7 +25,8 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
                        'ates': data_ates,
                        'ttes': data_ttes}
     
-    data['1_high_electricity_price'] = {'year_expansion_range': year_expansion_range,
+    data['1_high_electricity_price'] = {'scenario_weighting': scenarios_weighting['1_high_electricity_price'],
+                                        'year_expansion_range': year_expansion_range,
                                         'heating': heating_demand,
                                         'cooling': cooling_demand,
                                         'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()},
@@ -47,7 +49,8 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
                                         'ates': data_ates,
                                         'ttes': data_ttes}
     
-    # data['2_low_electricity_price'] = {'year_expansion_range': year_expansion_range,
+    # data['2_low_electricity_price'] = {'scenario_weighting': scenarios_weighting['2_low_electricity_price'],
+    #                                    'year_expansion_range': year_expansion_range,
     #                                    'heating': heating_demand,
     #                                    'cooling': cooling_demand,
     #                                    'electricity_price': {year: [value * 0.5 for value in values] for year, values in electricity_price.items()},
@@ -70,7 +73,8 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                    'ates': data_ates,
     #                                    'ttes': data_ttes}
     
-    # data['3_non_neg_electricity_price'] = {'year_expansion_range': year_expansion_range,
+    # data['3_non_neg_electricity_price'] = {'scenario_weighting': scenarios_weighting['3_non_neg_electricity_price'],
+    #                                        'year_expansion_range': year_expansion_range,
     #                                        'heating': heating_demand,
     #                                        'cooling': cooling_demand,
     #                                        'electricity_price': {year: [max(0, value) for value in values] for year, values in electricity_price.items()},
@@ -93,7 +97,8 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                        'ates': data_ates,
     #                                        'ttes': data_ttes}
     
-    # data['4_high_gas_price'] = {'year_expansion_range': year_expansion_range,
+    # data['4_high_gas_price'] = {'scenario_weighting': scenarios_weighting['4_high_gas_price'],
+    #                             'year_expansion_range': year_expansion_range,
     #                             'heating': heating_demand,
     #                             'cooling': cooling_demand,
     #                             'electricity_price': electricity_price,
@@ -116,7 +121,8 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                             'ates': data_ates,
     #                             'ttes': data_ttes}
     
-    # data['5_zero_co2_price'] = {'year_expansion_range': year_expansion_range,
+    # data['5_zero_co2_price'] = {'scenario_weighting': scenarios_weighting['5_zero_co2_price'],
+    #                             'year_expansion_range': year_expansion_range,
     #                             'heating': heating_demand,
     #                             'cooling': cooling_demand,
     #                             'electricity_price': electricity_price,
@@ -139,7 +145,8 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                             'ates': data_ates,
     #                             'ttes': data_ttes}
     
-    # data['6_high_co2_price'] = {'year_expansion_range': year_expansion_range,
+    # data['6_high_co2_price'] = {'scenario_weighting': scenarios_weighting['6_high_co2_price'],
+    #                             'year_expansion_range': year_expansion_range,
     #                             'heating': heating_demand,
     #                             'cooling': cooling_demand,
     #                             'electricity_price': electricity_price,
@@ -162,7 +169,8 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                             'ates': data_ates,
     #                             'ttes': data_ttes}
     
-    # data['7_half_investment_c'] = {'year_expansion_range': year_expansion_range,
+    # data['7_half_investment_c'] = {'scenario_weighting': scenarios_weighting['7_half_investment_c'],
+    #                                'year_expansion_range': year_expansion_range,
     #                                'heating': heating_demand,
     #                                'cooling': cooling_demand,
     #                                'electricity_price': electricity_price,
@@ -185,7 +193,8 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                'ates': {year: {name: (value * 0.5 if name == 'p_ates_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ates.items()},
     #                                'ttes': {year: {name: (value * 0.5 if name == 'p_ttes_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()}}
     
-    # data['8_low_electricity_price_high_co2_price'] = {'year_expansion_range': year_expansion_range,
+    # data['8_low_electricity_price_high_co2_price'] = {'scenario_weighting': scenarios_weighting['8_low_electricity_price_high_co2_price'],
+    #                                                   'year_expansion_range': year_expansion_range,
     #                                                   'heating': heating_demand,
     #                                                   'cooling': cooling_demand,
     #                                                   'electricity_price': {year: [value * 0.5 for value in values] for year, values in electricity_price.items()},
@@ -208,7 +217,8 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                                   'ates': data_ates,
     #                                                   'ttes': data_ttes}
     
-    # data['9_high_electricity_price_high_gas_price_high_co2_price'] = {'year_expansion_range': year_expansion_range,
+    # data['9_high_electricity_price_high_gas_price_high_co2_price'] = {'scenario_weighting': scenarios_weighting['9_high_electricity_price_high_gas_price_high_co2_price'],
+    #                                                                   'year_expansion_range': year_expansion_range,
     #                                                                   'heating': heating_demand,
     #                                                                   'cooling': cooling_demand,
     #                                                                   'electricity_price': {year: [value * 1.5 for value in values] for year, values in electricity_price.items()},
