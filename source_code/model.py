@@ -49,8 +49,7 @@ heating_demand, cooling_demand, electricity_price, electricity_mean_price, elect
 
 # SERVER !!!
 from scenarios import define_scenarios
-data = define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes, data_ites)
-data = define_scenarios(scenarios_weighting, year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes)
+data = define_scenarios(scenarios_weighting, year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes, data_ites)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #

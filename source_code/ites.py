@@ -3,51 +3,51 @@ import pyomo.environ as py
 def add_ites_equations(m=None):
     
     def ites_feed_in_max_bound(m, s, y, t):
-        return m.v_ites_q_cool_out[s, y, t] <= m.v_ites_ac_Q_max[s, y]
+        return m.v_ites_q_cool_out[s, y, t] <= m.v_ites_ac_Q_max[y]
     
     # def ites_limit_1(m, s, y):
-    #     return m.v_ites_ac_Q_max[s, y] <= 0
+    #     return m.v_ites_ac_Q_max[y] <= 0
     
     # def ites_limit_2(m, s, y):
-    #     return m.v_ites_k_cool_max[s, y] <= 0
+    #     return m.v_ites_k_cool_max[y] <= 0
     
     def ites_soc_max_bound(m, s, y, t):
-        return m.v_ites_k_cool[s, y, t] <= m.v_ites_k_cool_max[s, y]
+        return m.v_ites_k_cool[s, y, t] <= m.v_ites_k_cool_max[y]
 
     def ites_soc(m, s, y, t):
         if t == 0:
-            return m.v_ites_k_cool[s, y, t] == m.v_ites_k_cool_max[s, y] * m.p_ites_losses[s, y] * m.p_ites_init[s, y] + m.v_ites_q_cool_out[s, y, t] * m.p_ites_eta[s, y] - m.v_ites_q_cool_in[s, y, t] / m.p_ites_eta[s, y]
+            return m.v_ites_k_cool[s, y, t] == m.v_ites_k_cool_max[y] * m.p_ites_losses[s, y] * m.p_ites_init[s, y] + m.v_ites_q_cool_out[s, y, t] * m.p_ites_eta[s, y] - m.v_ites_q_cool_in[s, y, t] / m.p_ites_eta[s, y]
         elif t == 8759:
-            return m.v_ites_k_cool[s, y, t] ==  m.v_ites_k_cool_max[s, y] * m.p_ites_end[s, y]
+            return m.v_ites_k_cool[s, y, t] ==  m.v_ites_k_cool_max[y] * m.p_ites_end[s, y]
         else:
             return m.v_ites_k_cool[s, y, t] == m.v_ites_k_cool[s, y, t-1] * m.p_ites_losses[s, y] + m.v_ites_q_cool_out[s, y, t] * m.p_ites_eta[s, y] - m.v_ites_q_cool_in[s, y, t] / m.p_ites_eta[s, y]
     
     def ites_elec_cool(m, s, y, t):
         return m.v_ites_q_cool_out[s, y, t] == m.v_ites_q_elec_consumption[s, y, t] * m.p_ites_seer[s, y]
     
-    def ites_k_inv(m, s, y):
+    def ites_k_inv(m, y):
         if (y - 5) in m.set_years:
-            return m.v_ites_k_inv[s, y] == m.v_ites_k_cool_max[s, y] - m.v_ites_k_cool_max[s, y-5]
+            return m.v_ites_k_inv[y] == m.v_ites_k_cool_max[y] - m.v_ites_k_cool_max[y-5]
         else:
-            return m.v_ites_k_inv[s, y] == m.v_ites_k_cool_max[s, y]
+            return m.v_ites_k_inv[y] == m.v_ites_k_cool_max[y]
     
-    def ites_ac_Q_inv(m, s, y):
+    def ites_ac_Q_inv(m, y):
         if (y - 5) in m.set_years:
-            return m.v_ites_ac_Q_inv[s, y] == m.v_ites_ac_Q_max[s, y] - m.v_ites_ac_Q_max[s, y-5]
+            return m.v_ites_ac_Q_inv[y] == m.v_ites_ac_Q_max[y] - m.v_ites_ac_Q_max[y-5]
         else:
-            return m.v_ites_ac_Q_inv[s, y] == m.v_ites_ac_Q_max[s, y]
+            return m.v_ites_ac_Q_inv[y] == m.v_ites_ac_Q_max[y]
    
     def ites_c_inv(m, s, y):
-        return m.v_ites_c_inv[s, y] == m.v_ites_k_inv[s, y] * m.p_ites_c_inv[s, y] + m.v_ites_ac_Q_inv[s, y] * m.p_ac_c_inv[s, y]
+        return m.v_ites_c_inv[s, y] == m.p_scenario_weighting[s] * (m.v_ites_k_inv[y] * m.p_ites_c_inv[s, y] + m.v_ites_ac_Q_inv[y] * m.p_ac_c_inv[s, y])
     
     def ites_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ites_c_fix[s, y] == m.v_ites_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * (m.v_ites_c_inv[s, y] * 0.02 + (m.v_ites_k_cool_max[s, y] - m.v_ites_k_cool_max[s, y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ites_elec[s, y])
+            return m.v_ites_c_fix[s, y] == m.v_ites_c_fix[s, y-5] + m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ites_c_inv[s, y] * 0.02 + (m.v_ites_k_cool_max[y] - m.v_ites_k_cool_max[y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ites_elec[s, y])
         else:
-            return m.v_ites_c_fix[s, y] == m.p_year_expansion_range[s, y] * (m.v_ites_c_inv[s, y] * 0.02 + m.v_ites_k_cool_max[s, y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ites_elec[s, y])
+            return m.v_ites_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ites_c_inv[s, y] * 0.02 + m.v_ites_k_cool_max[y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ites_elec[s, y])
     
     def ites_c_var(m, s, y, t):
-        return m.v_ites_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ites_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + (m.v_ites_q_cool_in[s, y, t] + m.v_ites_q_cool_out[s, y, t]) * m.p_ites_c_charge_discharge[s, y])
+        return m.v_ites_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ites_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + (m.v_ites_q_cool_in[s, y, t] + m.v_ites_q_cool_out[s, y, t]) * m.p_ites_c_charge_discharge[s, y])
 
     m.con_ites_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                  rule = ites_feed_in_max_bound)
@@ -61,10 +61,10 @@ def add_ites_equations(m=None):
     m.con_ites_soc = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = ites_soc)
         
-    m.con_ites_k_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_ites_k_inv = py.Constraint(m.set_years,
                                      rule = ites_k_inv)
     
-    m.con_ites_ac_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
+    m.con_ites_ac_Q_inv = py.Constraint(m.set_years,
                                         rule = ites_ac_Q_inv)
     
     m.con_ites_c_inv = py.Constraint(m.set_scenarios, m.set_years,
@@ -85,34 +85,34 @@ def add_ites_equations(m=None):
 def add_ites_variables(m=None):
     """This section defines the variables for ITES"""
     m.v_ites_q_cool_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
-                                   domain = py.NonNegativeReals,
-                                   doc = 'cool energy feed in per scenario, year and hour')
+                                domain = py.NonNegativeReals,
+                                doc = 'cool energy feed in per scenario, year and hour')
     
     m.v_ites_q_cool_out = py.Var(m.set_scenarios, m.set_years, m.set_hours,
-                                    domain = py.NonNegativeReals,
-                                    doc = 'cool energy storing per scenario, year and hour')
+                                 domain = py.NonNegativeReals,
+                                 doc = 'cool energy storing per scenario, year and hour')
     
-    m.v_ites_ac_Q_max = py.Var(m.set_scenarios, m.set_years,
+    m.v_ites_ac_Q_max = py.Var(m.set_years,
                                domain = py.NonNegativeReals,
                                doc = 'maximum cool energy storing per scenario and year')
     
     m.v_ites_k_cool = py.Var(m.set_scenarios, m.set_years, m.set_hours,
-                                domain = py.NonNegativeReals,
-                                doc = 'state of charge per scenario, year and hour')
+                             domain = py.NonNegativeReals,
+                             doc = 'state of charge per scenario, year and hour')
     
-    m.v_ites_k_cool_max = py.Var(m.set_scenarios, m.set_years,
-                                    domain = py.NonNegativeReals,
-                                    doc = 'maximum state of charge per scenario, year and hour')
+    m.v_ites_k_cool_max = py.Var(m.set_years,
+                                 domain = py.NonNegativeReals,
+                                 doc = 'maximum state of charge per scenario, year and hour')
     
     m.v_ites_q_elec_consumption = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                                          domain = py.NonNegativeReals,
                                          doc = 'electricity input of airchiller per scenario, year and hour')
    
-    m.v_ites_k_inv = py.Var(m.set_scenarios, m.set_years,
+    m.v_ites_k_inv = py.Var(m.set_years,
                             domain = py.NonNegativeReals,
                             doc = 'new installed capacity of ITES per scenario and year')
    
-    m.v_ites_ac_Q_inv = py.Var(m.set_scenarios, m.set_years,
+    m.v_ites_ac_Q_inv = py.Var(m.set_years,
                                domain = py.NonNegativeReals,
                                doc = 'new installed capacity of ac for ITES per scenario and year')
     
