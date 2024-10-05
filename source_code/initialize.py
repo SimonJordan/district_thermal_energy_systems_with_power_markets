@@ -24,6 +24,7 @@ def initialize_parameters(years=[]):
     data_cp = {}
     data_ates = {}
     data_ttes = {}
+    data_ites = {}
     
     cur_dir = os.path.dirname(__file__)
     path_to_input_folder = os.path.join(cur_dir, '..', 'inputs')
@@ -48,6 +49,7 @@ def initialize_parameters(years=[]):
     path_to_file_cp = os.path.join(path_to_input_folder, 'cp.xlsx')
     path_to_file_ates = os.path.join(path_to_input_folder, 'ates.xlsx')
     path_to_file_ttes = os.path.join(path_to_input_folder, 'ttes.xlsx')
+    path_to_file_ites = os.path.join(path_to_input_folder, 'ites.xlsx')
     
     for year in years:
         df_demand = pd.read_excel(path_to_file_demand, sheet_name=str(year))
@@ -71,6 +73,7 @@ def initialize_parameters(years=[]):
         df_cp = pd.read_excel(path_to_file_cp, sheet_name=str(year))
         df_ates = pd.read_excel(path_to_file_ates, sheet_name=str(year))
         df_ttes = pd.read_excel(path_to_file_ttes, sheet_name=str(year))
+        df_ites = pd.read_excel(path_to_file_ites, sheet_name=str(year))
         heating_demand[year] = df_demand['heating_demand_districts_building'].tolist()
         cooling_demand[year] = df_demand['cooling_demand_districts_building'].tolist()
         electricity_price[year] = df_electricity_price['electricity_price'].tolist()
@@ -148,5 +151,14 @@ def initialize_parameters(years=[]):
         p_ttes_cop = df_ttes['p_ttes_cop'].tolist()[0]
         p_ttes_c_charge_discharge = df_ttes['p_ttes_c_charge_discharge'].tolist()[0]
         data_ttes[year] = {'p_ttes_losses': p_ttes_losses, 'p_ttes_eta': p_ttes_eta, 'p_ttes_init': p_ttes_init, 'p_ttes_end': p_ttes_end, 'p_ttes_c_inv': p_ttes_c_inv, 'p_ttes_elec': p_ttes_elec, 'p_ttes_cop': p_ttes_cop, 'p_ttes_c_charge_discharge': p_ttes_c_charge_discharge}
+        p_ites_losses = df_ites['p_ites_losses'].tolist()[0]
+        p_ites_eta = df_ites['p_ites_eta'].tolist()[0]
+        p_ites_init = df_ites['p_ites_init'].tolist()[0]
+        p_ites_end = df_ites['p_ites_end'].tolist()[0]
+        p_ites_c_inv = df_ites['p_ites_c_inv'].tolist()[0]
+        p_ites_elec = df_ites['p_ites_elec'].tolist()[0]
+        p_ites_seer = df_ites['p_ites_seer'].tolist()[0]
+        p_ites_c_charge_discharge = df_ites['p_ites_c_charge_discharge'].tolist()[0]
+        data_ites[year] = {'p_ites_losses': p_ites_losses, 'p_ites_eta': p_ites_eta, 'p_ites_init': p_ites_init, 'p_ites_end': p_ites_end, 'p_ites_c_inv': p_ites_c_inv, 'p_ites_elec': p_ites_elec, 'p_ites_seer': p_ites_seer, 'p_ites_c_charge_discharge': p_ites_c_charge_discharge}
 
-    return heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes
+    return heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes, data_ites

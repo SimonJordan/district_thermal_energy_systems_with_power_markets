@@ -37,7 +37,7 @@ hours = list(range(8760))
 #-----------------------------------------------------------------------------#
 
 from initialize import initialize_parameters
-heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes = initialize_parameters(years)
+heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes, data_ites = initialize_parameters(years)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -47,7 +47,7 @@ heating_demand, cooling_demand, electricity_price, electricity_mean_price, elect
 
 # SERVER !!!
 from scenarios import define_scenarios
-data = define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes)
+data = define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes, data_ites)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -156,6 +156,11 @@ add_ttes_parameters(model)
 add_ttes_variables(model)
 add_ttes_equations(model)
 
+from ites import add_ites_parameters, add_ites_variables, add_ites_equations
+add_ites_parameters(model)
+add_ites_variables(model)
+add_ites_equations(model)
+
 #-----------------------------------------------------------------------------#
 #                                                                             #
 # setting the demand balance equations                                        #
@@ -166,7 +171,7 @@ def demand_balance_heating(m, s, y, t):
     return m.v_eb_q_heat_in[s, y, t] + m.v_hp_q_heat_in[s, y, t] + m.v_st_q_heat_in[s, y, t] + m.v_wi_q_heat_in[s, y, t] + m.v_gt_q_heat_in[s, y, t] + m.v_dgt_q_heat_in[s, y, t] + m.v_ieh_q_heat_in[s, y, t] + m.v_chp_q_heat_in[s, y, t] - m.v_ab_ct_q_heat_out[s, y, t] + m.v_ab_hp_q_heat_in[s, y, t] - m.v_ab_hp_q_heat_out[s, y, t] + m.v_cp_hp_q_heat_in[s, y, t] + m.v_ates_q_heat_in[s, y, t] - m.v_ates_q_heat_out[s, y, t] + m.v_ttes_q_heat_in[s, y, t] - m.v_ttes_q_heat_out[s, y, t] == model.data_values[s]['heating'][y][t]
 
 def demand_balance_cooling(m, s, y, t):
-    return m.v_ac_q_cool_in[s, y, t] + m.v_ab_ct_q_cool_in[s, y, t] + m.v_ab_hp_q_cool_in[s, y, t] + m.v_cp_ct_q_cool_in[s, y, t] + m.v_cp_hp_q_cool_in[s, y, t] + m.v_ates_q_cool_in[s, y, t] - m.v_ates_q_cool_out[s, y, t] == model.data_values[s]['cooling'][y][t]
+    return m.v_ac_q_cool_in[s, y, t] + m.v_ab_ct_q_cool_in[s, y, t] + m.v_ab_hp_q_cool_in[s, y, t] + m.v_cp_ct_q_cool_in[s, y, t] + m.v_cp_hp_q_cool_in[s, y, t] + m.v_ates_q_cool_in[s, y, t] - m.v_ates_q_cool_out[s, y, t] + m.v_ites_q_cool_in[s, y, t] - m.v_ites_q_cool_out[s, y, t] == model.data_values[s]['cooling'][y][t]
 
 model.con_demand_balance_heating = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance_heating)
 model.con_demand_balance_cooling = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance_cooling)
@@ -192,7 +197,8 @@ def objective_function(m):
            sum(m.v_cp_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_cp_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_ates_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours)
+           sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
+           sum(m.v_ites_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours)
 
 model.obj = py.Objective(expr=objective_function, sense=py.minimize)
 
@@ -222,6 +228,7 @@ solver = py.SolverFactory('gurobi')
 # solver.options['threads'] = 40
 #solver.options['NonConvex'] = 2
 solution = solver.solve(model)
+print(solution)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -246,8 +253,6 @@ print('Script solving time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_2, 
 
 from save import save_output
 save_output(model)
-    
-print(solution)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -270,7 +275,7 @@ hours_3 = elapsed_time_3 // 3600
 minutes_3 = (elapsed_time_3 % 3600) // 60
 seconds_3 = elapsed_time_3 % 60
 
-print('Script data exporting time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_3, minutes_3, seconds_3))
+print('Script data saving/exporting time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_3, minutes_3, seconds_3))
 
 final_seconds = seconds_1 + seconds_2 + seconds_3
 final_minutes = minutes_1 + minutes_2 + minutes_3 + final_seconds // 60
