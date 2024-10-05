@@ -5,7 +5,7 @@ def add_ab_equations(m=None):
     def ab_ct_feed_in_max_bound(m, s, y, t):
         return m.v_ab_ct_q_cool_in[s, y, t] <= m.v_ab_ct_Q_cool_max[y]
     
-    # def ab_ct_limit(m, s, y):
+    # def ab_ct_limit(m, y):
     #     return m.v_ab_ct_Q_cool_max[y] <= 0
     
     def ab_ct_heat_out(m, s, y, t):
@@ -35,7 +35,7 @@ def add_ab_equations(m=None):
     def ab_hp_feed_in_max_bound(m, s, y, t):
         return m.v_ab_hp_q_cool_in[s, y, t] <= m.v_ab_hp_Q_cool_max[y]
     
-    # def ab_hp_limit(m, s, y):
+    # def ab_hp_limit(m, y):
     #     return m.v_ab_hp_Q_cool_max[y] <= 0
     
     def ab_hp_heat_out(m, s, y, t):
@@ -86,7 +86,7 @@ def add_ab_equations(m=None):
     m.con_ab_ct_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                       rule = ab_ct_c_var)
     
-    # m.con_ab_ct_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_ab_ct_limit = py.Constraint(m.set_years,
     #                                   rule = ab_ct_limit)
     
     m.con_ab_hp_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
@@ -113,7 +113,7 @@ def add_ab_equations(m=None):
     m.con_ab_hp_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                       rule = ab_hp_c_var)
     
-    # m.con_ab_hp_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_ab_hp_limit = py.Constraint(m.set_years,
     #                                   rule = ab_hp_limit)
 
 def add_ab_variables(m=None):

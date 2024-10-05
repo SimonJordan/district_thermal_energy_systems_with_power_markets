@@ -5,7 +5,7 @@ def add_hp_equations(m=None):
     def hp_feed_in_max_bound(m, s, y, t):
         return m.v_hp_q_heat_in[s, y, t] <= m.v_hp_Q_heat_max[y]
     
-    # def hp_limit(m, s, y):
+    # def hp_limit(m, y):
     #     return m.v_hp_Q_heat_max[y] <= 0
     
     def hp_elec_heat(m, s, y, t): 
@@ -47,7 +47,7 @@ def add_hp_equations(m=None):
     m.con_hp_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = hp_c_var)
     
-    # m.con_hp_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_hp_limit = py.Constraint(m.set_years,
     #                                rule = hp_limit)
 
 def add_hp_variables(m=None):

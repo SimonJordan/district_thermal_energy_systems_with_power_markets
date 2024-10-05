@@ -5,8 +5,8 @@ def add_wi_equations(m=None):
     def wi_feed_in_max_bound(m, s, y, t):
         return m.v_wi_q_heat_in[s, y, t] + m.v_wi_q_elec_in[s, y, t] <= m.v_wi_Q_mix_max[y]
     
-    # def wi_limit(m, s, y):
-    #     return m.v_wi_Q_mix_max[s, y] <= 0
+    # def wi_limit(m, y):
+    #     return m.v_wi_Q_mix_max[y] <= 0
     
     def wi_waste_heat(m, s, y, t):
         return m.v_wi_q_heat_in[s, y, t] == m.p_wi_q_waste[s, y] * m.p_wi_eta[s, y] * m.p_wi_h_waste[s, y] * m.p_wi_heat[s, y] * m.v_wi_p_scale[s, y, t]
@@ -59,7 +59,7 @@ def add_wi_equations(m=None):
     m.con_wi_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = wi_c_var)
     
-    # m.con_wi_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_wi_limit = py.Constraint(m.set_years,
     #                                rule = wi_limit)
 
 def add_wi_variables(m=None):

@@ -5,7 +5,7 @@ def add_cp_equations(m=None):
     def cp_ct_feed_in_max_bound(m, s, y, t):
         return m.v_cp_ct_q_cool_in[s, y, t] <= m.v_cp_ct_Q_cool_max[y]
     
-    # def cp_ct_limit(m, s, y):
+    # def cp_ct_limit(m, y):
     #     return m.v_cp_ct_Q_cool_max[y] <= 0
     
     def cp_ct_elec_cool(m, s, y, t):
@@ -32,7 +32,7 @@ def add_cp_equations(m=None):
     def cp_hp_feed_in_max_bound(m, s, y, t):
         return m.v_cp_hp_q_cool_in[s, y, t] <= m.v_cp_hp_Q_cool_max[y]
     
-    # def cp_hp_limit(m, s, y):
+    # def cp_hp_limit(m, y):
     #     return m.v_cp_hp_Q_cool_max[y] <= 0
     
     def cp_hp_elec_cool(m, s, y, t):
@@ -77,7 +77,7 @@ def add_cp_equations(m=None):
     m.con_cp_ct_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                       rule = cp_ct_c_var)
     
-    # m.con_cp_ct_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_cp_ct_limit = py.Constraint(m.set_years,
     #                                   rule = cp_ct_limit)
 
     m.con_cp_hp_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
@@ -101,7 +101,7 @@ def add_cp_equations(m=None):
     m.con_cp_hp_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                       rule = cp_hp_c_var)
     
-    # m.con_cp_hp_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_cp_hp_limit = py.Constraint(m.set_years,
     #                                   rule = cp_hp_limit)
 
 def add_cp_variables(m=None):

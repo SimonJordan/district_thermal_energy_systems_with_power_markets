@@ -5,7 +5,7 @@ def add_ac_equations(m=None):
     def ac_feed_in_max_bound(m, s, y, t):
         return m.v_ac_q_cool_in[s, y, t] <= m.v_ac_Q_cool_max[y]
     
-    # def ac_limit(m, s, y):
+    # def ac_limit(m, y):
     #     return m.v_ac_Q_cool_max[y] <= 0
     
     def ac_elec_cool(m, s, y, t):
@@ -47,8 +47,8 @@ def add_ac_equations(m=None):
     m.con_ac_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = ac_c_var)
     
-    # m.con_ac_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                 rule = ac_limit)
+    # m.con_ac_limit = py.Constraint(m.set_years,
+    #                                rule = ac_limit)
 
 def add_ac_variables(m=None):
     

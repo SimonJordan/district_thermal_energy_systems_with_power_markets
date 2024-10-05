@@ -5,7 +5,7 @@ def add_st_equations(m=None):
     def st_feed_in_max_bound(m, s, y, t):
         return m.v_st_q_heat_in[s, y, t] <= m.v_st_Q_heat_max[y]
     
-    # def st_limit(m, s, y):
+    # def st_limit(m, y):
     #     return m.v_st_Q_heat_max[y] <= 0
     
     def st_solar_radiation(m, s, y, t):
@@ -68,7 +68,7 @@ def add_st_equations(m=None):
     m.con_st_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = st_c_var)
     
-    # m.con_st_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_st_limit = py.Constraint(m.set_years,
     #                                rule = st_limit)
     
      

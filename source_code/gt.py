@@ -5,7 +5,7 @@ def add_gt_equations(m=None):
     def gt_feed_in_max_bound(m, s, y, t):
         return m.v_gt_q_heat_in[s, y, t] <= m.v_gt_Q_heat_max[y]
     
-    # def gt_limit(m, s, y):
+    # def gt_limit(m, y):
     #     return m.v_gt_Q_heat_max[y] <= 0
     
     def gt_elec_heat(m, s, y, t): 
@@ -47,7 +47,7 @@ def add_gt_equations(m=None):
     m.con_gt_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = gt_c_var)
     
-    # m.con_gt_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_gt_limit = py.Constraint(m.set_years,
     #                                rule = gt_limit)
 
 def add_gt_variables(m=None):

@@ -5,8 +5,8 @@ def add_chp_equations(m=None):
     def chp_feed_in_max_bound(m, s, y, t):
         return m.v_chp_q_heat_in[s, y, t] + m.v_chp_q_elec_in[s, y, t] <= m.v_chp_Q_mix_max[y]
     
-    # def chp_limit(m, s, y):
-    #     return m.v_chp_Q_mix_max[s, y] <= 0
+    # def chp_limit(m, y):
+    #     return m.v_chp_Q_mix_max[y] <= 0
     
     def chp_gas_heat(m, s, y, t):
         return m.v_chp_q_heat_in[s, y, t] == m.v_chp_q_gas[s, y, t] * m.p_chp_eta[s, y] * m.p_chp_heat[s, y]
@@ -53,7 +53,7 @@ def add_chp_equations(m=None):
     m.con_chp_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                     rule = chp_c_var)
     
-    # m.con_chp_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_chp_limit = py.Constraint(m.set_years,
     #                                rule = chp_limit)
 
 def add_chp_variables(m=None):

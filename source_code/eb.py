@@ -5,7 +5,7 @@ def add_eb_equations(m=None):
     def eb_feed_in_max_bound(m, s, y, t):
         return m.v_eb_q_heat_in[s, y, t] <= m.v_eb_Q_heat_max[y]
     
-    # def eb_limit(m, s, y):
+    # def eb_limit(m, y):
     #     return m.v_eb_Q_heat_max[y] <= 0
     
     def eb_elec_heat(m, s, y, t):
@@ -47,7 +47,7 @@ def add_eb_equations(m=None):
     m.con_eb_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = eb_c_var)
     
-    # m.con_eb_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_eb_limit = py.Constraint(m.set_years,
     #                                rule = eb_limit)
 
 def add_eb_variables(m=None):
