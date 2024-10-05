@@ -59,9 +59,9 @@ def add_ates_equations(m=None):
     
     def ates_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_ates_c_fix[s, y] == m.v_ates_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * (m.v_ates_c_inv[s, y] * 0.02 + (m.v_ates_k_max[s, y] - m.v_ates_k_max[s, y-5]) * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y])
+            return m.v_ates_c_fix[s, y] == m.v_ates_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * (m.v_ates_c_inv[s, y] * 0.02 + m.v_ates_k_inv[s, y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y])
         else:
-            return m.v_ates_c_fix[s, y] == m.p_year_expansion_range[s, y] * (m.v_ates_c_inv[s, y] * 0.02 + m.v_ates_k_max[s, y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y])
+            return m.v_ates_c_fix[s, y] == m.p_year_expansion_range[s, y] * (m.v_ates_c_inv[s, y] * 0.02 + m.v_ates_k_inv[s, y] * (m.p_c_mean_elec[s, y] + m.p_mean_elec_co2_share[s, y] * m.p_c_co2[s, y]) * m.p_ates_elec[s, y])
     
     def ates_c_var(m, s, y, t):
         return m.v_ates_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ates_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + (m.v_ates_q_heat_in[s, y, t] + m.v_ates_q_heat_out[s, y, t] + m.v_ates_q_cool_in[s, y, t] + m.v_ates_q_cool_out[s, y, t]) * m.p_ates_c_charge_discharge[s, y])
