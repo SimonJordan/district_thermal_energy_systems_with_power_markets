@@ -376,6 +376,9 @@ for year in years:
     dgt_inv[year] = df_inv_capacity['dgt'].tolist()[0]
     ieh_inv[year] = df_inv_capacity['ieh'].tolist()[0]
     chp_inv[year] = df_inv_capacity['chp'].tolist()[0]
+    ab_ct_inv[year] = df_inv_capacity['ab_ct'].tolist()[0]
+    ab_hp_inv[year] = df_inv_capacity['ab_hp'].tolist()[0]
+    cp_hp_inv[year] = df_inv_capacity['cp_hp'].tolist()[0]
     ates_inv[year] = df_inv_capacity['ates'].tolist()[0]
     ttes_inv[year] = df_inv_capacity['ttes'].tolist()[0]
     
