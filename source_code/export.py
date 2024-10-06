@@ -13,6 +13,8 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
 
     for scenario in scenarios:
         path_to_heat_supply = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_heat_supply.xlsx')
+        path_to_cool_supply = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_cool_supply.xlsx')
+        path_to_inv_capacity = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_inv_capacity.xlsx')
         path_to_inv_cost = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_inv_cost.xlsx')
         path_to_fix_cost = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_fix_cost.xlsx')
         path_to_var_cost = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_var_cost.xlsx')
@@ -28,21 +30,53 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
         df_5 = []
         df_6 = []
         df_7 = []
+        df_8 = []
         
         for year in years:
-            eb_in = []
-            hp_in = []
-            st_in = []
-            wi_in = []
-            gt_in = []
-            dgt_in = []
-            ieh_in = []
-            chp_in = []
-            ates_in = []
-            ates_out = []
-            ttes_in = []
-            ttes_out = []
-                    
+            eb_heat_in = []
+            hp_heat_in = []
+            st_heat_in = []
+            wi_heat_in = []
+            gt_heat_in = []
+            dgt_heat_in = []
+            ieh_heat_in = []
+            chp_heat_in = []
+            ab_ct_heat_out = []
+            ab_hp_heat_in = []
+            ab_hp_heat_out = []
+            cp_hp_heat_in = []
+            ates_heat_in = []
+            ates_heat_out = []
+            ttes_heat_in = []
+            ttes_heat_out = []
+            
+            ac_cool_in = []
+            ab_ct_cool_in = []
+            ab_hp_cool_in = []
+            cp_ct_cool_in = []
+            cp_hp_cool_in = []
+            ates_cool_in = []
+            ates_cool_out = []
+            ites_cool_in = []
+            ites_cool_out = []
+            
+            eb_inv = []
+            hp_inv = []
+            st_inv = []
+            wi_inv = []
+            gt_inv = []
+            dgt_inv = []
+            ieh_inv = []
+            chp_inv = []
+            ac_inv = []
+            ab_ct_inv = []
+            ab_hp_inv = []
+            cp_ct_inv = []
+            cp_hp_inv = []
+            ates_inv = []
+            ttes_inv = []
+            ites_inv = []
+            
             eb_c_inv = []
             hp_c_inv = []
             st_c_inv = []
@@ -51,8 +85,14 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             dgt_c_inv = []
             ieh_c_inv = []
             chp_c_inv = []
+            ac_c_inv = []
+            ab_ct_c_inv = []
+            ab_hp_c_inv = []
+            cp_ct_c_inv = []
+            cp_hp_c_inv = []
             ates_c_inv = []
             ttes_c_inv = []
+            ites_c_inv = []
             
             eb_c_fix = []
             hp_c_fix = []
@@ -62,8 +102,14 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             dgt_c_fix = []
             ieh_c_fix = []
             chp_c_fix = []
+            ac_c_fix = []
+            ab_ct_c_fix = []
+            ab_hp_c_fix = []
+            cp_ct_c_fix = []
+            cp_hp_c_fix = []
             ates_c_fix = []
             ttes_c_fix = []
+            ites_c_fix = []
             
             eb_c_var = []
             hp_c_var = []
@@ -73,15 +119,46 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             dgt_c_var = []
             ieh_c_var = []
             chp_c_var = []
+            ac_c_var = []
+            ab_ct_c_var = []
+            ab_hp_c_var = []
+            cp_ct_c_var = []
+            cp_hp_c_var = []
             ates_c_var = []
             ttes_c_var = []
+            ites_c_var = []
             
             eb_elec = []
             hp_elec = []
             st_elec = []
             gt_elec = []
+            dgt_elec = []
+            ieh_elec = []
+            ac_elec = []
+            ab_ct_elec = []
+            ab_hp_elec = []
+            cp_ct_elec = []
+            cp_hp_elec = []
             ates_elec = []
             ttes_elec = []
+            ites_elec = []
+    
+            eb_inv.append(py.value(m.v_eb_Q_inv[scenario, year]))
+            hp_inv.append(py.value(m.v_hp_Q_inv[scenario, year]))
+            st_inv.append(py.value(m.v_st_P_inv[scenario, year]))
+            wi_inv.append(py.value(m.v_wi_Q_inv[scenario, year]))
+            gt_inv.append(py.value(m.v_gt_Q_inv[scenario, year]))
+            dgt_inv.append(py.value(m.v_dgt_Q_inv[scenario, year]))
+            ieh_inv.append(py.value(m.v_ieh_Q_inv[scenario, year]))
+            chp_inv.append(py.value(m.v_chp_Q_inv[scenario, year]))
+            ac_inv.append(py.value(m.v_ac_Q_inv[scenario, year]))
+            ab_ct_inv.append(py.value(m.v_ab_ct_Q_inv[scenario, year]))
+            ab_hp_inv.append(py.value(m.v_ab_hp_Q_inv[scenario, year]))
+            cp_ct_inv.append(py.value(m.v_cp_ct_Q_inv[scenario, year]))
+            cp_hp_inv.append(py.value(m.v_cp_hp_Q_inv[scenario, year]))
+            ates_inv.append(py.value(m.v_ates_k_inv[scenario, year]))
+            ttes_inv.append(py.value(m.v_ttes_k_inv[scenario, year]))
+            ites_inv.append(py.value(m.v_ites_k_inv[scenario, year]))
             
             eb_c_inv.append(py.value(m.v_eb_c_inv[scenario, year]))
             hp_c_inv.append(py.value(m.v_hp_c_inv[scenario, year]))
@@ -91,8 +168,14 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             dgt_c_inv.append(py.value(m.v_dgt_c_inv[scenario, year]))
             ieh_c_inv.append(py.value(m.v_ieh_c_inv[scenario, year]))
             chp_c_inv.append(py.value(m.v_chp_c_inv[scenario, year]))
+            ac_c_inv.append(py.value(m.v_ac_c_inv[scenario, year]))
+            ab_ct_c_inv.append(py.value(m.v_ab_ct_c_inv[scenario, year]))
+            ab_hp_c_inv.append(py.value(m.v_ab_hp_c_inv[scenario, year]))
+            cp_ct_c_inv.append(py.value(m.v_cp_ct_c_inv[scenario, year]))
+            cp_hp_c_inv.append(py.value(m.v_cp_hp_c_inv[scenario, year]))
             ates_c_inv.append(py.value(m.v_ates_c_inv[scenario, year]))
             ttes_c_inv.append(py.value(m.v_ttes_c_inv[scenario, year]))
+            ites_c_inv.append(py.value(m.v_ites_c_inv[scenario, year]))
             
             eb_c_fix.append(py.value(m.v_eb_c_fix[scenario, year]))
             hp_c_fix.append(py.value(m.v_hp_c_fix[scenario, year]))
@@ -102,22 +185,42 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             dgt_c_fix.append(py.value(m.v_dgt_c_fix[scenario, year]))
             ieh_c_fix.append(py.value(m.v_ieh_c_fix[scenario, year]))
             chp_c_fix.append(py.value(m.v_chp_c_fix[scenario, year]))
+            ac_c_fix.append(py.value(m.v_ac_c_fix[scenario, year]))
+            ab_ct_c_fix.append(py.value(m.v_ab_ct_c_fix[scenario, year]))
+            ab_hp_c_fix.append(py.value(m.v_ab_hp_c_fix[scenario, year]))
+            cp_ct_c_fix.append(py.value(m.v_cp_ct_c_fix[scenario, year]))
+            cp_hp_c_fix.append(py.value(m.v_cp_hp_c_fix[scenario, year]))
             ates_c_fix.append(py.value(m.v_ates_c_fix[scenario, year]))
             ttes_c_fix.append(py.value(m.v_ttes_c_fix[scenario, year]))
+            ites_c_fix.append(py.value(m.v_ites_c_fix[scenario, year]))
             
             for hour in hours:
-                eb_in.append(py.value(m.v_eb_q_heat_in[scenario, year, hour]))
-                hp_in.append(py.value(m.v_hp_q_heat_in[scenario, year, hour]))
-                st_in.append(py.value(m.v_st_q_heat_in[scenario, year, hour]))
-                wi_in.append(py.value(m.v_wi_q_heat_in[scenario, year, hour]))
-                gt_in.append(py.value(m.v_gt_q_heat_in[scenario, year, hour]))
-                dgt_in.append(py.value(m.v_dgt_q_heat_in[scenario, year, hour]))
-                ieh_in.append(py.value(m.v_ieh_q_heat_in[scenario, year, hour]))
-                chp_in.append(py.value(m.v_chp_q_heat_in[scenario, year, hour]))
-                ates_in.append(py.value(m.v_ates_q_heat_in[scenario, year, hour]))
-                ates_out.append(-py.value(m.v_ates_q_heat_out[scenario, year, hour]))
-                ttes_in.append(py.value(m.v_ttes_q_heat_in[scenario, year, hour]))
-                ttes_out.append(-py.value(m.v_ttes_q_heat_out[scenario, year, hour]))
+                eb_heat_in.append(py.value(m.v_eb_q_heat_in[scenario, year, hour]))
+                hp_heat_in.append(py.value(m.v_hp_q_heat_in[scenario, year, hour]))
+                st_heat_in.append(py.value(m.v_st_q_heat_in[scenario, year, hour]))
+                wi_heat_in.append(py.value(m.v_wi_q_heat_in[scenario, year, hour]))
+                gt_heat_in.append(py.value(m.v_gt_q_heat_in[scenario, year, hour]))
+                dgt_heat_in.append(py.value(m.v_dgt_q_heat_in[scenario, year, hour]))
+                ieh_heat_in.append(py.value(m.v_ieh_q_heat_in[scenario, year, hour]))
+                chp_heat_in.append(py.value(m.v_chp_q_heat_in[scenario, year, hour]))
+                ab_ct_heat_out.append(py.value(m.v_ab_ct_q_heat_out[scenario, year, hour]))
+                ab_hp_heat_in.append(py.value(m.v_ab_hp_q_heat_in[scenario, year, hour]))
+                ab_hp_heat_out.append(py.value(m.v_ab_hp_q_heat_out[scenario, year, hour]))
+                cp_hp_heat_in.append(py.value(m.v_cp_hp_q_heat_in[scenario, year, hour]))
+                ates_heat_in.append(py.value(m.v_ates_q_heat_in[scenario, year, hour]))
+                ates_heat_out.append(-py.value(m.v_ates_q_heat_out[scenario, year, hour]))
+                ttes_heat_in.append(py.value(m.v_ttes_q_heat_in[scenario, year, hour]))
+                ttes_heat_out.append(-py.value(m.v_ttes_q_heat_out[scenario, year, hour]))
+
+                ac_cool_in.append(py.value(m.v_ac_q_cool_in[scenario, year, hour]))
+                ab_ct_cool_in.append(py.value(m.v_ab_ct_q_cool_in[scenario, year, hour]))
+                ab_hp_cool_in.append(py.value(m.v_ab_hp_q_cool_in[scenario, year, hour]))
+                cp_ct_cool_in.append(py.value(m.v_cp_ct_q_cool_in[scenario, year, hour]))
+                cp_hp_cool_in.append(py.value(m.v_cp_hp_q_cool_in[scenario, year, hour]))
+                ates_cool_in.append(py.value(m.v_ates_q_cool_in[scenario, year, hour]))
+                ates_cool_out.append(-py.value(m.v_ates_q_cool_out[scenario, year, hour]))
+                ites_cool_in.append(py.value(m.v_ites_q_cool_in[scenario, year, hour]))
+                ites_cool_out.append(-py.value(m.v_ites_q_cool_out[scenario, year, hour]))
                 
                 eb_c_var.append(py.value(m.v_eb_c_var[scenario, year, hour]))
                 hp_c_var.append(py.value(m.v_hp_c_var[scenario, year, hour]))
@@ -127,15 +230,39 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
                 dgt_c_var.append(py.value(m.v_dgt_c_var[scenario, year, hour]))
                 ieh_c_var.append(py.value(m.v_ieh_c_var[scenario, year, hour]))
                 chp_c_var.append(py.value(m.v_chp_c_var[scenario, year, hour]))
+                ac_c_var.append(py.value(m.v_ac_c_var[scenario, year, hour]))
+                ab_ct_c_var.append(py.value(m.v_ab_ct_c_var[scenario, year, hour]))
+                ab_hp_c_var.append(py.value(m.v_ab_hp_c_var[scenario, year, hour]))
+                cp_ct_c_var.append(py.value(m.v_cp_ct_c_var[scenario, year, hour]))
+                cp_hp_c_var.append(py.value(m.v_cp_hp_c_var[scenario, year, hour]))
                 ates_c_var.append(py.value(m.v_ates_c_var[scenario, year, hour]))
                 ttes_c_var.append(py.value(m.v_ttes_c_var[scenario, year, hour]))
+                ites_c_var.append(py.value(m.v_ites_c_var[scenario, year, hour]))
                 
                 eb_elec.append(py.value(m.v_eb_q_elec_consumption[scenario, year, hour]))
                 hp_elec.append(py.value(m.v_hp_q_elec_consumption[scenario, year, hour]))
                 st_elec.append(py.value(m.v_st_q_elec_consumption[scenario, year, hour]))
                 gt_elec.append(py.value(m.v_gt_q_elec_consumption[scenario, year, hour]))
+                dgt_elec.append(py.value(m.v_dgt_q_elec_consumption[scenario, year, hour]))
+                ieh_elec.append(py.value(m.v_ieh_q_elec_consumption[scenario, year, hour]))
+                ac_elec.append(py.value(m.v_ac_q_elec_consumption[scenario, year, hour]))
+                ab_ct_elec.append(py.value(m.v_ab_ct_q_elec_consumption[scenario, year, hour]))
+                ab_hp_elec.append(py.value(m.v_ab_hp_q_elec_consumption[scenario, year, hour]))
+                cp_ct_elec.append(py.value(m.v_cp_ct_q_elec_consumption[scenario, year, hour]))
+                cp_hp_elec.append(py.value(m.v_cp_hp_q_elec_consumption[scenario, year, hour]))
                 ates_elec.append(py.value(m.v_ates_q_elec_consumption[scenario, year, hour]))
                 ttes_elec.append(py.value(m.v_ttes_q_elec_consumption[scenario, year, hour]))
+                ites_elec.append(py.value(m.v_ites_q_elec_consumption[scenario, year, hour]))
+            
+            df_0.append(pd.DataFrame({'hour': hours, 'heating': data[scenario]['heating'][year], 'eb': eb_heat_in, 'hp': hp_heat_in, 'st': st_heat_in, 'wi': wi_heat_in, 'gt': gt_heat_in, 'dgt': dgt_heat_in, 'ieh': ieh_heat_in, 'chp': chp_heat_in, 'ab_ct-': ab_ct_heat_out, 'ab_hp+': ab_hp_heat_in, 'ab_hp-': ab_hp_heat_out, 'cp_hp+': cp_hp_heat_in, 'ates+': ates_heat_in, 'ates-': ates_heat_out, 'ttes+': ttes_heat_in, 'ttes-': ttes_heat_out}))
+            df_1.append(pd.DataFrame({'hour': hours, 'cooling': data[scenario]['cooling'][year], 'ac': ac_cool_in, 'ab_ct': ab_ct_cool_in, 'ab_hp': ab_hp_cool_in, 'cp_ct': cp_ct_cool_in, 'cp_hp': cp_hp_cool_in, 'ates+': ates_cool_in, 'ates-': ates_cool_out, 'ites+': ites_cool_in, 'ites-': ites_cool_out}))
+            df_2.append(pd.DataFrame({'eb': eb_inv, 'hp': hp_inv, 'st': st_inv, 'wi': wi_inv, 'gt': gt_inv, 'dgt': dgt_inv, 'ieh': ieh_inv, 'chp': chp_inv, 'ac': ac_inv, 'ab_ct': ab_ct_inv, 'ab_hp': ab_hp_inv, 'cp_ct': cp_ct_inv, 'cp_hp': cp_hp_inv, 'ates': ates_inv, 'ttes': ttes_inv, 'ites': ites_inv}))
+            df_3.append(pd.DataFrame({'eb': eb_c_inv, 'hp': hp_c_inv, 'st': st_c_inv, 'wi': wi_c_inv, 'gt': gt_c_inv, 'dgt': dgt_c_inv, 'ieh': ieh_c_inv, 'chp': chp_c_inv, 'ac': ac_c_inv, 'ab_ct': ab_ct_c_inv, 'ab_hp': ab_hp_c_inv, 'cp_ct': cp_ct_c_inv, 'cp_hp': cp_hp_c_inv, 'ates': ates_c_inv, 'ttes': ttes_c_inv, 'ites': ites_c_inv}))
+            df_4.append(pd.DataFrame({'eb': eb_c_fix, 'hp': hp_c_fix, 'st': st_c_fix, 'wi': wi_c_fix, 'gt': gt_c_fix, 'dgt': dgt_c_fix, 'ieh': ieh_c_fix, 'chp': chp_c_fix, 'ac': ac_c_fix, 'ab_ct': ab_ct_c_fix, 'ab_hp': ab_hp_c_fix, 'cp_ct': cp_ct_c_fix, 'cp_hp': cp_hp_c_fix, 'ates': ates_c_fix, 'ttes': ttes_c_fix, 'ites': ites_c_fix}))
+            df_5.append(pd.DataFrame({'eb': eb_c_var, 'hp': hp_c_var, 'st': st_c_var, 'wi': wi_c_var, 'gt': gt_c_var, 'dgt': dgt_c_var, 'ieh': ieh_c_var, 'chp': chp_c_var, 'ac': ac_c_var, 'ab_ct': ab_ct_c_var, 'ab_hp': ab_hp_c_var, 'cp_ct': cp_ct_c_var, 'cp_hp': cp_hp_c_var, 'ates': ates_c_var, 'ttes': ttes_c_var, 'ites': ites_c_var}))
+            df_6.append(pd.DataFrame({'eb': eb_elec, 'hp': hp_elec, 'st': st_elec, 'gt': gt_elec, 'dgt': dgt_elec, 'ieh': ieh_elec, 'ac': ac_elec, 'ab_ct': ab_ct_elec, 'ab_hp': ab_hp_elec, 'cp_ct': cp_ct_elec, 'cp_hp': cp_hp_elec, 'ates': ates_elec, 'ttes': ttes_elec, 'ites': ites_elec}))
+            df_7.append(pd.DataFrame({'elec': data[scenario]['electricity_price'][year], 'co2': data[scenario]['electricity_co2_share'][year], 'gas': data[scenario]['gas_price'][year]}))
+            df_8.append(pd.DataFrame({'co2': [data[scenario]['co2_price'][year]]}, index=[year]))
                 
             df_0.append(pd.DataFrame({'hour': hours, 'heating': data[scenario]['heating'][year], 'eb': eb_in, 'hp': hp_in, 'st': st_in, 'wi': wi_in, 'gt': gt_in, 'dgt': dgt_in, 'ieh': ieh_in, 'chp': chp_in, 'ates+': ates_in, 'ates-': ates_out, 'ttes+': ttes_in, 'ttes-': ttes_out}))
             df_2.append(pd.DataFrame({'eb': eb_c_inv, 'hp': hp_c_inv, 'st': st_c_inv, 'wi': wi_c_inv, 'gt': gt_c_inv, 'dgt': dgt_c_inv, 'ieh': ieh_c_inv, 'chp': chp_c_inv, 'ates': ates_c_inv, 'ttes': ttes_c_inv}))
@@ -148,29 +275,37 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
         with pd.ExcelWriter(path_to_heat_supply) as writer:
             for df, year in zip(df_0, years):
                 df.to_excel(writer, sheet_name=str(year), index=False)
-                       
-        with pd.ExcelWriter(path_to_inv_cost) as writer:
+                
+        with pd.ExcelWriter(path_to_cool_supply) as writer:
+            for df, year in zip(df_1, years):
+                df.to_excel(writer, sheet_name=str(year), index=False)
+                
+        with pd.ExcelWriter(path_to_inv_capacity) as writer:
             for df, year in zip(df_2, years):
                 df.to_excel(writer, sheet_name=str(year), index=False)
                 
-        with pd.ExcelWriter(path_to_fix_cost) as writer:
+        with pd.ExcelWriter(path_to_inv_cost) as writer:
             for df, year in zip(df_3, years):
+                df.to_excel(writer, sheet_name=str(year), index=False)
+                
+        with pd.ExcelWriter(path_to_fix_cost) as writer:
+            for df, year in zip(df_4, years):
                 df.to_excel(writer, sheet_name=str(year), index=False)
                         
         with pd.ExcelWriter(path_to_var_cost) as writer:
-            for df, year in zip(df_4, years):
-                df.to_excel(writer, sheet_name=str(year), index=False)
-
-        with pd.ExcelWriter(path_to_elec_consumption) as writer:
             for df, year in zip(df_5, years):
                 df.to_excel(writer, sheet_name=str(year), index=False)
 
-        with pd.ExcelWriter(path_to_elec_gas_price) as writer:
+        with pd.ExcelWriter(path_to_elec_consumption) as writer:
             for df, year in zip(df_6, years):
+                df.to_excel(writer, sheet_name=str(year), index=False)
+
+        with pd.ExcelWriter(path_to_elec_gas_price) as writer:
+            for df, year in zip(df_7, years):
                 df.to_excel(writer, sheet_name=str(year), index=False)
                 
         with pd.ExcelWriter(path_to_co2_price) as writer:
-            for df, year in zip(df_7, years):
+            for df, year in zip(df_8, years):
                 df.to_excel(writer, sheet_name=str(year), index=False)
 
     path_to_inv_capacity = os.path.join(path_to_result_folder, '[all]_#_inv_capacity.xlsx')

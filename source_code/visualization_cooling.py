@@ -32,6 +32,10 @@ gt_in = {}
 dgt_in = {}
 ieh_in = {}
 chp_in = {}
+ab_ct_out = {}
+ab_hp_in = {}
+ab_hp_out = {}
+cp_hp_in = {}
 ates_in = {}
 ates_out = {}
 ttes_in = {}
@@ -45,6 +49,9 @@ gt_inv = {}
 dgt_inv = {}
 ieh_inv = {}
 chp_inv = {}
+ab_ct_inv = {}
+ab_hp_inv = {}
+cp_hp_inv = {}
 ates_inv = {}
 ttes_inv = {}
 
@@ -56,6 +63,9 @@ gt_c_inv = {}
 dgt_c_inv = {}
 ieh_c_inv = {}
 chp_c_inv = {}
+ab_ct_c_inv = {}
+ab_hp_c_inv = {}
+cp_hp_c_inv = {}
 ates_c_inv = {}
 ttes_c_inv = {}
 
@@ -67,6 +77,9 @@ gt_c_fix = {}
 dgt_c_fix = {}
 ieh_c_fix = {}
 chp_c_fix = {}
+ab_ct_c_fix = {}
+ab_hp_c_fix = {}
+cp_hp_c_fix = {}
 ates_c_fix = {}
 ttes_c_fix = {}
 
@@ -78,6 +91,9 @@ gt_c_var = {}
 dgt_c_var = {}
 ieh_c_var = {}
 chp_c_var = {}
+ab_ct_c_var = {}
+ab_hp_c_var = {}
+cp_hp_c_var = {}
 ates_c_var = {}
 ttes_c_var = {}
 
@@ -85,6 +101,11 @@ eb_elec = {}
 hp_elec = {}
 st_elec = {}
 gt_elec = {}
+dgt_elec = {}
+ieh_elec = {}
+ab_ct_elec = {}
+ab_hp_elec = {}
+cp_hp_elec = {}
 ates_elec = {}
 ttes_elec = {}
 
@@ -103,6 +124,10 @@ for scenario in scenarios:
     dgt_in_scenario = {}
     ieh_in_scenario = {}
     chp_in_scenario = {}
+    ab_ct_out_scenario = {}
+    ab_hp_in_scenario = {}
+    ab_hp_out_scenario = {}
+    cp_hp_in_scenario = {}
     ates_in_scenario = {}
     ates_out_scenario = {}
     ttes_in_scenario = {}
@@ -116,6 +141,9 @@ for scenario in scenarios:
     dgt_c_inv_scenario = {}
     ieh_c_inv_scenario = {}
     chp_c_inv_scenario = {}
+    ab_ct_c_inv_scenario = {}
+    ab_hp_c_inv_scenario = {}
+    cp_hp_c_inv_scenario = {}
     ates_c_inv_scenario = {}
     ttes_c_inv_scenario = {}
     
@@ -127,6 +155,9 @@ for scenario in scenarios:
     dgt_c_fix_scenario = {}
     ieh_c_fix_scenario = {}
     chp_c_fix_scenario = {}
+    ab_ct_c_fix_scenario = {}
+    ab_hp_c_fix_scenario = {}
+    cp_hp_c_fix_scenario = {}
     ates_c_fix_scenario = {}
     ttes_c_fix_scenario = {}
     
@@ -138,6 +169,9 @@ for scenario in scenarios:
     dgt_c_var_scenario = {}
     ieh_c_var_scenario = {}
     chp_c_var_scenario = {}
+    ab_ct_c_var_scenario = {}
+    ab_hp_c_var_scenario = {}
+    cp_hp_c_var_scenario = {}
     ates_c_var_scenario = {}
     ttes_c_var_scenario = {}
     
@@ -145,6 +179,11 @@ for scenario in scenarios:
     hp_elec_scenario = {}
     st_elec_scenario = {}
     gt_elec_scenario = {}
+    dgt_elec_scenario = {}
+    ieh_elec_scenario = {}
+    ab_ct_elec_scenario = {}
+    ab_hp_elec_scenario = {}
+    cp_hp_elec_scenario = {}
     ates_elec_scenario = {}
     ttes_elec_scenario = {}
     
@@ -179,6 +218,10 @@ for scenario in scenarios:
         dgt_in_scenario[year] = df_heat_supply['dgt'].tolist()
         ieh_in_scenario[year] = df_heat_supply['ieh'].tolist()
         chp_in_scenario[year] = df_heat_supply['chp'].tolist()
+        ab_ct_out_scenario[year] = df_heat_supply['ab_ct-'].tolist()
+        ab_hp_in_scenario[year] = df_heat_supply['ab_hp+'].tolist()
+        ab_hp_out_scenario[year] = df_heat_supply['ab_hp-'].tolist()
+        cp_hp_in_scenario[year] = df_heat_supply['cp_hp+'].tolist()
         ates_in_scenario[year] = df_heat_supply['ates+'].tolist()
         ates_out_scenario[year] = df_heat_supply['ates-'].tolist()
         ttes_in_scenario[year] = df_heat_supply['ttes+'].tolist()
@@ -192,6 +235,9 @@ for scenario in scenarios:
         dgt_c_inv_scenario[year] = df_inv_cost['dgt'].tolist()[0]
         ieh_c_inv_scenario[year] = df_inv_cost['ieh'].tolist()[0]
         chp_c_inv_scenario[year] = df_inv_cost['chp'].tolist()[0]
+        ab_ct_c_inv_scenario[year] = df_inv_cost['ab_ct'].tolist()[0]
+        ab_hp_c_inv_scenario[year] = df_inv_cost['ab_hp'].tolist()[0]
+        cp_hp_c_inv_scenario[year] = df_inv_cost['cp_hp'].tolist()[0]
         ates_c_inv_scenario[year] = df_inv_cost['ates'].tolist()[0]
         ttes_c_inv_scenario[year] = df_inv_cost['ttes'].tolist()[0]
         
@@ -203,6 +249,9 @@ for scenario in scenarios:
         dgt_c_fix_scenario[year] = df_fix_cost['dgt'].tolist()[0]
         ieh_c_fix_scenario[year] = df_fix_cost['ieh'].tolist()[0]
         chp_c_fix_scenario[year] = df_fix_cost['chp'].tolist()[0]
+        ab_ct_c_fix_scenario[year] = df_fix_cost['ab_ct'].tolist()[0]
+        ab_hp_c_fix_scenario[year] = df_fix_cost['ab_hp'].tolist()[0]
+        cp_hp_c_fix_scenario[year] = df_fix_cost['cp_ct'].tolist()[0]
         ates_c_fix_scenario[year] = df_fix_cost['ates'].tolist()[0]
         ttes_c_fix_scenario[year] = df_fix_cost['ttes'].tolist()[0]
         
@@ -214,6 +263,9 @@ for scenario in scenarios:
         dgt_c_var_scenario[year] = df_var_cost['dgt'].tolist()
         ieh_c_var_scenario[year] = df_var_cost['ieh'].tolist()
         chp_c_var_scenario[year] = df_var_cost['chp'].tolist()
+        ab_ct_c_var_scenario[year] = df_var_cost['ab_ct'].tolist()
+        ab_hp_c_var_scenario[year] = df_var_cost['ab_hp'].tolist()
+        cp_hp_c_var_scenario[year] = df_var_cost['cp_hp'].tolist()
         ates_c_var_scenario[year] = df_var_cost['ates'].tolist()
         ttes_c_var_scenario[year] = df_var_cost['ttes'].tolist()
         
@@ -221,6 +273,11 @@ for scenario in scenarios:
         hp_elec_scenario[year] = df_elec_consumption['hp'].tolist()
         st_elec_scenario[year] = df_elec_consumption['st'].tolist()
         gt_elec_scenario[year] = df_elec_consumption['gt'].tolist()
+        dgt_elec_scenario[year] = df_elec_consumption['dgt'].tolist()
+        ieh_elec_scenario[year] = df_elec_consumption['ieh'].tolist()
+        ab_ct_elec_scenario[year] = df_elec_consumption['ab_ct'].tolist()
+        ab_hp_elec_scenario[year] = df_elec_consumption['ab_hp'].tolist()
+        cp_hp_elec_scenario[year] = df_elec_consumption['cp_hp'].tolist()
         ates_elec_scenario[year] = df_elec_consumption['ates'].tolist()
         ttes_elec_scenario[year] = df_elec_consumption['ttes'].tolist()
         
@@ -238,6 +295,10 @@ for scenario in scenarios:
     dgt_in[scenario] = dgt_in_scenario
     ieh_in[scenario] = ieh_in_scenario
     chp_in[scenario] = chp_in_scenario
+    ab_ct_out[scenario] = ab_ct_out_scenario 
+    ab_hp_in[scenario] = ab_hp_in_scenario 
+    ab_hp_out[scenario] = ab_hp_out_scenario 
+    cp_hp_in[scenario] = cp_hp_in_scenario 
     ates_in[scenario] = ates_in_scenario
     ates_out[scenario] = ates_out_scenario
     ttes_in[scenario] = ttes_in_scenario
@@ -251,6 +312,9 @@ for scenario in scenarios:
     dgt_c_inv[scenario] = dgt_c_inv_scenario
     ieh_c_inv[scenario] = ieh_c_inv_scenario
     chp_c_inv[scenario] = chp_c_inv_scenario
+    ab_ct_c_inv[scenario] = ab_ct_c_inv_scenario 
+    ab_hp_c_inv[scenario] = ab_hp_c_inv_scenario 
+    cp_hp_c_inv[scenario] = cp_hp_c_inv_scenario 
     ates_c_inv[scenario] = ates_c_inv_scenario
     ttes_c_inv[scenario] = ttes_c_inv_scenario
     
@@ -262,6 +326,9 @@ for scenario in scenarios:
     dgt_c_fix[scenario] = dgt_c_fix_scenario
     ieh_c_fix[scenario] = ieh_c_fix_scenario
     chp_c_fix[scenario] = chp_c_fix_scenario
+    ab_ct_c_fix[scenario] = ab_ct_c_fix_scenario 
+    ab_hp_c_fix[scenario] = ab_hp_c_fix_scenario 
+    cp_hp_c_fix[scenario] = cp_hp_c_fix_scenario 
     ates_c_fix[scenario] = ates_c_fix_scenario
     ttes_c_fix[scenario] = ttes_c_fix_scenario
     
@@ -273,6 +340,9 @@ for scenario in scenarios:
     dgt_c_var[scenario] = dgt_c_var_scenario
     ieh_c_var[scenario] = ieh_c_var_scenario
     chp_c_var[scenario] = chp_c_var_scenario
+    ab_ct_c_var[scenario] = ab_ct_c_var_scenario 
+    ab_hp_c_var[scenario] = ab_hp_c_var_scenario 
+    cp_hp_c_var[scenario] = cp_hp_c_var_scenario 
     ates_c_var[scenario] = ates_c_var_scenario
     ttes_c_var[scenario] = ttes_c_var_scenario
     
@@ -280,6 +350,11 @@ for scenario in scenarios:
     hp_elec[scenario] = hp_elec_scenario
     st_elec[scenario] = st_elec_scenario
     gt_elec[scenario] = gt_elec_scenario
+    dgt_elec[scenario] = dgt_elec_scenario
+    ieh_elec[scenario] = ieh_elec_scenario
+    ab_ct_elec[scenario] = ab_ct_elec_scenario 
+    ab_hp_elec[scenario] = ab_hp_elec_scenario 
+    cp_hp_elec[scenario] = cp_hp_elec_scenario 
     ates_elec[scenario] = ates_elec_scenario
     ttes_elec[scenario] = ttes_elec_scenario
     
@@ -310,20 +385,6 @@ df_0 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand[visualize_s
 
 fig = go.Figure()
 
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['heating_demand'], fill='tozeroy', name='Demand'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['eb'], fill='tonexty', name='Electric Boiler'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['hp'], fill='tonexty', name='Heat Pump'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['st'], fill='tonexty', name='Solar Thermal'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['wi'], fill='tonexty', name='Waste Incineration'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['gt'], fill='tonexty', name='Geothermal'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['dgt'], fill='tonexty', name='Deep Geothermal'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ieh'], fill='tonexty', name='Industrial Excess Heat'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['chp'], fill='tonexty', name='Combined Heat and Power'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ates+'], fill='tonexty', name='ATES in'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ates-'], fill='tonexty', name='ATES out'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ttes+'], fill='tonexty', name='TTES in'))
-# fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ttes-'], fill='tonexty', name='TTES out'))
-
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['chp'], mode='lines', name='Combined heat and power', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['wi'], mode='lines', name='Waste incineration', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
@@ -337,8 +398,6 @@ fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ttes+'], mode='lines', name='TT
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ates-'], mode='lines', name='ATES store', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ates+'], mode='lines', name='ATES feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['heating_demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
-
-# fig.update_layout(title='Load curve', xaxis_title='time in h', yaxis_title='thermal heating energy per hour in MWh/h', legend_title='Technologies')
 
 fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Heat supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
 
@@ -890,7 +949,7 @@ load_duration_curve_demand.sort(reverse=True)
 load_duration_curve = {}
 
 for scenario in scenarios:
-    load_duration_curve_scenario = [elec_0 + elec_1 + elec_2 + elec_3 + elec_4 + elec_5 + elec_6 + elec_7 for elec_0, elec_1, elec_2, elec_3, elec_4, elec_5, elec_6, elec_7 in zip(eb_elec[scenario][visualize_year], hp_elec[scenario][visualize_year], st_elec[scenario][visualize_year], gt_elec[scenario][visualize_year], [value * 0.1 for value in dgt_in[scenario][visualize_year]], [value * 0.02 for value in ieh_in[scenario][visualize_year]], ates_elec[scenario][visualize_year], ttes_elec[scenario][visualize_year])]
+    load_duration_curve_scenario = [elec_0 + elec_1 + elec_2 + elec_3 + elec_4 + elec_5 + elec_6 + elec_7 for elec_0, elec_1, elec_2, elec_3, elec_4, elec_5, elec_6, elec_7 in zip(eb_elec[scenario][visualize_year], hp_elec[scenario][visualize_year], st_elec[scenario][visualize_year], gt_elec[scenario][visualize_year], dgt_elec[scenario][visualize_year], ieh_elec[scenario][visualize_year], ates_elec[scenario][visualize_year], ttes_elec[scenario][visualize_year])]
     load_duration_curve[scenario] =  sorted(load_duration_curve_scenario, reverse=True)
 
 fig = go.Figure()

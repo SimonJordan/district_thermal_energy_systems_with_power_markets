@@ -8,6 +8,10 @@ def add_ieh_equations(m=None):
     def ieh_limit(m, s, y, t):
         return m.v_ieh_q_heat_in[s, y, t] <= m.p_ieh_in[s, y, t]
     
+    def ieh_elec_heat(m, s, y, t): 
+        return m.v_ieh_q_elec_consumption[s, y, t] == m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_elec[s, y]
+     
+    def ieh_Q_inv(m, s, y):
     def ieh_Q_inv(m, y):
         if (y - 5) in m.set_years:
             return m.v_ieh_Q_inv[y] == m.v_ieh_Q_heat_max[y] - m.v_ieh_Q_heat_max[y-5]
@@ -24,6 +28,7 @@ def add_ieh_equations(m=None):
             return m.v_ieh_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * m.v_ieh_c_inv[s, y] * 0.02
     
     def ieh_c_var(m, s, y, t):
+        return m.v_ieh_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ieh_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_c_in[s, y])
         return m.v_ieh_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_elec[s, y] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_c_in[s, y])
     
     m.con_ieh_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
@@ -32,6 +37,10 @@ def add_ieh_equations(m=None):
     m.con_ieh_limit = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                      rule = ieh_limit)
     
+    m.con_ieh_elec_heat = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+                                        rule = ieh_elec_heat)
+    
+    m.con_ieh_Q_inv = py.Constraint(m.set_scenarios, m.set_years,
     m.con_ieh_Q_inv = py.Constraint(m.set_years,
                                      rule = ieh_Q_inv)   
         
@@ -50,9 +59,14 @@ def add_ieh_variables(m=None):
                                domain = py.NonNegativeReals,
                                doc = 'heat energy feed in from industrial excess heat per scenario, year and hour')
     
+    m.v_ieh_q_elec_consumption = py.Var(m.set_scenarios, m.set_years, m.set_hours,
+                                        domain = py.NonNegativeReals,
+                                        doc = 'electricity input of industrial excess heat per scenario, year and hour')
+    
+    m.v_ieh_Q_heat_max = py.Var(m.set_scenarios, m.set_years,
     m.v_ieh_Q_heat_max = py.Var(m.set_years,
                                 domain = py.NonNegativeReals,
-                                doc = 'max heat feed in from industrial excess heat for diiehrict heating')
+                                doc = 'max heat feed in from industrial excess heat for district heating')
     
     m.v_ieh_Q_inv = py.Var(m.set_years,
                            domain = py.NonNegativeReals,
