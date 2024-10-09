@@ -1,4 +1,4 @@
-def define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes, data_ites):
+def define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_ites):
     data = {}
     
     data['0_basic'] = {'year_expansion_range': year_expansion_range,
@@ -21,7 +21,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
                        'ac': data_ac,
                        'ab': data_ab,
                        'cp': data_cp,
-                       'ates': data_ates,
                        'ttes': data_ttes,
                        'ites': data_ites}
     
@@ -45,7 +44,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
                                         'ac': data_ac,
                                         'ab': data_ab,
                                         'cp': data_cp,
-                                        'ates': data_ates,
                                         'ttes': data_ttes,
                                         'ites': data_ites}
     
@@ -69,7 +67,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                     'ac': data_ac,
     #                                     'ab': data_ab,
     #                                     'cp': data_cp,
-    #                                     'ates': data_ates,
     #                                     'ttes': data_ttes,
     #                                     'ites': data_ites}
     
@@ -93,7 +90,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                         'ac': data_ac,
     #                                         'ab': data_ab,
     #                                         'cp': data_cp,
-    #                                         'ates': data_ates,
     #                                         'ttes': data_ttes,
     #                                         'ites': data_ites}
     
@@ -117,7 +113,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                             'ac': data_ac,
     #                             'ab': data_ab,
     #                             'cp': data_cp,
-    #                             'ates': data_ates,
     #                             'ttes': data_ttes,
     #                             'ites': data_ites}
     
@@ -141,7 +136,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                             'ac': data_ac,
     #                             'ab': data_ab,
     #                             'cp': data_cp,
-    #                             'ates': data_ates,
     #                             'ttes': data_ttes,
     #                             'ites': data_ites}
     
@@ -165,7 +159,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                             'ac': data_ac,
     #                             'ab': data_ab,
     #                             'cp': data_cp,
-    #                             'ates': data_ates,
     #                             'ttes': data_ttes,
     #                             'ites': data_ites}
     
@@ -189,7 +182,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                 'ac': {year: {name: (value * 0.5 if name == 'p_ac_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ac.items()},
     #                                 'ab': {year: {name: (value * 0.5 if name == 'p_ab_c_inv' or 'p_ct_ab_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ab.items()},
     #                                 'cp': {year: {name: (value * 0.5 if name == 'p_cp_c_inv' or 'p_ct_cp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_cp.items()},
-    #                                 'ates': {year: {name: (value * 0.5 if name == 'p_ates_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ates.items()},
     #                                 'ttes': {year: {name: (value * 0.5 if name == 'p_ttes_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()},
     #                                 'ites': {year: {name: (value * 0.5 if name == 'p_ites_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()}}
     
@@ -213,7 +205,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                                   'ac': data_ac,
     #                                                   'ab': data_ab,
     #                                                   'cp': data_cp,
-    #                                                   'ates': data_ates,
     #                                                   'ttes': data_ttes,
     #                                                   'ites': data_ites}
     
@@ -237,7 +228,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                                                   'ac': data_ac,
     #                                                                   'ab': data_ab,
     #                                                                   'cp': data_cp,
-    #                                                                   'ates': data_ates,
     #                                                                   'ttes': data_ttes,
     #                                                                   'ites': data_ites}
     
