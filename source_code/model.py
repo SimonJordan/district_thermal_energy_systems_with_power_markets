@@ -23,9 +23,8 @@ print('Start of the script at:', formatted_time)
 #-----------------------------------------------------------------------------#
 
 # SERVER !!!
-# scenarios = ['0_basic', '3_non_neg_electricity_price', '5_zero_co2_price', '6_high_co2_price', '9_high_electricity_price_high_gas_price_high_co2_price']
-# scenarios = ['0_basic', '1_high_electricity_price', '2_low_electricity_price', '3_non_neg_electricity_price', '4_high_gas_price', '5_zero_co2_price', '6_high_co2_price', '7_half_investment_c', '8_low_electricity_price_high_co2_price', '9_high_electricity_price_high_gas_price_high_co2_price']
-scenarios = ['0_basic', '1_high_electricity_price']
+# scenarios = ['1_reference', '2_high_electricity_prices', '3_low_electricity_prices', '4_flexible_energy_market', '5_energy_congestion', '6_green_friendly', '7_low_gas_demand', '8_natural_gas_friendly', '9_warm_winters', '10_cold_winters', '11_hot_summers', '12_warm_summers', '13_moderate_climate', '14_zero_co2_price', '15_delayed_co2_pricing', '16_ambitious_co2_pricing', '17_expiring_support_res', '18_res_friendly']
+scenarios = ['1_reference', '2_high_electricity_prices']
 years = [2025, 2030, 2035, 2040, 2045, 2050]
 year_expansion_range = {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}
 hours = list(range(8760))

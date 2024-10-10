@@ -19,7 +19,7 @@ years = [2025, 2030, 2035, 2040, 2045, 2050]
 year_expansion_range = {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}
 hours = list(range(8760))
 
-visualize_scenario = '0_basic'
+visualize_scenario = '1_reference'
 visualize_year = 2035
 
 heating_demand = {}
@@ -486,14 +486,14 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Winter week', 'Summer week'))
 
-fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[0]][visualize_year][:168], mode='lines', name='Scenario 0: basic', line=dict(color='#636EFA')), row=1, col=1)
-fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[1]][visualize_year][:168], mode='lines', name='Scenario 1: high electricity price', line=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[0]][visualize_year][:168], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[1]][visualize_year][:168], mode='lines', name='Scenario 2: high electricity price', line=dict(color='#00CC96')), row=1, col=1)
 fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_3['gt'][scenarios[0]][visualize_year][:168] + df_3['gt'][scenarios[1]][visualize_year][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
 
 #fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[1]][visualize_year], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
 
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['gt'][scenarios[0]][visualize_year][4380:4548], mode='lines', name='Scenario 0: basic', line=dict(color='#636EFA'), showlegend=False), row=1, col=2)
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['gt'][scenarios[1]][visualize_year][4380:4548], mode='lines', name='Scenario 1: high electricity price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['gt'][scenarios[0]][visualize_year][4380:4548], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['gt'][scenarios[1]][visualize_year][4380:4548], mode='lines', name='Scenario 2: high electricity price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
 fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_3['gt'][scenarios[0]][visualize_year][4380:4548] + df_3['gt'][scenarios[1]][visualize_year][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
 
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=1)
@@ -510,14 +510,14 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Winter week', 'Summer week'))
 
-fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ieh'][scenarios[0]][visualize_year][:168], mode='lines', name='Scenario 0: basic', line=dict(color='#636EFA')), row=1, col=1)
-fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ieh'][scenarios[1]][visualize_year][:168], mode='lines', name='Scenario 1: high electricity price', line=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ieh'][scenarios[0]][visualize_year][:168], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ieh'][scenarios[1]][visualize_year][:168], mode='lines', name='Scenario 2: high electricity price', line=dict(color='#00CC96')), row=1, col=1)
 fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_3['ieh'][scenarios[0]][visualize_year][:168] + df_3['ieh'][scenarios[1]][visualize_year][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
 
 #fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[1]][visualize_year], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
 
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ieh'][scenarios[0]][visualize_year][4380:4548], mode='lines', name='Scenario 0: basic', line=dict(color='#636EFA'), showlegend=False), row=1, col=2)
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ieh'][scenarios[1]][visualize_year][4380:4548], mode='lines', name='Scenario 1: high electricity price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ieh'][scenarios[0]][visualize_year][4380:4548], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ieh'][scenarios[1]][visualize_year][4380:4548], mode='lines', name='Scenario 2: high electricity price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
 fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_3['ieh'][scenarios[0]][visualize_year][4380:4548] + df_3['ieh'][scenarios[1]][visualize_year][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
 
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=1)
