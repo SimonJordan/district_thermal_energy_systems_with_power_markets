@@ -24,9 +24,9 @@ print('Start of the script at:', formatted_time)
 
 # SERVER !!!
 # scenarios = ['1_reference', '2_high_electricity_prices', '3_low_electricity_prices', '4_flexible_energy_market', '5_energy_congestion', '6_green_friendly', '7_low_gas_demand', '8_natural_gas_friendly', '9_warm_winters', '10_cold_winters', '11_hot_summers', '12_warm_summers', '13_moderate_climate', '14_zero_co2_price', '15_delayed_co2_pricing', '16_ambitious_co2_pricing', '17_expiring_support_res', '18_res_friendly']
+# scenarios_weighting = {'1_reference': 0.15, '2_high_electricity_prices': 0.03, '3_low_electricity_prices': 0.03, '4_flexible_energy_market': 0.06, '5_energy_congestion': 0.03, '6_green_friendly': 0.04, '7_low_gas_demand': 0.04, '8_natural_gas_friendly': 0.04, '9_warm_winters': 0.03, '10_cold_winters': 0.12, '11_hot_summers': 0.12, '12_warm_summers': 0.03, '13_moderate_climate': 0.03, '14_zero_co2_price': 0.03, '15_delayed_co2_pricing': 0.06, '16_ambitious_co2_pricing': 0.04, '17_expiring_support_res': 0.06, '18_res_friendly': 0.06}
 scenarios = ['1_reference', '2_high_electricity_prices']
-# scenarios_weighting = {'0_basic': 0.3, '3_non_neg_electricity_price': 0.2, '5_zero_co2_price': 0.15, '6_high_co2_price': 0.25, '9_high_electricity_price_high_gas_price_high_co2_price': 0.1}
-scenarios_weighting = {'0_basic': 1, '1_high_electricity_price': 1}
+scenarios_weighting = {'1_reference': 1, '2_high_electricity_prices': 1}
 years = [2025, 2030, 2035, 2040, 2045, 2050]
 year_expansion_range = {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}
 hours = list(range(8760))
