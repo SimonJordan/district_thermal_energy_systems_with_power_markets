@@ -30,16 +30,16 @@ def add_ieh_equations(m=None):
         return m.v_ieh_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_ieh_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]) + m.v_ieh_q_heat_in[s, y, t] * m.p_ieh_c_in[s, y])
     
     m.con_ieh_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
-                                                 rule = ieh_feed_in_max_bound)
+                                                rule = ieh_feed_in_max_bound)
     
     m.con_ieh_limit = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
-                                     rule = ieh_limit)
+                                    rule = ieh_limit)
     
     m.con_ieh_elec_heat = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                         rule = ieh_elec_heat)
     
     m.con_ieh_Q_inv = py.Constraint(m.set_years,
-                                    rule = ieh_Q_inv)   
+                                    rule = ieh_Q_inv)
         
     m.con_ieh_c_inv = py.Constraint(m.set_scenarios, m.set_years,
                                     rule = ieh_c_inv)

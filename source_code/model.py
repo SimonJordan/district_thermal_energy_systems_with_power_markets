@@ -23,10 +23,9 @@ print('Start of the script at:', formatted_time)
 #-----------------------------------------------------------------------------#
 
 # SERVER !!!
-# scenarios = ['0_basic', '3_non_neg_electricity_price', '5_zero_co2_price', '6_high_co2_price', '9_high_electricity_price_high_gas_price_high_co2_price']
-# scenarios = ['0_basic', '1_high_electricity_price', '2_low_electricity_price', '3_non_neg_electricity_price', '4_high_gas_price', '5_zero_co2_price', '6_high_co2_price', '7_half_investment_c', '8_low_electricity_price_high_co2_price', '9_high_electricity_price_high_gas_price_high_co2_price']
+# scenarios = ['1_reference', '2_high_electricity_prices', '3_low_electricity_prices', '4_flexible_energy_market', '5_energy_congestion', '6_green_friendly', '7_low_gas_demand', '8_natural_gas_friendly', '9_warm_winters', '10_cold_winters', '11_hot_summers', '12_warm_summers', '13_moderate_climate', '14_zero_co2_price', '15_delayed_co2_pricing', '16_ambitious_co2_pricing', '17_expiring_support_res', '18_res_friendly']
+scenarios = ['1_reference', '2_high_electricity_prices']
 # scenarios_weighting = {'0_basic': 0.3, '3_non_neg_electricity_price': 0.2, '5_zero_co2_price': 0.15, '6_high_co2_price': 0.25, '9_high_electricity_price_high_gas_price_high_co2_price': 0.1}
-scenarios = ['0_basic', '1_high_electricity_price']
 scenarios_weighting = {'0_basic': 1, '1_high_electricity_price': 1}
 years = [2025, 2030, 2035, 2040, 2045, 2050]
 year_expansion_range = {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}
@@ -39,7 +38,7 @@ hours = list(range(8760))
 #-----------------------------------------------------------------------------#
 
 from initialize import initialize_parameters
-heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes, data_ites = initialize_parameters(years)
+heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_ites = initialize_parameters(years)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -49,7 +48,7 @@ heating_demand, cooling_demand, electricity_price, electricity_mean_price, elect
 
 # SERVER !!!
 from scenarios import define_scenarios
-data = define_scenarios(scenarios_weighting, year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ates, data_ttes, data_ites)
+data = define_scenarios(scenarios_weighting, year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_ites)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -148,11 +147,6 @@ add_cp_equations(model)
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-from ates import add_ates_parameters, add_ates_variables, add_ates_equations
-add_ates_parameters(model)
-add_ates_variables(model)
-add_ates_equations(model)
-
 from ttes import add_ttes_parameters, add_ttes_variables, add_ttes_equations
 add_ttes_parameters(model)
 add_ttes_variables(model)
@@ -170,10 +164,10 @@ add_ites_equations(model)
 #-----------------------------------------------------------------------------#
 
 def demand_balance_heating(m, s, y, t):
-    return m.v_eb_q_heat_in[s, y, t] + m.v_hp_q_heat_in[s, y, t] + m.v_st_q_heat_in[s, y, t] + m.v_wi_q_heat_in[s, y, t] + m.v_gt_q_heat_in[s, y, t] + m.v_dgt_q_heat_in[s, y, t] + m.v_ieh_q_heat_in[s, y, t] + m.v_chp_q_heat_in[s, y, t] - m.v_ab_ct_q_heat_out[s, y, t] + m.v_ab_hp_q_heat_in[s, y, t] - m.v_ab_hp_q_heat_out[s, y, t] + m.v_cp_hp_q_heat_in[s, y, t] + m.v_ates_q_heat_in[s, y, t] - m.v_ates_q_heat_out[s, y, t] + m.v_ttes_q_heat_in[s, y, t] - m.v_ttes_q_heat_out[s, y, t] == model.data_values[s]['heating'][y][t]
+    return m.v_eb_q_heat_in[s, y, t] + m.v_hp_q_heat_in[s, y, t] + m.v_st_q_heat_in[s, y, t] + m.v_wi_q_heat_in[s, y, t] + m.v_gt_q_heat_in[s, y, t] + m.v_dgt_q_heat_in[s, y, t] + m.v_ieh_q_heat_in[s, y, t] + m.v_chp_q_heat_in[s, y, t] - m.v_ab_ct_q_heat_out[s, y, t] + m.v_ab_hp_q_heat_in[s, y, t] - m.v_ab_hp_q_heat_out[s, y, t] + m.v_cp_hp_q_heat_in[s, y, t] + m.v_ttes_q_heat_in[s, y, t] - m.v_ttes_q_heat_out[s, y, t] == model.data_values[s]['heating'][y][t]
 
 def demand_balance_cooling(m, s, y, t):
-    return m.v_ac_q_cool_in[s, y, t] + m.v_ab_ct_q_cool_in[s, y, t] + m.v_ab_hp_q_cool_in[s, y, t] + m.v_cp_ct_q_cool_in[s, y, t] + m.v_cp_hp_q_cool_in[s, y, t] + m.v_ates_q_cool_in[s, y, t] - m.v_ates_q_cool_out[s, y, t] + m.v_ites_q_cool_in[s, y, t] - m.v_ites_q_cool_out[s, y, t] == model.data_values[s]['cooling'][y][t]
+    return m.v_ac_q_cool_in[s, y, t] + m.v_ab_ct_q_cool_in[s, y, t] + m.v_ab_hp_q_cool_in[s, y, t] + m.v_cp_ct_q_cool_in[s, y, t] + m.v_cp_hp_q_cool_in[s, y, t] + m.v_ites_q_cool_in[s, y, t] - m.v_ites_q_cool_out[s, y, t] == model.data_values[s]['cooling'][y][t]
 
 model.con_demand_balance_heating = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance_heating)
 model.con_demand_balance_cooling = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance_cooling)
@@ -198,7 +192,6 @@ def objective_function(m):
            sum(m.v_ab_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_cp_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_cp_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ates_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ates_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
            sum(m.v_ites_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours)
 
