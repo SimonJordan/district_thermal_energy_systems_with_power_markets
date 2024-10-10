@@ -150,7 +150,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                             'ab': {year: {name: (value * 0.8 if name == 'p_ab_c_inv' or 'p_ct_ab_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ab.items()},
     #                             'cp': {year: {name: (value * 0.8 if name == 'p_cp_c_inv' or 'p_ct_cp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_cp.items()},
     #                             'ttes': {year: {name: (value * 0.8 if name == 'p_ttes_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()},
-    #                             'ites': {year: {name: (value * 0.8 if name == 'p_ites_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()}}
+    #                             'ites': {year: {name: (value * 0.8 if name == 'p_ites_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ites.items()}}
     
     # data['7_low_gas_demand'] = {'year_expansion_range': year_expansion_range,
     #                             'heating': heating_demand,
@@ -228,7 +228,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                            'electricity_mean_price': {year: value * 1.05 if year in [2045, 2050] else value for year, value in electricity_mean_price.items()},
     #                            'electricity_co2_share': electricity_co2_share,
     #                            'electricity_mean_co2_share': electricity_mean_co2_share,
-    #                             'gas_price': {year: [value * 1.1 for value in values] if year in [2045, 2050] else values for year, values in gas_price.items()},
+    #                            'gas_price': {year: [value * 1.1 for value in values] if year in [2045, 2050] else values for year, values in gas_price.items()},
     #                            'co2_price': co2_price,
     #                            'eb': data_eb,
     #                            'hp': data_hp,
@@ -403,7 +403,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                    'ab': {year: {name: (value * 0.7 if name == ('p_ab_c_inv' or 'p_ct_ab_c_inv') and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ab.items()},
     #                                    'cp': {year: {name: (value * 0.7 if name == ('p_cp_c_inv' or 'p_ct_cp_c_inv') and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_cp.items()},
     #                                    'ttes': {year: {name: (value * 0.7 if name == 'p_ttes_c_inv' and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()},
-    #                                    'ites': {year: {name: (value * 0.7 if name == 'p_ites_c_inv' and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()}}
+    #                                    'ites': {year: {name: (value * 0.7 if name == 'p_ites_c_inv' and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ites.items()}}
     
     # data['18_res_friendly'] = {'year_expansion_range': year_expansion_range,
     #                            'heating': heating_demand,
@@ -426,7 +426,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                            'ab': {year: {name: (value * 0.7 if name == 'p_ab_c_inv' or 'p_ct_ab_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ab.items()},
     #                            'cp': {year: {name: (value * 0.7 if name == 'p_cp_c_inv' or 'p_ct_cp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_cp.items()},
     #                            'ttes': {year: {name: (value * 0.7 if name == 'p_ttes_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()},
-    #                            'ites': {year: {name: (value * 0.7 if name == 'p_ites_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()}}
+    #                            'ites': {year: {name: (value * 0.7 if name == 'p_ites_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ites.items()}}
     
     return data
     
