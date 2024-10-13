@@ -255,10 +255,13 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
         dgt_inv = []
         ieh_inv = []
         chp_inv = []
+        ac_inv = []
         ab_ct_inv = []
         ab_hp_inv = []
+        cp_ct_inv = []
         cp_hp_inv = []
         ttes_inv = []
+        ites_inv = []
         
         eb_inv.append(py.value(m.v_eb_Q_inv[year]))
         hp_inv.append(py.value(m.v_hp_Q_inv[year]))
@@ -268,12 +271,15 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
         dgt_inv.append(py.value(m.v_dgt_Q_inv[year]))
         ieh_inv.append(py.value(m.v_ieh_Q_inv[year]))
         chp_inv.append(py.value(m.v_chp_Q_inv[year]))
+        ac_inv.append(py.value(m.v_ac_Q_inv[year]))
         ab_ct_inv.append(py.value(m.v_ab_ct_Q_inv[year]))
         ab_hp_inv.append(py.value(m.v_ab_hp_Q_inv[year]))
+        cp_ct_inv.append(py.value(m.v_cp_ct_Q_inv[year]))
         cp_hp_inv.append(py.value(m.v_cp_hp_Q_inv[year]))
         ttes_inv.append(py.value(m.v_ttes_k_inv[year]))
+        ites_inv.append(py.value(m.v_ites_k_inv[year]))
 
-        df_2.append(pd.DataFrame({'eb': eb_inv, 'hp': hp_inv, 'st': st_inv, 'wi': wi_inv, 'gt': gt_inv, 'dgt': dgt_inv, 'ieh': ieh_inv, 'chp': chp_inv, 'ab_ct': ab_ct_inv, 'ab_hp': ab_hp_inv, 'cp_hp': cp_hp_inv, 'ttes': ttes_inv}))
+        df_2.append(pd.DataFrame({'eb': eb_inv, 'hp': hp_inv, 'st': st_inv, 'wi': wi_inv, 'gt': gt_inv, 'dgt': dgt_inv, 'ieh': ieh_inv, 'chp': chp_inv, 'ac': ac_inv, 'ab_ct': ab_ct_inv, 'ab_hp': ab_hp_inv, 'cp_ct': cp_ct_inv, 'cp_hp': cp_hp_inv, 'ttes': ttes_inv, 'ites': ites_inv}))
 
     with pd.ExcelWriter(path_to_inv_capacity) as writer:
         for df, year in zip(df_2, years):
