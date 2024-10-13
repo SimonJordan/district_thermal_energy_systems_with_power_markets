@@ -546,15 +546,15 @@ fig.show()
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_ac_inv[:3], name='Ratio airchiller', line=dict(color='#FF6692')), row=2, col=1)
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_cp_ct_inv[:3], name='Ratio compression with cooling tower', line=dict(color='#00CC96')), row=2, col=1)
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_cp_hp_inv[:3], name='Ratio compression with heat pump', line=dict(color='#19D3F3')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_ac_inv[:3], name='Ratio airchiller', line=dict(width=4, color='#FF6692')))
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_cp_ct_inv[:3], name='Ratio compression with cooling tower', line=dict(width=4, color='#00CC96')))
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_cp_hp_inv[:3], name='Ratio compression with heat pump', line=dict(width=4, color='#19D3F3')))
 
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3])
 
 fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20))
 
-fig.update_yaxes(range=[0, 6])
+fig.update_yaxes(range=[0, 20])
 
 fig.update_layout(title=dict(text='Investments', font=dict(size=30)), legend=dict(font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)))
 
