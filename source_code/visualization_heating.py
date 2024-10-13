@@ -5,6 +5,13 @@ import plotly.io as pio
 import plotly.graph_objects as go
 import plotly.subplots as sp
 
+# assumptions
+eta_gas = 0.9
+co2_conversion = 0.2
+eta_electricity = 0.99
+cp_seer = 5
+cp_hp_cop = 6.0525
+
 pio.renderers.default = 'browser'
 
 cur_dir = os.path.dirname(__file__)
@@ -23,20 +30,20 @@ visualize_scenario = '1_reference'
 visualize_year = 2035
 
 heating_demand = {}
-eb_in = {}
-hp_in = {}
-st_in = {}
-wi_in = {}
-gt_in = {}
-dgt_in = {}
-ieh_in = {}
-chp_in = {}
-ab_ct_out = {}
-ab_hp_in = {}
-ab_hp_out = {}
-cp_hp_in = {}
-ttes_in = {}
-ttes_out = {}
+eb_heat_in = {}
+hp_heat_in = {}
+st_heat_in = {}
+wi_heat_in = {}
+gt_heat_in = {}
+dgt_heat_in = {}
+ieh_heat_in = {}
+chp_heat_in = {}
+ab_ct_heat_out = {}
+ab_hp_heat_in = {}
+ab_hp_heat_out = {}
+cp_hp_heat_in = {}
+ttes_heat_in = {}
+ttes_heat_out = {}
 
 eb_inv = {}
 hp_inv = {}
@@ -108,20 +115,20 @@ co2_price = {}
 
 for scenario in scenarios:
     heating_demand_scenario = {}
-    eb_in_scenario = {}
-    hp_in_scenario = {}
-    st_in_scenario = {}
-    wi_in_scenario = {}
-    gt_in_scenario = {}
-    dgt_in_scenario = {}
-    ieh_in_scenario = {}
-    chp_in_scenario = {}
-    ab_ct_out_scenario = {}
-    ab_hp_in_scenario = {}
-    ab_hp_out_scenario = {}
-    cp_hp_in_scenario = {}
-    ttes_in_scenario = {}
-    ttes_out_scenario = {}
+    eb_heat_in_scenario = {}
+    hp_heat_in_scenario = {}
+    st_heat_in_scenario = {}
+    wi_heat_in_scenario = {}
+    gt_heat_in_scenario = {}
+    dgt_heat_in_scenario = {}
+    ieh_heat_in_scenario = {}
+    chp_heat_in_scenario = {}
+    ab_ct_heat_out_scenario = {}
+    ab_hp_heat_in_scenario = {}
+    ab_hp_heat_out_scenario = {}
+    cp_hp_heat_in_scenario = {}
+    ttes_heat_in_scenario = {}
+    ttes_heat_out_scenario = {}
     
     eb_inv_scenario = {}
     hp_inv_scenario = {}
@@ -211,20 +218,20 @@ for scenario in scenarios:
         df_co2_price = pd.read_excel(path_to_co2_price, sheet_name=str(year))
         
         heating_demand_scenario[year] = df_heat_supply['heating'].tolist()
-        eb_in_scenario[year] = df_heat_supply['eb'].tolist()
-        hp_in_scenario[year] = df_heat_supply['hp'].tolist()
-        st_in_scenario[year] = df_heat_supply['st'].tolist()
-        wi_in_scenario[year] = df_heat_supply['wi'].tolist()
-        gt_in_scenario[year] = df_heat_supply['gt'].tolist()
-        dgt_in_scenario[year] = df_heat_supply['dgt'].tolist()
-        ieh_in_scenario[year] = df_heat_supply['ieh'].tolist()
-        chp_in_scenario[year] = df_heat_supply['chp'].tolist()
-        ab_ct_out_scenario[year] = df_heat_supply['ab_ct-'].tolist()
-        ab_hp_in_scenario[year] = df_heat_supply['ab_hp+'].tolist()
-        ab_hp_out_scenario[year] = df_heat_supply['ab_hp-'].tolist()
-        cp_hp_in_scenario[year] = df_heat_supply['cp_hp+'].tolist()
-        ttes_in_scenario[year] = df_heat_supply['ttes+'].tolist()
-        ttes_out_scenario[year] = df_heat_supply['ttes-'].tolist()
+        eb_heat_in_scenario[year] = df_heat_supply['eb'].tolist()
+        hp_heat_in_scenario[year] = df_heat_supply['hp'].tolist()
+        st_heat_in_scenario[year] = df_heat_supply['st'].tolist()
+        wi_heat_in_scenario[year] = df_heat_supply['wi'].tolist()
+        gt_heat_in_scenario[year] = df_heat_supply['gt'].tolist()
+        dgt_heat_in_scenario[year] = df_heat_supply['dgt'].tolist()
+        ieh_heat_in_scenario[year] = df_heat_supply['ieh'].tolist()
+        chp_heat_in_scenario[year] = df_heat_supply['chp'].tolist()
+        ab_ct_heat_out_scenario[year] = df_heat_supply['ab_ct-'].tolist()
+        ab_hp_heat_in_scenario[year] = df_heat_supply['ab_hp+'].tolist()
+        ab_hp_heat_out_scenario[year] = df_heat_supply['ab_hp-'].tolist()
+        cp_hp_heat_in_scenario[year] = df_heat_supply['cp_hp+'].tolist()
+        ttes_heat_in_scenario[year] = df_heat_supply['ttes+'].tolist()
+        ttes_heat_out_scenario[year] = df_heat_supply['ttes-'].tolist()
         
         eb_inv_scenario[year] = df_inv_capacity['eb'].tolist()[0]
         hp_inv_scenario[year] = df_inv_capacity['hp'].tolist()[0]
@@ -236,7 +243,7 @@ for scenario in scenarios:
         chp_inv_scenario[year] = df_inv_capacity['chp'].tolist()[0]
         ab_ct_inv_scenario[year] = df_inv_capacity['ab_ct'].tolist()[0]
         ab_hp_inv_scenario[year] = df_inv_capacity['ab_hp'].tolist()[0]
-        cp_hp_inv_scenario[year] = df_inv_capacity['cp_hp'].tolist()[0]
+        cp_hp_inv_scenario[year] = df_inv_capacity['cp_hp'].tolist()[0] * (1 + 1 / cp_seer)
         ttes_inv_scenario[year] = df_inv_capacity['ttes'].tolist()[0]
         
         eb_c_inv_scenario[year] = df_inv_cost['eb'].tolist()[0]
@@ -286,7 +293,7 @@ for scenario in scenarios:
         ieh_elec_scenario[year] = df_elec_consumption['ieh'].tolist()
         ab_ct_elec_scenario[year] = df_elec_consumption['ab_ct'].tolist()
         ab_hp_elec_scenario[year] = df_elec_consumption['ab_hp'].tolist()
-        cp_hp_elec_scenario[year] = df_elec_consumption['cp_hp'].tolist()
+        cp_hp_elec_scenario[year] = [value * cp_seer / (cp_seer + cp_hp_cop) for value in df_elec_consumption['cp_hp'].tolist()]
         ttes_elec_scenario[year] = df_elec_consumption['ttes'].tolist()
         
         electricity_price_scenario[year] = df_elec_price_co2_share_gas_price['elec'].tolist()
@@ -295,20 +302,20 @@ for scenario in scenarios:
         co2_price_scenario[year] = df_co2_price['co2'].tolist()[0]
         
     heating_demand[scenario] = heating_demand_scenario
-    eb_in[scenario] = eb_in_scenario
-    hp_in[scenario] = hp_in_scenario
-    st_in[scenario] = st_in_scenario
-    wi_in[scenario] = wi_in_scenario
-    gt_in[scenario] = gt_in_scenario
-    dgt_in[scenario] = dgt_in_scenario
-    ieh_in[scenario] = ieh_in_scenario
-    chp_in[scenario] = chp_in_scenario
-    ab_ct_out[scenario] = ab_ct_out_scenario
-    ab_hp_in[scenario] = ab_hp_in_scenario
-    ab_hp_out[scenario] = ab_hp_out_scenario
-    cp_hp_in[scenario] = cp_hp_in_scenario
-    ttes_in[scenario] = ttes_in_scenario
-    ttes_out[scenario] = ttes_out_scenario
+    eb_heat_in[scenario] = eb_heat_in_scenario
+    hp_heat_in[scenario] = hp_heat_in_scenario
+    st_heat_in[scenario] = st_heat_in_scenario
+    wi_heat_in[scenario] = wi_heat_in_scenario
+    gt_heat_in[scenario] = gt_heat_in_scenario
+    dgt_heat_in[scenario] = dgt_heat_in_scenario
+    ieh_heat_in[scenario] = ieh_heat_in_scenario
+    chp_heat_in[scenario] = chp_heat_in_scenario
+    ab_ct_heat_out[scenario] = ab_ct_heat_out_scenario
+    ab_hp_heat_in[scenario] = ab_hp_heat_in_scenario
+    ab_hp_heat_out[scenario] = ab_hp_heat_out_scenario
+    cp_hp_heat_in[scenario] = cp_hp_heat_in_scenario
+    ttes_heat_in[scenario] = ttes_heat_in_scenario
+    ttes_heat_out[scenario] = ttes_heat_out_scenario
     
     eb_inv[scenario] = eb_inv_scenario
     hp_inv[scenario] = hp_inv_scenario
@@ -380,15 +387,19 @@ for scenario in scenarios:
 
 #%% FIG 0
 
-df_0 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand[visualize_scenario][visualize_year], 'eb': eb_in[visualize_scenario][visualize_year], 'hp': hp_in[visualize_scenario][visualize_year], 'st': st_in[visualize_scenario][visualize_year], 'wi': wi_in[visualize_scenario][visualize_year], 'gt': gt_in[visualize_scenario][visualize_year], 'dgt': dgt_in[visualize_scenario][visualize_year], 'ieh': ieh_in[visualize_scenario][visualize_year], 'chp': chp_in[visualize_scenario][visualize_year], 'ttes+': ttes_in[visualize_scenario][visualize_year], 'ttes-': ttes_out[visualize_scenario][visualize_year]})
+df_0 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand[visualize_scenario][visualize_year], 'eb': eb_heat_in[visualize_scenario][visualize_year], 'hp': hp_heat_in[visualize_scenario][visualize_year], 'st': st_heat_in[visualize_scenario][visualize_year], 'wi': wi_heat_in[visualize_scenario][visualize_year], 'gt': gt_heat_in[visualize_scenario][visualize_year], 'dgt': dgt_heat_in[visualize_scenario][visualize_year], 'ieh': ieh_heat_in[visualize_scenario][visualize_year], 'chp': chp_heat_in[visualize_scenario][visualize_year], 'ab_ct-': ab_ct_heat_out[visualize_scenario][visualize_year], 'ab_hp+': ab_hp_heat_in[visualize_scenario][visualize_year], 'ab_hp-': ab_hp_heat_out[visualize_scenario][visualize_year], 'cp_hp+': cp_hp_heat_in[visualize_scenario][visualize_year], 'ttes+': ttes_heat_in[visualize_scenario][visualize_year], 'ttes-': ttes_heat_out[visualize_scenario][visualize_year]})
 
 fig = go.Figure()
 
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_hp-'], mode='lines', name='Absorption with heat pump take out', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_hp+'], mode='lines', name='Absorption with heat pump feed in', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_ct-'], mode='lines', name='Absorption with cooling tower take out', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['chp'], mode='lines', name='Combined heat and power', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['wi'], mode='lines', name='Waste incineration', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
@@ -401,26 +412,34 @@ fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(
 fig.show()
 
 heating_demand_sorted_1 = sorted(heating_demand[visualize_scenario][visualize_year], reverse=True)
-eb_in_sorted_1 = sorted(eb_in[visualize_scenario][visualize_year], reverse=True)
-hp_in_sorted_1 = sorted(hp_in[visualize_scenario][visualize_year], reverse=True)
-st_in_sorted_1 = sorted(st_in[visualize_scenario][visualize_year], reverse=True)
-wi_in_sorted_1 = sorted(wi_in[visualize_scenario][visualize_year], reverse=True)
-gt_in_sorted_1 = sorted(gt_in[visualize_scenario][visualize_year], reverse=True)
-dgt_in_sorted_1 = sorted(dgt_in[visualize_scenario][visualize_year], reverse=True)
-ieh_in_sorted_1 = sorted(ieh_in[visualize_scenario][visualize_year], reverse=True)
-chp_in_sorted_1 = sorted(chp_in[visualize_scenario][visualize_year], reverse=True)
-ttes_in_sorted_1 = sorted(ttes_in[visualize_scenario][visualize_year], reverse=True)
-ttes_out_sorted_1 = sorted(ttes_out[visualize_scenario][visualize_year])
+eb_heat_in_sorted_1 = sorted(eb_heat_in[visualize_scenario][visualize_year], reverse=True)
+hp_heat_in_sorted_1 = sorted(hp_heat_in[visualize_scenario][visualize_year], reverse=True)
+st_heat_in_sorted_1 = sorted(st_heat_in[visualize_scenario][visualize_year], reverse=True)
+wi_heat_in_sorted_1 = sorted(wi_heat_in[visualize_scenario][visualize_year], reverse=True)
+gt_heat_in_sorted_1 = sorted(gt_heat_in[visualize_scenario][visualize_year], reverse=True)
+dgt_heat_in_sorted_1 = sorted(dgt_heat_in[visualize_scenario][visualize_year], reverse=True)
+ieh_heat_in_sorted_1 = sorted(ieh_heat_in[visualize_scenario][visualize_year], reverse=True)
+chp_heat_in_sorted_1 = sorted(chp_heat_in[visualize_scenario][visualize_year], reverse=True)
+ab_ct_heat_out_sorted_1 = sorted(ab_ct_heat_out[visualize_scenario][visualize_year], reverse=True)
+ab_hp_heat_in_sorted_1 = sorted(ab_hp_heat_in[visualize_scenario][visualize_year], reverse=True)
+ab_hp_heat_out_sorted_1 = sorted(ab_hp_heat_out[visualize_scenario][visualize_year], reverse=True)
+cp_hp_heat_in_sorted_1 = sorted(cp_hp_heat_in[visualize_scenario][visualize_year], reverse=True)
+ttes_heat_in_sorted_1 = sorted(ttes_heat_in[visualize_scenario][visualize_year], reverse=True)
+ttes_heat_out_sorted_1 = sorted(ttes_heat_out[visualize_scenario][visualize_year])
 
-df_1 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_1, 'eb': eb_in_sorted_1, 'hp': hp_in_sorted_1, 'st': st_in_sorted_1, 'wi': wi_in_sorted_1, 'gt': gt_in_sorted_1, 'dgt': dgt_in_sorted_1, 'ieh': ieh_in_sorted_1, 'chp': chp_in_sorted_1, 'ttes+': ttes_in_sorted_1, 'ttes-': ttes_out_sorted_1})
+df_1 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_1, 'eb': eb_heat_in_sorted_1, 'hp': hp_heat_in_sorted_1, 'st': st_heat_in_sorted_1, 'wi': wi_heat_in_sorted_1, 'gt': gt_heat_in_sorted_1, 'dgt': dgt_heat_in_sorted_1, 'ieh': ieh_heat_in_sorted_1, 'chp': chp_heat_in_sorted_1, 'ab_ct-': ab_ct_heat_out_sorted_1, 'ab_hp+': ab_hp_heat_in_sorted_1, 'ab_hp-': ab_hp_heat_out_sorted_1, 'cp_hp+': cp_hp_heat_in_sorted_1, 'ttes+': ttes_heat_in_sorted_1, 'ttes-': ttes_heat_out_sorted_1})
 
 fig = go.Figure()
 
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_hp-'], mode='lines', name='Absorption with heat pump take out', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_hp+'], mode='lines', name='Absorption with heat pump feed in', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_ct-'], mode='lines', name='Absorption with cooling tower take out', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['chp'], mode='lines', name='Combined heat and power', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['wi'], mode='lines', name='Waste incineration', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
@@ -434,26 +453,34 @@ fig.show()
 
 index_sorted = sorted(range(len(heating_demand[visualize_scenario][visualize_year])), key=lambda i: heating_demand[visualize_scenario][visualize_year][i], reverse=True)
 heating_demand_sorted_2 = [heating_demand[visualize_scenario][visualize_year][i] for i in index_sorted]
-eb_in_sorted_2 = [eb_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-hp_in_sorted_2 = [hp_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-st_in_sorted_2 = [st_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-wi_in_sorted_2 = [wi_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-gt_in_sorted_2 = [gt_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-dgt_in_sorted_2 = [dgt_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-ieh_in_sorted_2 = [ieh_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-chp_in_sorted_2 = [chp_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-ttes_in_sorted_2 = [ttes_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-ttes_out_sorted_2 = [ttes_out[visualize_scenario][visualize_year][i] for i in index_sorted]
+eb_heat_in_sorted_2 = [eb_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+hp_heat_in_sorted_2 = [hp_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+st_heat_in_sorted_2 = [st_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+wi_heat_in_sorted_2 = [wi_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+gt_heat_in_sorted_2 = [gt_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+dgt_heat_in_sorted_2 = [dgt_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+ieh_heat_in_sorted_2 = [ieh_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+chp_heat_in_sorted_2 = [chp_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+ab_ct_heat_out_sorted_2 = [ab_ct_heat_out[visualize_scenario][visualize_year][i] for i in index_sorted]
+ab_hp_heat_in_sorted_2 = [ab_hp_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+ab_hp_heat_out_sorted_2 = [ab_hp_heat_out[visualize_scenario][visualize_year][i] for i in index_sorted]
+cp_hp_heat_in_sorted_2 = [cp_hp_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+ttes_heat_in_sorted_2 = [ttes_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
+ttes_heat_out_sorted_2 = [ttes_heat_out[visualize_scenario][visualize_year][i] for i in index_sorted]
 
-df_2 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_2, 'eb': eb_in_sorted_2, 'hp': hp_in_sorted_2, 'st': st_in_sorted_2, 'wi': wi_in_sorted_2, 'gt': gt_in_sorted_2, 'dgt': dgt_in_sorted_2, 'ieh': ieh_in_sorted_2, 'chp': chp_in_sorted_2, 'ttes+': ttes_in_sorted_2, 'ttes-': ttes_out_sorted_2})
+df_2 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_2, 'eb': eb_heat_in_sorted_2, 'hp': hp_heat_in_sorted_2, 'st': st_heat_in_sorted_2, 'wi': wi_heat_in_sorted_2, 'gt': gt_heat_in_sorted_2, 'dgt': dgt_heat_in_sorted_2, 'ieh': ieh_heat_in_sorted_2, 'chp': chp_heat_in_sorted_2, 'ab_ct-': ab_ct_heat_out_sorted_2, 'ab_hp+': ab_hp_heat_in_sorted_2, 'ab_hp-': ab_hp_heat_out_sorted_2, 'cp_hp+': cp_hp_heat_in_sorted_2, 'ttes+': ttes_heat_in_sorted_2, 'ttes-': ttes_heat_out_sorted_2})
 
 fig = go.Figure()
 
+fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_hp-'], mode='lines', name='Absorption with heat pump take out', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_hp+'], mode='lines', name='Absorption with heat pump feed in', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_ct-'], mode='lines', name='Absorption with cooling tower take out', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['chp'], mode='lines', name='Combined heat and power', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['wi'], mode='lines', name='Waste incineration', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
+fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
@@ -467,10 +494,10 @@ fig.show()
 
 #%% FIG 1
 
-df_3 = pd.DataFrame({'hour': dict(zip(scenarios, [hours]*len(scenarios))), 'eb': eb_in, 'hp': hp_in, 'st': st_in, 'wi': wi_in, 'gt': gt_in, 'dgt': dgt_in, 'ieh': ieh_in, 'chp': chp_in, 'ttes+': ttes_in, 'ttes-': ttes_out})
+df_3 = pd.DataFrame({'hour': dict(zip(scenarios, [hours]*len(scenarios))), 'eb': eb_heat_in, 'hp': hp_heat_in, 'st': st_heat_in, 'wi': wi_heat_in, 'gt': gt_heat_in, 'dgt': dgt_heat_in, 'ieh': ieh_heat_in, 'chp': chp_heat_in, 'ab_ct-': ab_ct_heat_out, 'ab_hp+': ab_hp_heat_in, 'ab_hp-': ab_hp_heat_out, 'cp_hp+': cp_hp_heat_in, 'ttes+': ttes_heat_in, 'ttes-': ttes_heat_out})
 
-technologies_abb = ['eb', 'hp', 'st', 'wi', 'gt', 'dgt', 'ieh', 'chp', 'ttes+', 'ttes-']
-technologies_name = {'eb': 'Electric boiler', 'hp': 'Heat pump', 'st': 'Solar thermal', 'wi': 'Waste incineration', 'gt': 'Geothermal', 'dgt': 'Deep geothermal', 'ieh': 'Industrial excess heat', 'chp': 'Combined heat and power', 'ttes+': 'TTES feed in', 'ttes-': 'TTES store'}
+technologies_abb = ['eb', 'hp', 'st', 'wi', 'gt', 'dgt', 'ieh', 'chp', 'ab_ct-', 'ab_hp+', 'ab_hp-', 'cp_hp+', 'ttes+', 'ttes-']
+technologies_name = {'eb': 'Electric boiler', 'hp': 'Heat pump', 'st': 'Solar thermal', 'wi': 'Waste incineration', 'gt': 'Geothermal', 'dgt': 'Deep geothermal', 'ieh': 'Industrial excess heat', 'chp': 'Combined heat and power', 'ab_ct-': 'Absorption with cooling tower take out', 'ab_hp+': 'Absorption with heat pump feed in', 'ab_hp-': 'Absorption with heat pump take out', 'cp_hp+': 'Compression with heat pump feed in', 'ttes+': 'TTES feed in', 'ttes-': 'TTES store'}
 
 for technology in technologies_abb: 
     fig = go.Figure()
@@ -581,6 +608,7 @@ ratio_eb_inv = []
 ratio_hp_inv = []
 ratio_gt_inv = []
 ratio_ieh_inv = []
+ratio_cp_hp_inv = []
 ratio_inv = []
 index = 0
 
@@ -591,18 +619,20 @@ for year in years[:3]:
     heating_hp_inv_sum = sum(list(hp_inv[visualize_scenario].values())[:index])
     heating_gt_inv_sum = sum(list(gt_inv[visualize_scenario].values())[:index])
     heating_ieh_inv_sum = sum(list(ieh_inv[visualize_scenario].values())[:index])
-    heating_technology_inv_sum = sum(list(eb_inv[visualize_scenario].values())[:index]) + sum(list(hp_inv[visualize_scenario].values())[:index]) + sum(list(st_inv[visualize_scenario].values())[:index]) + sum(list(wi_inv[visualize_scenario].values())[:index]) + sum(list(gt_inv[visualize_scenario].values())[:index]) + sum(list(dgt_inv[visualize_scenario].values())[:index]) + sum(list(ieh_inv[visualize_scenario].values())[:index]) + sum(list(chp_inv[visualize_scenario].values())[:index])
+    heating_cp_hp_inv_sum = sum(list(cp_hp_inv[visualize_scenario].values())[:index])
+    heating_technology_inv_sum = sum(list(eb_inv[visualize_scenario].values())[:index]) + sum(list(hp_inv[visualize_scenario].values())[:index]) + sum(list(st_inv[visualize_scenario].values())[:index]) + sum(list(wi_inv[visualize_scenario].values())[:index]) + sum(list(gt_inv[visualize_scenario].values())[:index]) + sum(list(dgt_inv[visualize_scenario].values())[:index]) + sum(list(ieh_inv[visualize_scenario].values())[:index]) + sum(list(chp_inv[visualize_scenario].values())[:index]) + sum(list(cp_hp_inv[visualize_scenario].values())[:index])
     storage_technology_inv_sum = sum(list(ttes_inv[visualize_scenario].values())[:index])
     
     ratio_eb_inv.append(heating_eb_inv_sum / storage_technology_inv_sum * 100)
     ratio_hp_inv.append(heating_hp_inv_sum / storage_technology_inv_sum * 100)
     ratio_gt_inv.append(heating_gt_inv_sum / storage_technology_inv_sum * 100)
     ratio_ieh_inv.append(heating_ieh_inv_sum / storage_technology_inv_sum * 100)
+    ratio_cp_hp_inv.append(heating_cp_hp_inv_sum / storage_technology_inv_sum * 100)
     ratio_inv.append(heating_technology_inv_sum / storage_technology_inv_sum * 100)
     
-    technologies = ['Electric boiler', 'Heat pump', 'Solar thermal', 'Waste incineration', 'Geothermal', 'Deep geothermal', 'Industrial excess heat', 'Combined heat and power']
-    technologies_map = {'Electric boiler': eb_inv, 'Heat pump': hp_inv, 'Solar thermal': st_inv, 'Waste incineration': wi_inv, 'Geothermal': gt_inv, 'Deep geothermal': dgt_inv, 'Industrial excess heat': ieh_inv, 'Combined heat and power': chp_inv}
-    storages = ['Aquifer thermal energy storage', 'Tank thermal energy storage']
+    technologies = ['Electric boiler', 'Heat pump', 'Solar thermal', 'Waste incineration', 'Geothermal', 'Deep geothermal', 'Industrial excess heat', 'Combined heat and power', 'Absorption with cooling tower', 'Absorption with heat pump', 'Compression with heat pump']
+    technologies_map = {'Electric boiler': eb_inv, 'Heat pump': hp_inv, 'Solar thermal': st_inv, 'Waste incineration': wi_inv, 'Geothermal': gt_inv, 'Deep geothermal': dgt_inv, 'Industrial excess heat': ieh_inv, 'Combined heat and power': chp_inv, 'Absorption with cooling tower': ab_ct_inv, 'Absorption with heat pump': ab_hp_inv, 'Compression with heat pump': cp_hp_inv}
+    storages = ['Tank thermal energy storage']
     storages_map = {'Tank thermal energy storage': ttes_inv}
 
 fig = go.Figure()
@@ -611,18 +641,20 @@ fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], 
 
 fig.add_trace(go.Scatter(x=years[:3], y=ratio_inv[:3], name='Ratio'), row=2, col=1)
 
-fig.add_trace(go.Bar(x=years[:3], y=list(storages_map['Aquifer thermal energy storage'][visualize_scenario].values())[:3], name='Aquifer thermal energy storage', marker=dict(color='grey')), row=1, col=2)
 fig.add_trace(go.Bar(x=years[:3], y=list(storages_map['Tank thermal energy storage'][visualize_scenario].values())[:3], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
 
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Electric boiler'][visualize_scenario].values())[:3], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Industrial excess heat'][visualize_scenario].values())[:3], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Heat pump'][visualize_scenario].values())[:3], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Compression with heat pump'][visualize_scenario].values())[:3], name='Compression with heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Geothermal'][visualize_scenario].values())[:3], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Solar thermal'][visualize_scenario].values())[:3], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Deep geothermal'][visualize_scenario].values())[:3], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Waste incineration'][visualize_scenario].values())[:3], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Combined heat and power'][visualize_scenario].values())[:3], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
-    
+fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with cooling tower'][visualize_scenario].values())[:3], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with heat pump'][visualize_scenario].values())[:3], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=1)
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=2)
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=2, col=1)
@@ -644,21 +676,24 @@ fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], 
 fig.add_trace(go.Scatter(x=years[:3], y=ratio_inv[:3], name='Ratio total', line=dict(color='#EF553B')), row=2, col=2)
 
 fig.add_trace(go.Scatter(x=years[:3], y=ratio_gt_inv[:3], name='Ratio geothermal', line=dict(color='#00CC96')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_cp_hp_inv[:3], name='Ratio compression with heat pump', line=dict(color='#19D3F3')), row=2, col=1)
 fig.add_trace(go.Scatter(x=years[:3], y=ratio_hp_inv[:3], name='Ratio heat pump', line=dict(color='#19D3F3')), row=2, col=1)
 fig.add_trace(go.Scatter(x=years[:3], y=ratio_ieh_inv[:3], name='Ratio industrial excess heat', line=dict(color='#B6E880')), row=2, col=1)
 fig.add_trace(go.Scatter(x=years[:3], y=ratio_eb_inv[:3], name='Ratio electric boiler', line=dict(color='#FF6692')), row=2, col=1)
 
+fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with heat pump'][visualize_scenario].values())[:3], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with cooling tower'][visualize_scenario].values())[:3], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Combined heat and power'][visualize_scenario].values())[:3], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Waste incineration'][visualize_scenario].values())[:3], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Deep geothermal'][visualize_scenario].values())[:3], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Solar thermal'][visualize_scenario].values())[:3], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Geothermal'][visualize_scenario].values())[:3], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Compression with heat pump'][visualize_scenario].values())[:3], name='Compression with heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Heat pump'][visualize_scenario].values())[:3], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Industrial excess heat'][visualize_scenario].values())[:3], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Electric boiler'][visualize_scenario].values())[:3], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
 
 fig.add_trace(go.Bar(x=years[:3], y=list(storages_map['Tank thermal energy storage'][visualize_scenario].values())[:3], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
-fig.add_trace(go.Bar(x=years[:3], y=list(storages_map['Aquifer thermal energy storage'][visualize_scenario].values())[:3], name='Aquifer thermal energy storage', marker=dict(color='grey')), row=1, col=2)
 
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=1)
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=2)
@@ -681,17 +716,19 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Heating technology investments', 'Storage technology investments'))
 
+fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with heat pump'][visualize_scenario].values())[:3], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with cooling tower'][visualize_scenario].values())[:3], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Combined heat and power'][visualize_scenario].values())[:3], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Waste incineration'][visualize_scenario].values())[:3], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Deep geothermal'][visualize_scenario].values())[:3], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Solar thermal'][visualize_scenario].values())[:3], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Geothermal'][visualize_scenario].values())[:3], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Compression with heat pump'][visualize_scenario].values())[:3], name='Compression with heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Heat pump'][visualize_scenario].values())[:3], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Industrial excess heat'][visualize_scenario].values())[:3], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Electric boiler'][visualize_scenario].values())[:3], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
 
 fig.add_trace(go.Bar(x=years[:3], y=list(storages_map['Tank thermal energy storage'][visualize_scenario].values())[:3], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
-fig.add_trace(go.Bar(x=years[:3], y=list(storages_map['Aquifer thermal energy storage'][visualize_scenario].values())[:3], name='Aquifer thermal energy storage', marker=dict(color='grey')), row=1, col=2)
 
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=1)
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=2)
@@ -705,10 +742,11 @@ fig.show()
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_gt_inv[:3], name='Ratio geothermal', line=dict(width=4, color='#00CC96')))
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_hp_inv[:3], name='Ratio heat pump', line=dict(width=4, color='#19D3F3')))
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_ieh_inv[:3], name='Ratio industrial excess heat', line=dict(width=4, color='#B6E880')))
 fig.add_trace(go.Scatter(x=years[:3], y=ratio_eb_inv[:3], name='Ratio electric boiler', line=dict(width=4, color='#FF6692')))
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_ieh_inv[:3], name='Ratio industrial excess heat', line=dict(width=4, color='#B6E880')))
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_hp_inv[:3], name='Ratio heat pump', line=dict(width=4, color='#19D3F3')))
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_cp_hp_inv[:3], name='Ratio compression with heat pump', line=dict(width=4, color='#19D3F3')))
+fig.add_trace(go.Scatter(x=years[:3], y=ratio_gt_inv[:3], name='Ratio geothermal', line=dict(width=4, color='#00CC96')))
 
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3])
 
@@ -781,11 +819,6 @@ for building in range(1, 40):
     buildings_demand[building] = heating_demand_building
     buildings_demand_sum[building] = sum(heating_demand_building)
 
-# assumptions
-eta_gas = 0.9
-co2_conversion = 0.2
-eta_electricity = 0.99
-
 for building in range(1, 40):
     buildings_lcoh_scenario = []
     for scenario in scenarios:
@@ -844,9 +877,9 @@ for scenario in scenarios:
         
         sum_heating_demand_scenario = sum(heating_demand[scenario][year])
         sum_heating_demand += sum_heating_demand_scenario * year_expansion_range[year]
-        sum_heating_cost += sum(eb_c_var[scenario][year]) + sum(hp_c_var[scenario][year]) + sum(st_c_var[scenario][year]) + sum(wi_c_var[scenario][year]) + sum(gt_c_var[scenario][year]) + sum(dgt_c_var[scenario][year]) + sum(ieh_c_var[scenario][year]) + sum(chp_c_var[scenario][year]) + sum(ttes_c_var[scenario][year]) + \
-                            eb_c_inv[scenario][year] + hp_c_inv[scenario][year] + st_c_inv[scenario][year] + wi_c_inv[scenario][year] + gt_c_inv[scenario][year] + dgt_c_inv[scenario][year] + ieh_c_inv[scenario][year] + chp_c_inv[scenario][year] + ttes_c_inv[scenario][year] + \
-                            eb_c_fix[scenario][year] + hp_c_fix[scenario][year] + st_c_fix[scenario][year] + wi_c_fix[scenario][year] + gt_c_fix[scenario][year] + dgt_c_fix[scenario][year] + ieh_c_fix[scenario][year] + chp_c_fix[scenario][year] + ttes_c_fix[scenario][year]
+        sum_heating_cost += sum(eb_c_var[scenario][year]) + sum(hp_c_var[scenario][year]) + sum(st_c_var[scenario][year]) + sum(wi_c_var[scenario][year]) + sum(gt_c_var[scenario][year]) + sum(dgt_c_var[scenario][year]) + sum(ieh_c_var[scenario][year]) + sum(chp_c_var[scenario][year]) + sum(ab_ct_c_var[scenario][year]) + sum(ab_hp_c_var[scenario][year]) + sum(cp_hp_c_var[scenario][year]) * cp_seer / (cp_seer + cp_hp_cop) + sum(ttes_c_var[scenario][year]) + \
+                            eb_c_inv[scenario][year] + hp_c_inv[scenario][year] + st_c_inv[scenario][year] + wi_c_inv[scenario][year] + gt_c_inv[scenario][year] + dgt_c_inv[scenario][year] + ieh_c_inv[scenario][year] + chp_c_inv[scenario][year] + ab_ct_c_inv[scenario][year] + ab_hp_c_inv[scenario][year] + cp_hp_c_inv[scenario][year] * (1 + 1 / cp_seer) / (1 + 1 + 1 / cp_seer) + ttes_c_inv[scenario][year] + \
+                            eb_c_fix[scenario][year] + hp_c_fix[scenario][year] + st_c_fix[scenario][year] + wi_c_fix[scenario][year] + gt_c_fix[scenario][year] + dgt_c_fix[scenario][year] + ieh_c_fix[scenario][year] + chp_c_fix[scenario][year] + ab_ct_c_fix[scenario][year] + ab_hp_c_fix[scenario][year] + cp_hp_c_fix[scenario][year] * (1 + 1 / cp_seer) / (1 + 1 + 1 / cp_seer) + ttes_c_fix[scenario][year]
                             
     lcoh[scenario] = sum_heating_cost / sum_heating_demand
 
@@ -936,7 +969,7 @@ load_duration_curve_demand.sort(reverse=True)
 load_duration_curve = {}
 
 for scenario in scenarios:
-    load_duration_curve_scenario = [elec_0 + elec_1 + elec_2 + elec_3 + elec_4 + elec_5 + elec_6 for elec_0, elec_1, elec_2, elec_3, elec_4, elec_5, elec_6, elec_7 in zip(eb_elec[scenario][visualize_year], hp_elec[scenario][visualize_year], st_elec[scenario][visualize_year], gt_elec[scenario][visualize_year], dgt_elec[scenario][visualize_year], ieh_elec[scenario][visualize_year], ttes_elec[scenario][visualize_year])]
+    load_duration_curve_scenario = [elec_0 + elec_1 + elec_2 + elec_3 + elec_4 + elec_5 + elec_6 + elec_7 + elec_8 + elec_9 for elec_0, elec_1, elec_2, elec_3, elec_4, elec_5, elec_6, elec_7, elec_8, elec_9 in zip(eb_elec[scenario][visualize_year], hp_elec[scenario][visualize_year], st_elec[scenario][visualize_year], gt_elec[scenario][visualize_year], dgt_elec[scenario][visualize_year], ieh_elec[scenario][visualize_year], ab_ct_elec[scenario][visualize_year], ab_hp_elec[scenario][visualize_year], cp_hp_elec[scenario][visualize_year], ttes_elec[scenario][visualize_year])]
     load_duration_curve[scenario] =  sorted(load_duration_curve_scenario, reverse=True)
 
 fig = go.Figure()
