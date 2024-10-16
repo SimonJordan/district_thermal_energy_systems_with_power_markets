@@ -2,14 +2,14 @@ import pyomo.environ as py
 
 def add_eb_equations(m=None):
 
-    def eb_feed_in_max_bound(m, s, y, t):
-        return m.v_eb_q_heat_in[s, y, t] <= m.v_eb_Q_heat_max[y]
+    def eb_feed_in_max_bound(m, s, y, h):
+        return m.v_eb_q_heat_in[s, y, h] <= m.v_eb_Q_heat_max[y]
     
     # def eb_limit(m, y):
     #     return m.v_eb_Q_heat_max[y] <= 0
     
-    def eb_elec_heat(m, s, y, t):
-        return m.v_eb_q_heat_in[s, y, t] == m.v_eb_q_elec_consumption[s, y, t] * m.p_eb_eta[s, y]
+    def eb_elec_heat(m, s, y, h):
+        return m.v_eb_q_heat_in[s, y, h] == m.v_eb_q_elec_consumption[s, y, h] * m.p_eb_eta[s, y]
     
     def eb_Q_inv(m, y):
         if (y - 5) in m.set_years:
@@ -26,8 +26,8 @@ def add_eb_equations(m=None):
         else:
             return m.v_eb_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * m.v_eb_c_inv[s, y] * 0.02
             
-    def eb_c_var(m, s, y, t):
-        return m.v_eb_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_eb_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
+    def eb_c_var(m, s, y, h):
+        return m.v_eb_c_var[s, y, h] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_eb_q_elec_consumption[s, y, h] * (m.p_c_elec[s, y, h] + m.p_elec_co2_share[s, y, h] * m.p_c_co2[s, y]))
         
     m.con_eb_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                rule = eb_feed_in_max_bound)

@@ -9,8 +9,9 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
     
     with open(path_to_file_scenarios, 'w') as file:
         for scenario in scenarios:
-            file.write(scenario + '\n')
-
+            scenario_weighting = data[scenario]['scenario_weighting']
+            file.write(f'{scenario},{scenario_weighting}\n')
+    
     for scenario in scenarios:
         path_to_heat_supply = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_heat_supply.xlsx')
         path_to_cool_supply = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_cool_supply.xlsx')

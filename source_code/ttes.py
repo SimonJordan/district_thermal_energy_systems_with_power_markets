@@ -2,8 +2,8 @@ import pyomo.environ as py
 
 def add_ttes_equations(m=None):
     
-    def ttes_feed_in_max_bound(m, s, y, t):
-        return m.v_ttes_q_heat_out[s, y, t] <= m.v_ttes_hp_Q_max[y]
+    def ttes_feed_in_max_bound(m, s, y, h):
+        return m.v_ttes_q_heat_out[s, y, h] <= m.v_ttes_hp_Q_max[y]
     
     # def ttes_limit_1(m, y):
     #     return m.v_ttes_hp_Q_max[y] <= 0
@@ -11,19 +11,19 @@ def add_ttes_equations(m=None):
     # def ttes_limit_2(m, y):
     #     return m.v_ttes_k_heat_max[y] <= 0
 
-    def ttes_soc_max_bound(m, s, y, t):
-        return m.v_ttes_k_heat[s, y, t] <= m.v_ttes_k_heat_max[y]
+    def ttes_soc_max_bound(m, s, y, h):
+        return m.v_ttes_k_heat[s, y, h] <= m.v_ttes_k_heat_max[y]
     
-    def ttes_soc(m, s, y, t):
-        if t == 0:
-            return m.v_ttes_k_heat[s, y, t] == m.v_ttes_k_heat_max[y] * m.p_ttes_losses[s, y] * m.p_ttes_init[s, y] + m.v_ttes_q_heat_out[s, y, t] * m.p_ttes_eta[s, y] - m.v_ttes_q_heat_in[s, y, t] / m.p_ttes_eta[s, y]
-        elif t == 8759:
-            return m.v_ttes_k_heat[s, y, t] == m.v_ttes_k_heat_max[y] * m.p_ttes_end[s, y]
+    def ttes_soc(m, s, y, h):
+        if h == 0:
+            return m.v_ttes_k_heat[s, y, h] == m.v_ttes_k_heat_max[y] * m.p_ttes_losses[s, y] * m.p_ttes_init[s, y] + m.v_ttes_q_heat_out[s, y, h] * m.p_ttes_eta[s, y] - m.v_ttes_q_heat_in[s, y, h] / m.p_ttes_eta[s, y]
+        elif h == 8759:
+            return m.v_ttes_k_heat[s, y, h] == m.v_ttes_k_heat_max[y] * m.p_ttes_end[s, y]
         else:
-            return m.v_ttes_k_heat[s, y, t] == m.v_ttes_k_heat[s, y, t-1] * m.p_ttes_losses[s, y] + m.v_ttes_q_heat_out[s, y, t] * m.p_ttes_eta[s, y] - m.v_ttes_q_heat_in[s, y, t] / m.p_ttes_eta[s, y]
+            return m.v_ttes_k_heat[s, y, h] == m.v_ttes_k_heat[s, y, h-1] * m.p_ttes_losses[s, y] + m.v_ttes_q_heat_out[s, y, h] * m.p_ttes_eta[s, y] - m.v_ttes_q_heat_in[s, y, h] / m.p_ttes_eta[s, y]
     
-    def ttes_elec_heat(m, s, y, t):
-        return m.v_ttes_q_heat_out[s, y, t] == m.v_ttes_q_elec_consumption[s, y, t] * m.p_ttes_cop[s, y]
+    def ttes_elec_heat(m, s, y, h):
+        return m.v_ttes_q_heat_out[s, y, h] == m.v_ttes_q_elec_consumption[s, y, h] * m.p_ttes_cop[s, y]
     
     def ttes_k_inv(m, y):
         if (y - 5) in m.set_years:

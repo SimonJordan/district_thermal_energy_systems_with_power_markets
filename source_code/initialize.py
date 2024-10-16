@@ -71,6 +71,7 @@ def initialize_parameters(years=[]):
         df_cp = pd.read_excel(path_to_file_cp, sheet_name=str(year))
         df_ttes = pd.read_excel(path_to_file_ttes, sheet_name=str(year))
         df_ites = pd.read_excel(path_to_file_ites, sheet_name=str(year))
+        
         heating_demand[year] = df_demand['heating_demand_districts_building'].tolist()
         cooling_demand[year] = df_demand['cooling_demand_districts_building'].tolist()
         electricity_price[year] = df_electricity_price['electricity_price'].tolist()

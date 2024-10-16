@@ -5,20 +5,20 @@ def add_general_parameters(m=None):
     def init_year_expansion_range(m, s, y):
         return m.data_values[s]['year_expansion_range'][y]
     
-    def init_c_elec(m, s, y, t):
-        return m.data_values[s]['electricity_price'][y][t]
+    def init_c_elec(m, s, y, h):
+        return m.data_values[s]['electricity_price'][y][h]
     
     def init_c_mean_elec(m, s, y):
         return m.data_values[s]['electricity_mean_price'][y]
     
-    def init_electricity_co2_share(m, s, y, t):
-        return m.data_values[s]['electricity_co2_share'][y][t]
+    def init_electricity_co2_share(m, s, y, h):
+        return m.data_values[s]['electricity_co2_share'][y][h]
     
     def init_electricity_co2_share_mean(m, s, y):
         return m.data_values[s]['electricity_mean_co2_share'][y]
     
-    def init_c_gas(m, s, y, t):
-        return m.data_values[s]['gas_price'][y][t]
+    def init_c_gas(m, s, y, h):
+        return m.data_values[s]['gas_price'][y][h]
      
     def init_c_co2(m, s, y):
         return m.data_values[s]['co2_price'][y]

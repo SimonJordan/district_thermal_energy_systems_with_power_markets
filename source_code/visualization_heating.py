@@ -19,10 +19,15 @@ path_to_input_folder = os.path.join(cur_dir, '..', 'inputs')
 path_to_result_folder = os.path.join(cur_dir, '..', 'results')
 path_to_file_scenarios = os.path.join(path_to_result_folder, 'scenarios.txt')
 
+scenarios = []
+scenarios_weighting = {}
+
 with open(path_to_file_scenarios, 'r') as file:
-    scenarios = [line.strip() for line in file]
-    
-scenarios_weighting = {'1_reference': 1, '2_high_electricity_prices': 1}
+    for line in file:
+        scenario, weighting = line.strip().split(',')
+        scenarios.append(scenario)
+        scenarios_weighting[scenario] = weighting
+        
 years = [2025, 2030, 2035, 2040, 2045, 2050]
 year_expansion_range = {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}
 hours = list(range(8760))

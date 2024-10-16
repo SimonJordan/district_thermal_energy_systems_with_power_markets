@@ -2,20 +2,20 @@ import pyomo.environ as py
 
 def add_st_equations(m=None):
 
-    def st_feed_in_max_bound(m, s, y, t):
-        return m.v_st_q_heat_in[s, y, t] <= m.v_st_Q_heat_max[y]
+    def st_feed_in_max_bound(m, s, y, h):
+        return m.v_st_q_heat_in[s, y, h] <= m.v_st_Q_heat_max[y]
     
     # def st_limit(m, y):
     #     return m.v_st_Q_heat_max[y] <= 0
     
-    def st_solar_radiation(m, s, y, t):
-        return m.v_st_q_heat_in[s, y, t] == m.p_st_solar_radiation[s, y, t] * m.v_st_p[y, t] / 1000 * m.p_st_eta[s, y]
+    def st_solar_radiation(m, s, y, h):
+        return m.v_st_q_heat_in[s, y, h] == m.p_st_solar_radiation[s, y, h] * m.v_st_p[y, h] / 1000 * m.p_st_eta[s, y]
     
-    def st_elec_heat(m, s, y, t):
-        return m.v_st_q_heat_in[s, y, t] == m.v_st_q_elec_consumption[s, y, t] * m.p_st_cop[s, y]
+    def st_elec_heat(m, s, y, h):
+        return m.v_st_q_heat_in[s, y, h] == m.v_st_q_elec_consumption[s, y, h] * m.p_st_cop[s, y]
      
-    def st_p_max_bound(m, y, t):
-        return m.v_st_p[y, t] <= m.v_st_P_max[y]
+    def st_p_max_bound(m, y, h):
+        return m.v_st_p[y, h] <= m.v_st_P_max[y]
      
     def st_P_inv(m, y):
         if (y - 5) in m.set_years:
@@ -38,8 +38,8 @@ def add_st_equations(m=None):
         else:
             return m.v_st_c_fix[s, y] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * m.v_st_c_inv[s, y] * 0.02
             
-    def st_c_var(m, s, y, t):
-        return m.v_st_c_var[s, y, t] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_st_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
+    def st_c_var(m, s, y, h):
+        return m.v_st_c_var[s, y, h] == m.p_scenario_weighting[s] * m.p_year_expansion_range[s, y] * (m.v_st_q_elec_consumption[s, y, h] * (m.p_c_elec[s, y, h] + m.p_elec_co2_share[s, y, h] * m.p_c_co2[s, y]))
     
     m.con_st_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                rule = st_feed_in_max_bound)
@@ -125,8 +125,8 @@ def add_st_parameters(m=None):
     def init_st_cop(m, s, y):
         return m.data_values[s]['st'][y]['p_st_cop']
 
-    def init_solar_radiation(m, s, y, t):
-        return m.data_values[s]['st'][y]['p_st_solar_radiation'][t]
+    def init_solar_radiation(m, s, y, h):
+        return m.data_values[s]['st'][y]['p_st_solar_radiation'][h]
     
     m.p_st_eta = py.Param(m.set_scenarios, m.set_years,
                           initialize = init_st_eta,
