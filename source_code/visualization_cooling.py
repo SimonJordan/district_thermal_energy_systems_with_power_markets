@@ -72,6 +72,8 @@ cp_ct_elec = {}
 cp_hp_elec = {}
 ites_elec = {}
 
+ites_soc = {}
+
 electricity_price = {}
 electricity_co2_share = {}
 gas_price = {}
@@ -122,6 +124,8 @@ for scenario in scenarios:
     cp_hp_elec_scenario = {}
     ites_elec_scenario = {}
     
+    ites_soc_scenario = {}
+    
     electricity_price_scenario = {}
     electricity_co2_share_scenario = {}
     gas_price_scenario = {}
@@ -135,6 +139,7 @@ for scenario in scenarios:
     path_to_elec_consumption = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_consumption.xlsx')
     path_to_elec_price_co2_share_gas_price = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_price_co2_share_gas_price.xlsx')
     path_to_co2_price = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_co2_price.xlsx')
+    path_to_storage_soc = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_storage_soc.xlsx')
     
     for year in years:
         df_cool_supply = pd.read_excel(path_to_cool_supply, sheet_name=str(year))
@@ -145,6 +150,7 @@ for scenario in scenarios:
         df_elec_consumption = pd.read_excel(path_to_elec_consumption, sheet_name=str(year))
         df_elec_price_co2_share_gas_price = pd.read_excel(path_to_elec_price_co2_share_gas_price, sheet_name=str(year))
         df_co2_price = pd.read_excel(path_to_co2_price, sheet_name=str(year))
+        df_storage_soc = pd.read_excel(path_to_storage_soc, sheet_name=str(year))
         
         cooling_demand_scenario[year] = df_cool_supply['cooling'].tolist()
         ac_cool_in_scenario[year] = df_cool_supply['ac'].tolist()
@@ -189,6 +195,8 @@ for scenario in scenarios:
         cp_ct_elec_scenario[year] = df_elec_consumption['cp_ct'].tolist()
         cp_hp_elec_scenario[year] = [value * cp_hp_cop / (cp_seer + cp_hp_cop) for value in df_elec_consumption['cp_hp'].tolist()]
         ites_elec_scenario[year] = df_elec_consumption['ites'].tolist()
+        
+        ites_soc_scenario[year] = df_storage_soc['ites'].tolist()
         
         electricity_price_scenario[year] = df_elec_price_co2_share_gas_price['elec'].tolist()
         electricity_co2_share_scenario[year] = df_elec_price_co2_share_gas_price['co2'].tolist()
@@ -239,12 +247,14 @@ for scenario in scenarios:
     cp_hp_elec[scenario] = cp_hp_elec_scenario
     ites_elec[scenario] = ites_elec_scenario
     
+    ites_soc[scenario] = ites_soc_scenario
+    
     electricity_price[scenario] = electricity_price_scenario
     electricity_co2_share[scenario] = electricity_co2_share_scenario
     gas_price[scenario] = gas_price_scenario
     co2_price[scenario] = co2_price_scenario
 
-#%% FIG 0
+#%% FIG 0 - Demand dispatch
 
 df_0 = pd.DataFrame({'hour': hours, 'cooling_demand': cooling_demand[visualize_scenario][visualize_year], 'ac': ac_cool_in[visualize_scenario][visualize_year], 'ab_ct': ab_ct_cool_in[visualize_scenario][visualize_year], 'ab_hp': ab_hp_cool_in[visualize_scenario][visualize_year], 'cp_ct': cp_ct_cool_in[visualize_scenario][visualize_year], 'cp_hp': cp_hp_cool_in[visualize_scenario][visualize_year], 'ites+': ites_cool_in[visualize_scenario][visualize_year], 'ites-': ites_cool_out[visualize_scenario][visualize_year]})
 
@@ -316,7 +326,7 @@ fig.update_layout(title=dict(text='Load duration curve', font=dict(size=30)), xa
 
 fig.show()
 
-#%% FIG 1
+#%% FIG 1 - Technology dispatch
 
 df_3 = pd.DataFrame({'hour': dict(zip(scenarios, [hours]*len(scenarios))), 'ac': ac_cool_in, 'ab_ct': ab_ct_cool_in, 'ab_hp': ab_hp_cool_in, 'cp_ct': cp_ct_cool_in, 'cp_hp': cp_hp_cool_in, 'ites+': ites_cool_in, 'ites-': ites_cool_out})
 
@@ -381,52 +391,21 @@ fig.update_layout(title=dict(text='Compression with heat pump', font=dict(size=3
 
 fig.show()
 
-#%% FIG 2
+#%% FIG 2 - SOC
 
-# eb_inv = []
-# hp_inv = []
-# st_inv = []
-# wi_inv = []
-# gt_inv = []
-# dgt_inv = []
-# ieh_inv = []
-# chp_inv = []
-# ttes_inv = []
+df_4 = pd.DataFrame({'hour': hours, 'ites_absolute': ites_soc[visualize_scenario][visualize_year],})
+df_4['ites_relative'] = (df_4['ites_absolute'] / df_4['ites_absolute'].max()) * 100
 
-# for year in years:
-#     eb_inv.append(py.value(model.v_eb_Q_inv[visualize_scenario, year]))
-#     hp_inv.append(py.value(model.v_hp_Q_inv[visualize_scenario, year]))
-#     st_inv.append(py.value(model.v_st_P_inv[visualize_scenario, year]))
-#     wi_inv.append(py.value(model.v_wi_Q_inv[visualize_scenario, year]))
-#     gt_inv.append(py.value(model.v_gt_Q_inv[visualize_scenario, year]))
-#     dgt_inv.append(py.value(model.v_dgt_Q_inv[visualize_scenario, year]))
-#     ieh_inv.append(py.value(model.v_ieh_Q_inv[visualize_scenario, year]))
-#     chp_inv.append(py.value(model.v_chp_Q_inv[visualize_scenario, year]))
-#     ttes_inv.append(py.value(model.v_ttes_k_inv[visualize_scenario, year]))
+fig = go.Figure()
 
-# technologies = ['Electric Boiler', 'cool Pump', 'Solar Thermal', 'Waste Incineration', 'Geothermal', 'Deep Geothermal', 'Industrial Excess cool', 'Combined cool and Power', 'TTES']
-# technologies_map = {'Electric Boiler': eb_inv, 'cool Pump': hp_inv, 'Solar Thermal': st_inv, 'Waste Incineration': wi_inv, 'Geothermal': gt_inv, 'Deep Geothermal': dgt_inv, 'Industrial Excess cool': ieh_inv, 'Combined cool and Power': chp_inv, 'TTES': ttes_inv}
-# technologies_inv = []
+fig.add_trace(go.Scatter(x=df_4['hour'], y=df_4['ites_absolute'], mode='lines', name='ITES SOC', line=dict(color='#FFA15A', width=2)))
+fig.add_trace(go.Scatter(x=df_4['hour'], y=df_4['ites_relative'], mode='lines', name='ITES SOC', line=dict(color='#FFA15A', width=2), yaxis='y2', showlegend=False))
 
-# for year_index in range(len(years)):
-#     year_inv = []
-#     for technology in technologies:
-#         year_inv.append(technologies_map[technology][year_index])
-        
-#     technologies_inv.append(year_inv)
+fig.update_layout(title=dict(text='State of charge', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='State of charge in MWh', titlefont=dict(size=20), tickfont=dict(size=20), range=[0, df_4['ites_absolute'].max() * 1.1], tickvals=np.linspace(0, df_4['ites_absolute'].max(), 6), tickformat='.2f'), yaxis2=dict(title='State of charge in %', titlefont=dict(size=20), tickfont=dict(size=20), overlaying='y', side='right', range=[0, 100 * 1.1]), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
 
-# fig = go.Figure()
+fig.show()
 
-# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[0], name='2025'))
-# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[1], name='2030'))
-# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[2], name='2035'))
-# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[3], name='2040'))
-# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[4], name='2045'))
-# fig.add_trace(go.Bar(x=technologies, y=technologies_inv[5], name='2050'))
-
-# fig.update_layout(title='Investments', legend_title='Years', barmode='stack')
-
-# fig.show()
+#%% FIG 3 - Investments
 
 ratio_ac_inv = []
 ratio_ab_ct_inv = []
@@ -560,7 +539,7 @@ fig.update_layout(title=dict(text='Investments', font=dict(size=30)), legend=dic
 
 fig.show()
 
-#%% FIG 3
+#%% FIG 4 - LCOC
 
 buildings = {1: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              2: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
@@ -741,7 +720,7 @@ fig.update_layout(title=dict(text='Levelized costs of cooling', font=dict(size=3
 
 fig.show()
 
-#%% FIG 4
+#%% FIG 5 - Load duration curve
 
 load_duration_curve_demand = cooling_demand[visualize_scenario][visualize_year]
 
