@@ -198,14 +198,14 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                   'ttes': data_ttes,
     #                                   'ites': data_ites}
     
-    # data['9_warm_winters'] = {'year_expansion_range': year_expansion_range,
-    #                           'heating': {year: [value * 0.75 for value in values] if year in [2045, 2050] else values for year, values in heating_demand.items()},
+    # data['9_cold_winters'] = {'year_expansion_range': year_expansion_range,
+    #                           'heating': {year: [value * 1.1 for value in values] if year in [2045, 2050] else values for year, values in heating_demand.items()},
     #                           'cooling': cooling_demand,
-    #                           'electricity_price': electricity_price,
-    #                           'electricity_mean_price': electricity_mean_price,
+    #                           'electricity_price': {year: [value * 1.05 for value in values] if year in [2045, 2050] else values for year, values in electricity_price.items()},
+    #                           'electricity_mean_price': {year: value * 1.05 if year in [2045, 2050] else value for year, value in electricity_mean_price.items()},
     #                           'electricity_co2_share': electricity_co2_share,
     #                           'electricity_mean_co2_share': electricity_mean_co2_share,
-    #                           'gas_price': gas_price,
+    #                           'gas_price': {year: [value * 1.1 for value in values] if year in [2045, 2050] else values for year, values in gas_price.items()},
     #                           'co2_price': co2_price,
     #                           'eb': data_eb,
     #                           'hp': data_hp,
@@ -221,30 +221,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                           'ttes': data_ttes,
     #                           'ites': data_ites}
     
-    # data['10_cold_winters'] = {'year_expansion_range': year_expansion_range,
-    #                            'heating': {year: [value * 1.1 for value in values] if year in [2045, 2050] else values for year, values in heating_demand.items()},
-    #                            'cooling': cooling_demand,
-    #                            'electricity_price': {year: [value * 1.05 for value in values] if year in [2045, 2050] else values for year, values in electricity_price.items()},
-    #                            'electricity_mean_price': {year: value * 1.05 if year in [2045, 2050] else value for year, value in electricity_mean_price.items()},
-    #                            'electricity_co2_share': electricity_co2_share,
-    #                            'electricity_mean_co2_share': electricity_mean_co2_share,
-    #                            'gas_price': {year: [value * 1.1 for value in values] if year in [2045, 2050] else values for year, values in gas_price.items()},
-    #                            'co2_price': co2_price,
-    #                            'eb': data_eb,
-    #                            'hp': data_hp,
-    #                            'st': data_st,
-    #                            'wi': data_wi,
-    #                            'gt': data_gt,
-    #                            'dgt': data_dgt,
-    #                            'ieh': data_ieh,
-    #                            'chp': data_chp,
-    #                            'ac': data_ac,
-    #                            'ab': data_ab,
-    #                            'cp': data_cp,
-    #                            'ttes': data_ttes,
-    #                            'ites': data_ites}
-    
-    # data['11_hot_summers'] = {'year_expansion_range': year_expansion_range,
+    # data['10_hot_summers'] = {'year_expansion_range': year_expansion_range,
     #                           'heating': heating_demand,
     #                           'cooling': {year: [value * 1.1 for value in values] if year in [2030] else values for year, values in cooling_demand.items()},
     #                           'electricity_price': {year: [value * 1.1 for value in values] if year in [2030] else values for year, values in electricity_price.items()},
@@ -267,7 +244,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                           'ttes': data_ttes,
     #                           'ites': data_ites}
     
-    # data['12_warm_summers'] = {'year_expansion_range': year_expansion_range,
+    # data['11_warm_summers'] = {'year_expansion_range': year_expansion_range,
     #                            'heating': heating_demand,
     #                            'cooling': {year: [value * 1.05 for value in values] if year in [2045, 2050] else values for year, values in cooling_demand.items()},
     #                            'electricity_price': electricity_price,
@@ -290,7 +267,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                            'ttes': data_ttes,
     #                            'ites': data_ites}
     
-    # data['13_moderate_climate'] = {'year_expansion_range': year_expansion_range,
+    # data['12_moderate_climate'] = {'year_expansion_range': year_expansion_range,
     #                                'heating': {year: [value * 0.9 for value in values] for year, values in heating_demand.items()},
     #                                'cooling': {year: [value * 0.9 for value in values] for year, values in cooling_demand.items()},
     #                                'electricity_price': {year: [value * 0.9 for value in values] for year, values in electricity_price.items()},
@@ -313,7 +290,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                'ttes': data_ttes,
     #                                'ites': data_ites}
     
-    # data['14_zero_co2_price'] = {'year_expansion_range': year_expansion_range,
+    # data['13_zero_co2_price'] = {'year_expansion_range': year_expansion_range,
     #                              'heating': heating_demand,
     #                              'cooling': cooling_demand,
     #                              'electricity_price': electricity_price,
@@ -336,7 +313,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                              'ttes': data_ttes,
     #                              'ites': data_ites}
     
-    # data['15_delayed_co2_pricing'] = {'year_expansion_range': year_expansion_range,
+    # data['14_delayed_co2_pricing'] = {'year_expansion_range': year_expansion_range,
     #                                   'heating': heating_demand,
     #                                   'cooling': cooling_demand,
     #                                   'electricity_price': electricity_price,
@@ -359,7 +336,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                   'ttes': data_ttes,
     #                                   'ites': data_ites}
     
-    # data['16_ambitious_co2_pricing'] = {'year_expansion_range': year_expansion_range,
+    # data['15_ambitious_co2_pricing'] = {'year_expansion_range': year_expansion_range,
     #                                     'heating': heating_demand,
     #                                     'cooling': cooling_demand,
     #                                     'electricity_price': electricity_price,
@@ -382,7 +359,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                     'ttes': data_ttes,
     #                                     'ites': data_ites}
     
-    # data['17_expiring_support_res'] = {'year_expansion_range': year_expansion_range,
+    # data['16_expiring_support_res'] = {'year_expansion_range': year_expansion_range,
     #                                    'heating': heating_demand,
     #                                    'cooling': cooling_demand,
     #                                    'electricity_price': electricity_price,
@@ -404,29 +381,6 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                    'cp': {year: {name: (value * 0.7 if name == ('p_cp_c_inv' or 'p_ct_cp_c_inv') and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_cp.items()},
     #                                    'ttes': {year: {name: (value * 0.7 if name == 'p_ttes_c_inv' and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()},
     #                                    'ites': {year: {name: (value * 0.7 if name == 'p_ites_c_inv' and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ites.items()}}
-    
-    # data['18_res_friendly'] = {'year_expansion_range': year_expansion_range,
-    #                            'heating': heating_demand,
-    #                            'cooling': cooling_demand,
-    #                            'electricity_price': electricity_price,
-    #                            'electricity_mean_price': electricity_mean_price,
-    #                            'electricity_co2_share': electricity_co2_share,
-    #                            'electricity_mean_co2_share': electricity_mean_co2_share,
-    #                            'gas_price': gas_price,
-    #                            'co2_price': co2_price,
-    #                            'eb': {year: {name: (value * 0.7 if name == 'p_eb_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_eb.items()},
-    #                            'hp': {year: {name: (value * 0.7 if name == 'p_hp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_hp.items()},
-    #                            'st': {year: {name: (value * 0.7 if name == 'p_st_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_st.items()},
-    #                            'wi': {year: {name: (value * 0.7 if name == 'p_wi_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_wi.items()},
-    #                            'gt': {year: {name: (value * 0.7 if name == 'p_gt_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_gt.items()},
-    #                            'dgt': {year: {name: (value * 0.7 if name == 'p_dgt_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_dgt.items()},
-    #                            'ieh': {year: {name: (value * 0.7 if name == 'p_ieh_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ieh.items()},
-    #                            'chp': {year: {name: (value * 0.7 if name == 'p_chp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_chp.items()},
-    #                            'ac': {year: {name: (value * 0.7 if name == 'p_ac_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ac.items()},
-    #                            'ab': {year: {name: (value * 0.7 if name == 'p_ab_c_inv' or 'p_ct_ab_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ab.items()},
-    #                            'cp': {year: {name: (value * 0.7 if name == 'p_cp_c_inv' or 'p_ct_cp_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_cp.items()},
-    #                            'ttes': {year: {name: (value * 0.7 if name == 'p_ttes_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()},
-    #                            'ites': {year: {name: (value * 0.7 if name == 'p_ites_c_inv' else value) for name, value in dict_items.items()} for year, dict_items in data_ites.items()}}
     
     return data
     

@@ -23,7 +23,7 @@ print('Start of the script at:', formatted_time)
 #-----------------------------------------------------------------------------#
 
 # SERVER !!!
-# scenarios = ['1_reference', '2_high_electricity_prices', '3_low_electricity_prices', '4_flexible_energy_market', '5_energy_congestion', '6_green_friendly', '7_low_gas_demand', '8_natural_gas_friendly', '9_warm_winters', '10_cold_winters', '11_hot_summers', '12_warm_summers', '13_moderate_climate', '14_zero_co2_price', '15_delayed_co2_pricing', '16_ambitious_co2_pricing', '17_expiring_support_res', '18_res_friendly']
+# scenarios = ['1_reference', '2_high_electricity_prices', '3_low_electricity_prices', '4_flexible_energy_market', '5_energy_congestion', '6_green_friendly', '7_low_gas_demand', '8_natural_gas_friendly', '9_cold_winters', '10_hot_summers', '11_warm_summers', '12_moderate_climate', '13_zero_co2_price', '14_delayed_co2_pricing', '15_ambitious_co2_pricing', '16_expiring_support_res']
 scenarios = ['1_reference', '2_high_electricity_prices']
 years = [2025, 2030, 2035, 2040, 2045, 2050]
 year_expansion_range = {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}
@@ -57,10 +57,10 @@ data = define_scenarios(year_expansion_range, heating_demand, cooling_demand, el
 model_name = 'FLXenabler'
 model = py.ConcreteModel()
 model.name = model_name
-data_structure = {'scenarios': scenarios, 'years': years, 'hours': hours}
-model.set_scenarios = py.Set(initialize=data_structure['scenarios'])
-model.set_years = py.Set(initialize=data_structure['years'])
-model.set_hours = py.Set(initialize=data_structure['hours'])
+data_structure = {'s': scenarios, 'y': years, 'h': hours}
+model.set_scenarios = py.Set(initialize=data_structure['s'])
+model.set_years = py.Set(initialize=data_structure['y'])
+model.set_hours = py.Set(initialize=data_structure['h'])
 model.data_values = data
 
 #-----------------------------------------------------------------------------#
@@ -161,11 +161,11 @@ add_ites_equations(model)
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
-def demand_balance_heating(m, s, y, t):
-    return m.v_eb_q_heat_in[s, y, t] + m.v_hp_q_heat_in[s, y, t] + m.v_st_q_heat_in[s, y, t] + m.v_wi_q_heat_in[s, y, t] + m.v_gt_q_heat_in[s, y, t] + m.v_dgt_q_heat_in[s, y, t] + m.v_ieh_q_heat_in[s, y, t] + m.v_chp_q_heat_in[s, y, t] - m.v_ab_ct_q_heat_out[s, y, t] + m.v_ab_hp_q_heat_in[s, y, t] - m.v_ab_hp_q_heat_out[s, y, t] + m.v_cp_hp_q_heat_in[s, y, t] + m.v_ttes_q_heat_in[s, y, t] - m.v_ttes_q_heat_out[s, y, t] == model.data_values[s]['heating'][y][t]
+def demand_balance_heating(m, s, y, h):
+    return m.v_eb_q_heat_in[s, y, h] + m.v_hp_q_heat_in[s, y, h] + m.v_st_q_heat_in[s, y, h] + m.v_wi_q_heat_in[s, y, h] + m.v_gt_q_heat_in[s, y, h] + m.v_dgt_q_heat_in[s, y, h] + m.v_ieh_q_heat_in[s, y, h] + m.v_chp_q_heat_in[s, y, h] - m.v_ab_ct_q_heat_out[s, y, h] + m.v_ab_hp_q_heat_in[s, y, h] - m.v_ab_hp_q_heat_out[s, y, h] + m.v_cp_hp_q_heat_in[s, y, h] + m.v_ttes_q_heat_in[s, y, h] - m.v_ttes_q_heat_out[s, y, h] == model.data_values[s]['heating'][y][h]
 
-def demand_balance_cooling(m, s, y, t):
-    return m.v_ac_q_cool_in[s, y, t] + m.v_ab_ct_q_cool_in[s, y, t] + m.v_ab_hp_q_cool_in[s, y, t] + m.v_cp_ct_q_cool_in[s, y, t] + m.v_cp_hp_q_cool_in[s, y, t] + m.v_ites_q_cool_in[s, y, t] - m.v_ites_q_cool_out[s, y, t] == model.data_values[s]['cooling'][y][t]
+def demand_balance_cooling(m, s, y, h):
+    return m.v_ac_q_cool_in[s, y, h] + m.v_ab_ct_q_cool_in[s, y, h] + m.v_ab_hp_q_cool_in[s, y, h] + m.v_cp_ct_q_cool_in[s, y, h] + m.v_cp_hp_q_cool_in[s, y, h] + m.v_ites_q_cool_in[s, y, h] - m.v_ites_q_cool_out[s, y, h] == model.data_values[s]['cooling'][y][h]
 
 model.con_demand_balance_heating = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance_heating)
 model.con_demand_balance_cooling = py.Constraint(model.set_scenarios, model.set_years, model.set_hours, rule=demand_balance_cooling)
@@ -177,21 +177,21 @@ model.con_demand_balance_cooling = py.Constraint(model.set_scenarios, model.set_
 #-----------------------------------------------------------------------------#
 
 def objective_function(m):
-    return sum(m.v_eb_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_st_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_wi_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_gt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_dgt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ieh_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_chp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ac_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ac_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ac_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ab_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_ct_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ab_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_cp_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_cp_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours) + \
-           sum(m.v_ites_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_var[s, y, t] for s in m.set_scenarios for y in m.set_years for t in m.set_hours)
+    return sum(m.v_eb_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_st_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_wi_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_gt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_dgt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_ieh_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_chp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_ac_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ac_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ac_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_ab_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_ct_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_ab_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_cp_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_cp_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_ites_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours)
 
 model.obj = py.Objective(expr=objective_function, sense=py.minimize)
 

@@ -2,17 +2,17 @@ import pyomo.environ as py
 
 def add_ab_equations(m=None):
 
-    def ab_ct_feed_in_max_bound(m, s, y, t):
-        return m.v_ab_ct_q_cool_in[s, y, t] <= m.v_ab_ct_Q_cool_max[s, y]
+    def ab_ct_feed_in_max_bound(m, s, y, h):
+        return m.v_ab_ct_q_cool_in[s, y, h] <= m.v_ab_ct_Q_cool_max[s, y]
     
     # def ab_ct_limit(m, s, y):
     #     return m.v_ab_ct_Q_cool_max[s, y] <= 0
     
-    def ab_ct_heat_out(m, s, y, t):
-        return m.v_ab_ct_q_cool_in[s, y, t] == m.v_ab_ct_q_heat_out[s, y, t] * m.p_ab_eer[s, y]
+    def ab_ct_heat_out(m, s, y, h):
+        return m.v_ab_ct_q_cool_in[s, y, h] == m.v_ab_ct_q_heat_out[s, y, h] * m.p_ab_eer[s, y]
     
-    def ab_ct_elec_cool(m, s, y, t):
-        return m.v_ab_ct_q_elec_consumption[s, y, t] == m.v_ab_ct_q_heat_out[s, y, t] * 0.01 + (m.v_ab_ct_q_heat_out[s, y, t] + m.v_ab_ct_q_cool_in[s, y, t]) * 0.05
+    def ab_ct_elec_cool(m, s, y, h):
+        return m.v_ab_ct_q_elec_consumption[s, y, h] == m.v_ab_ct_q_heat_out[s, y, h] * 0.01 + (m.v_ab_ct_q_heat_out[s, y, h] + m.v_ab_ct_q_cool_in[s, y, h]) * 0.05
      
     def ab_ct_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
@@ -29,23 +29,23 @@ def add_ab_equations(m=None):
         else:
             return m.v_ab_ct_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_ab_ct_c_inv[s, y] * 0.02
 
-    def ab_ct_c_var(m, s, y, t):
-        return m.v_ab_ct_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ab_ct_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
+    def ab_ct_c_var(m, s, y, h):
+        return m.v_ab_ct_c_var[s, y, h] == m.p_year_expansion_range[s, y] * (m.v_ab_ct_q_elec_consumption[s, y, h] * (m.p_c_elec[s, y, h] + m.p_elec_co2_share[s, y, h] * m.p_c_co2[s, y]))
 
-    def ab_hp_feed_in_max_bound(m, s, y, t):
-        return m.v_ab_hp_q_cool_in[s, y, t] <= m.v_ab_hp_Q_cool_max[s, y]
+    def ab_hp_feed_in_max_bound(m, s, y, h):
+        return m.v_ab_hp_q_cool_in[s, y, h] <= m.v_ab_hp_Q_cool_max[s, y]
     
     # def ab_hp_limit(m, s, y):
     #     return m.v_ab_hp_Q_cool_max[s, y] <= 0
     
-    def ab_hp_heat_out(m, s, y, t):
-        return m.v_ab_hp_q_cool_in[s, y, t] == m.v_ab_hp_q_heat_out[s, y, t] * m.p_ab_eer[s, y]
+    def ab_hp_heat_out(m, s, y, h):
+        return m.v_ab_hp_q_cool_in[s, y, h] == m.v_ab_hp_q_heat_out[s, y, h] * m.p_ab_eer[s, y]
     
-    def ab_hp_heat_in(m, s, y, t):
-        return m.v_ab_hp_q_heat_in[s, y, t] == m.v_ab_hp_q_heat_out[s, y, t] + m.v_ab_hp_q_cool_in[s, y, t]
+    def ab_hp_heat_in(m, s, y, h):
+        return m.v_ab_hp_q_heat_in[s, y, h] == m.v_ab_hp_q_heat_out[s, y, h] + m.v_ab_hp_q_cool_in[s, y, h]
     
-    def ab_hp_elec_cool(m, s, y, t):
-        return m.v_ab_hp_q_elec_consumption[s, y, t] == m.v_ab_hp_q_heat_out[s, y, t] * 0.01 + m.v_ab_hp_q_heat_in[s, y, t] / m.p_ab_hp_cop[s, y]
+    def ab_hp_elec_cool(m, s, y, h):
+        return m.v_ab_hp_q_elec_consumption[s, y, h] == m.v_ab_hp_q_heat_out[s, y, h] * 0.01 + m.v_ab_hp_q_heat_in[s, y, h] / m.p_ab_hp_cop[s, y]
      
     def ab_hp_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
@@ -62,8 +62,8 @@ def add_ab_equations(m=None):
         else:
             return m.v_ab_hp_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_ab_hp_c_inv[s, y] * 0.02
 
-    def ab_hp_c_var(m, s, y, t):
-        return m.v_ab_hp_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ab_hp_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
+    def ab_hp_c_var(m, s, y, h):
+        return m.v_ab_hp_c_var[s, y, h] == m.p_year_expansion_range[s, y] * (m.v_ab_hp_q_elec_consumption[s, y, h] * (m.p_c_elec[s, y, h] + m.p_elec_co2_share[s, y, h] * m.p_c_co2[s, y]))
     
     m.con_ab_ct_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                   rule = ab_ct_feed_in_max_bound)

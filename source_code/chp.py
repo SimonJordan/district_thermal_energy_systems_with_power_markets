@@ -2,17 +2,17 @@ import pyomo.environ as py
 
 def add_chp_equations(m=None):
 
-    def chp_feed_in_max_bound(m, s, y, t):
-        return m.v_chp_q_heat_in[s, y, t] + m.v_chp_q_elec_in[s, y, t] <= m.v_chp_Q_mix_max[s, y]
+    def chp_feed_in_max_bound(m, s, y, h):
+        return m.v_chp_q_heat_in[s, y, h] + m.v_chp_q_elec_in[s, y, h] <= m.v_chp_Q_mix_max[s, y]
     
     # def chp_limit(m, s, y):
     #     return m.v_chp_Q_mix_max[s, y] <= 0
     
-    def chp_gas_heat(m, s, y, t):
-        return m.v_chp_q_heat_in[s, y, t] == m.v_chp_q_gas[s, y, t] * m.p_chp_eta[s, y] * m.p_chp_heat[s, y]
+    def chp_gas_heat(m, s, y, h):
+        return m.v_chp_q_heat_in[s, y, h] == m.v_chp_q_gas[s, y, h] * m.p_chp_eta[s, y] * m.p_chp_heat[s, y]
         
-    def chp_gas_elec(m, s, y, t):
-        return m.v_chp_q_elec_in[s, y, t] == m.v_chp_q_gas[s, y, t] * m.p_chp_eta[s, y] * m.p_chp_elec[s, y]
+    def chp_gas_elec(m, s, y, h):
+        return m.v_chp_q_elec_in[s, y, h] == m.v_chp_q_gas[s, y, h] * m.p_chp_eta[s, y] * m.p_chp_elec[s, y]
     
     def chp_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
@@ -29,8 +29,8 @@ def add_chp_equations(m=None):
         else:
             return m.v_chp_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_chp_c_inv[s, y] * 0.02
     
-    def chp_c_var(m, s, y, t):
-        return m.v_chp_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_chp_q_gas[s, y, t] * m.p_c_gas[s, y, t] + m.v_chp_q_gas[s, y, t] / m.p_chp_h_gas[s, y] * m.p_chp_co2_share[s, y] * m.p_c_co2[s, y] - m.v_chp_q_elec_in[s, y, t] * m.p_c_elec[s, y, t])
+    def chp_c_var(m, s, y, h):
+        return m.v_chp_c_var[s, y, h] == m.p_year_expansion_range[s, y] * (m.v_chp_q_gas[s, y, h] * m.p_c_gas[s, y, h] + m.v_chp_q_gas[s, y, h] / m.p_chp_h_gas[s, y] * m.p_chp_co2_share[s, y] * m.p_c_co2[s, y] - m.v_chp_q_elec_in[s, y, h] * m.p_c_elec[s, y, h])
     
     m.con_chp_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                 rule = chp_feed_in_max_bound)

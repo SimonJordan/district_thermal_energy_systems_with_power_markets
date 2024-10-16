@@ -2,14 +2,14 @@ import pyomo.environ as py
 
 def add_hp_equations(m=None):
 
-    def hp_feed_in_max_bound(m, s, y, t):
-        return m.v_hp_q_heat_in[s, y, t] <= m.v_hp_Q_heat_max[s, y]
+    def hp_feed_in_max_bound(m, s, y, h):
+        return m.v_hp_q_heat_in[s, y, h] <= m.v_hp_Q_heat_max[s, y]
     
     # def hp_limit(m, s, y):
     #     return m.v_hp_Q_heat_max[s, y] <= 0
     
-    def hp_elec_heat(m, s, y, t): 
-        return m.v_hp_q_heat_in[s, y, t] == m.v_hp_q_elec_consumption[s, y, t] * m.p_hp_cop[s, y, t]
+    def hp_elec_heat(m, s, y, h): 
+        return m.v_hp_q_heat_in[s, y, h] == m.v_hp_q_elec_consumption[s, y, h] * m.p_hp_cop[s, y, h]
      
     def hp_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
@@ -26,8 +26,8 @@ def add_hp_equations(m=None):
         else:
             return m.v_hp_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_hp_c_inv[s, y] * 0.02
 
-    def hp_c_var(m, s, y, t):
-        return m.v_hp_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_hp_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
+    def hp_c_var(m, s, y, h):
+        return m.v_hp_c_var[s, y, h] == m.p_year_expansion_range[s, y] * (m.v_hp_q_elec_consumption[s, y, h] * (m.p_c_elec[s, y, h] + m.p_elec_co2_share[s, y, h] * m.p_c_co2[s, y]))
 
     m.con_hp_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                rule = hp_feed_in_max_bound)
@@ -82,8 +82,8 @@ def add_hp_variables(m=None):
 
 def add_hp_parameters(m=None):
     
-    def init_hp_cop(m, s, y, t):
-        return m.data_values[s]['hp'][y]['p_hp_cop'][t]
+    def init_hp_cop(m, s, y, h):
+        return m.data_values[s]['hp'][y]['p_hp_cop'][h]
     
     def init_hp_c_inv(m, s, y):
         return m.data_values[s]['hp'][y]['p_hp_c_inv']
