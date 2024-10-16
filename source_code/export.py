@@ -20,6 +20,7 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
         path_to_elec_consumption = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_consumption.xlsx')
         path_to_elec_gas_price = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_price_co2_share_gas_price.xlsx')
         path_to_co2_price = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_co2_price.xlsx')
+        path_to_storage_soc = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_storage_soc.xlsx')
         
         df_0 = []
         df_1 = []
@@ -30,6 +31,7 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
         df_6 = []
         df_7 = []
         df_8 = []
+        df_9 = []
         
         for year in years:
             eb_heat_in = []
@@ -117,6 +119,9 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             ttes_elec = []
             ites_elec = []
             
+            ttes_soc = []
+            ites_soc = []
+            
             eb_c_inv.append(py.value(m.v_eb_c_inv[scenario, year]))
             hp_c_inv.append(py.value(m.v_hp_c_inv[scenario, year]))
             st_c_inv.append(py.value(m.v_st_c_inv[scenario, year]))
@@ -202,6 +207,9 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
                 cp_hp_elec.append(py.value(m.v_cp_hp_q_elec_consumption[scenario, year, hour]))
                 ttes_elec.append(py.value(m.v_ttes_q_elec_consumption[scenario, year, hour]))
                 ites_elec.append(py.value(m.v_ites_q_elec_consumption[scenario, year, hour]))
+                
+                ttes_soc.append(py.value(m.v_ttes_k_heat[scenario, year, hour]))
+                ites_soc.append(py.value(m.v_ites_k_cool[scenario, year, hour]))
             
             df_0.append(pd.DataFrame({'hour': hours, 'heating': data[scenario]['heating'][year], 'eb': eb_heat_in, 'hp': hp_heat_in, 'st': st_heat_in, 'wi': wi_heat_in, 'gt': gt_heat_in, 'dgt': dgt_heat_in, 'ieh': ieh_heat_in, 'chp': chp_heat_in, 'ab_ct-': ab_ct_heat_out, 'ab_hp+': ab_hp_heat_in, 'ab_hp-': ab_hp_heat_out, 'cp_hp+': cp_hp_heat_in, 'ttes+': ttes_heat_in, 'ttes-': ttes_heat_out}))
             df_1.append(pd.DataFrame({'hour': hours, 'cooling': data[scenario]['cooling'][year], 'ac': ac_cool_in, 'ab_ct': ab_ct_cool_in, 'ab_hp': ab_hp_cool_in, 'cp_ct': cp_ct_cool_in, 'cp_hp': cp_hp_cool_in, 'ites+': ites_cool_in, 'ites-': ites_cool_out}))
@@ -209,9 +217,10 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             df_4.append(pd.DataFrame({'eb': eb_c_fix, 'hp': hp_c_fix, 'st': st_c_fix, 'wi': wi_c_fix, 'gt': gt_c_fix, 'dgt': dgt_c_fix, 'ieh': ieh_c_fix, 'chp': chp_c_fix, 'ac': ac_c_fix, 'ab_ct': ab_ct_c_fix, 'ab_hp': ab_hp_c_fix, 'cp_ct': cp_ct_c_fix, 'cp_hp': cp_hp_c_fix, 'ttes': ttes_c_fix, 'ites': ites_c_fix}))
             df_5.append(pd.DataFrame({'eb': eb_c_var, 'hp': hp_c_var, 'st': st_c_var, 'wi': wi_c_var, 'gt': gt_c_var, 'dgt': dgt_c_var, 'ieh': ieh_c_var, 'chp': chp_c_var, 'ac': ac_c_var, 'ab_ct': ab_ct_c_var, 'ab_hp': ab_hp_c_var, 'cp_ct': cp_ct_c_var, 'cp_hp': cp_hp_c_var, 'ttes': ttes_c_var, 'ites': ites_c_var}))
             df_6.append(pd.DataFrame({'eb': eb_elec, 'hp': hp_elec, 'st': st_elec, 'gt': gt_elec, 'dgt': dgt_elec, 'ieh': ieh_elec, 'ac': ac_elec, 'ab_ct': ab_ct_elec, 'ab_hp': ab_hp_elec, 'cp_ct': cp_ct_elec, 'cp_hp': cp_hp_elec, 'ttes': ttes_elec, 'ites': ites_elec}))
-            df_7.append(pd.DataFrame({'elec': data[scenario]['electricity_price'][year], 'co2': data[scenario]['electricity_co2_share'][year], 'gas': data[scenario]['gas_price'][year]}))
+            df_7.append(pd.DataFrame({'hour': hours, 'elec': data[scenario]['electricity_price'][year], 'co2': data[scenario]['electricity_co2_share'][year], 'gas': data[scenario]['gas_price'][year]}))
             df_8.append(pd.DataFrame({'co2': [data[scenario]['co2_price'][year]]}, index=[year]))
-            
+            df_9.append(pd.DataFrame({'hour': hours, 'ttes': ttes_soc, 'ites': ites_soc}))
+        
         with pd.ExcelWriter(path_to_heat_supply) as writer:
             for df, year in zip(df_0, years):
                 df.to_excel(writer, sheet_name=str(year), index=False)
@@ -242,6 +251,10 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
                 
         with pd.ExcelWriter(path_to_co2_price) as writer:
             for df, year in zip(df_8, years):
+                df.to_excel(writer, sheet_name=str(year), index=False)
+                
+        with pd.ExcelWriter(path_to_storage_soc) as writer:
+            for df, year in zip(df_9, years):
                 df.to_excel(writer, sheet_name=str(year), index=False)
 
     path_to_inv_capacity = os.path.join(path_to_result_folder, '[all]_#_inv_capacity.xlsx')
