@@ -401,15 +401,15 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, None]], subplot_titles=('cooling technology investments', 'Storage technology investments', 'Ratio cooling to storage capacity'))
 
-fig.add_trace(go.Scatter(x=years[:5], y=ratio_inv[:3], name='Ratio'), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_inv[:5], name='Ratio'), row=2, col=1)
 
-fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Ice thermal energy storage'].values())[:3], name='Ice thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
+fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Ice thermal energy storage'].values())[:5], name='Ice thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
 
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:3], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:3], name='Compression with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:3], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:3], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:3], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:5], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
 
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=1)
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=2)
@@ -429,17 +429,17 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, {'colspan': 1}]], subplot_titles=('cooling technology investments', 'Storage technology investments', 'Ratio cooling to storage capacity', 'Ratio cooling to storage capacity'))
 
-fig.add_trace(go.Scatter(x=years[:5], y=ratio_inv[:3], name='Ratio total', line=dict(color='#EF553B')), row=2, col=2)
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_inv[:5], name='Ratio total', line=dict(color='#EF553B')), row=2, col=2)
 
-fig.add_trace(go.Scatter(x=years[:5], y=ratio_ac_inv[:3], name='Ratio airchiller', line=dict(color='#19D3F3')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_ac_inv[:5], name='Ratio airchiller', line=dict(color='#19D3F3')), row=2, col=1)
 
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:3], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:3], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:3], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:3], name='Compression with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:3], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:5], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
 
-fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Ice thermal energy storage'].values())[:3], name='Ice thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
+fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Ice thermal energy storage'].values())[:5], name='Ice thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
 
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=1)
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=2)
@@ -462,13 +462,13 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('cooling technology investments', 'Storage technology investments'))
 
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:3], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:3], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:3], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:3], name='Compression with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:3], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:5], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
 
-fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Ice thermal energy storage'].values())[:3], name='Ice thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
+fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Ice thermal energy storage'].values())[:5], name='Ice thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
 
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=1)
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=2)
@@ -482,7 +482,7 @@ fig.show()
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=years[:5], y=ratio_ac_inv[:3], name='Ratio airchiller', line=dict(width=4, color='#19D3F3')))
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_ac_inv[:5], name='Ratio airchiller', line=dict(width=4, color='#19D3F3')))
 
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5])
 
