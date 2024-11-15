@@ -861,10 +861,10 @@ for building in range(1, 40):
         for year in years:
             for hour in hours:
                 if building in buildings_gas:
-                    building_c_sum += buildings[building][year] * buildings_demand[building][hour] / eta_gas * (gas_price[scenario][year][hour] + co2_conversion * co2_price[scenario][year])
+                    building_c_sum += buildings[building][year] * demand_heat_variation[scenario][year] * buildings_demand[building][hour] / eta_gas * (gas_price[scenario][year][hour] + co2_conversion * co2_price[scenario][year])
                     
                 else:
-                    building_c_sum += buildings[building][year] * buildings_demand[building][hour] / eta_electricity * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
+                    building_c_sum += buildings[building][year] * demand_heat_variation[scenario][year] * buildings_demand[building][hour] / eta_electricity * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
             
         buildings_lcoh_scenario.append(building_c_sum / (buildings_demand_sum[building] * demand_heat_sum_variation[building]))
 

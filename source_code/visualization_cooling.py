@@ -605,7 +605,7 @@ for building in range(1, 40):
         
         for year in years:
             for hour in hours:
-                building_c_sum += buildings[building][year] * buildings_demand[building][hour] / eta_electricity * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
+                building_c_sum += buildings[building][year] * demand_cool_variation[scenario][year] * buildings_demand[building][hour] / eta_electricity * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
             
         buildings_lcoc_scenario.append(building_c_sum / (buildings_demand_sum[building] * demand_cool_sum_variation[building]))
 
