@@ -9,7 +9,7 @@ def add_cp_equations(m=None):
     #     return m.v_cp_ct_Q_cool_max[y] <= 0
     
     def cp_ct_elec_cool(m, s, y, h):
-        return m.v_cp_ct_q_elec_consumption[s, y, h] == m.v_cp_ct_q_cool_in[s, y, h]  / m.p_cp_ct_seer[s, y] + m.v_cp_ct_q_cool_in[s, y, h] * 0.05
+        return m.v_cp_ct_q_elec_consumption[s, y, h] == m.v_cp_ct_q_cool_in[s, y, h]  / m.p_cp_ct_seer[s, y] + m.v_cp_ct_q_cool_in[s, y, h] * (1 + 1 / m.p_cp_hp_seer[s, y]) * 0.05
     
     def cp_ct_Q_inv(m, y):
         if (y - 5) in m.set_years:
@@ -36,7 +36,7 @@ def add_cp_equations(m=None):
     #     return m.v_cp_hp_Q_cool_max[y] <= 0
     
     def cp_hp_elec_cool(m, s, y, h):
-        return m.v_cp_hp_q_elec_consumption[s, y, h] == m.v_cp_hp_q_cool_in[s, y, h]  / m.p_cp_hp_seer[s, y] + m.v_cp_hp_q_cool_in[s, y, h] / m.p_cp_hp_cop[s, y]
+        return m.v_cp_hp_q_elec_consumption[s, y, h] == m.v_cp_hp_q_cool_in[s, y, h]  / m.p_cp_hp_seer[s, y] + m.v_cp_hp_q_heat_in[s, y, h] / m.p_cp_hp_cop[s, y]
     
     def cp_hp_heat_in(m, s, y, h):
         return m.v_cp_hp_q_heat_in[s, y, h] == m.v_cp_hp_q_cool_in[s, y, h] + m.v_cp_hp_q_cool_in[s, y, h]  / m.p_cp_hp_seer[s, y]

@@ -251,7 +251,7 @@ for year in years:
     
 #%% FIG 0 - Demand dispatch
 
-df_0 = pd.DataFrame({'hour': hours, 'cooling_demand': cooling_demand[visualize_scenario][visualize_year], 'ac': ac_cool_in[visualize_scenario][visualize_year], 'ab_ct': ab_ct_cool_in[visualize_scenario][visualize_year], 'ab_hp': ab_hp_cool_in[visualize_scenario][visualize_year], 'cp_ct': cp_ct_cool_in[visualize_scenario][visualize_year], 'cp_hp': cp_hp_cool_in[visualize_scenario][visualize_year], 'ites+': ites_cool_in[visualize_scenario][visualize_year], 'ites-': ites_cool_out[visualize_scenario][visualize_year]})
+df_0 = pd.DataFrame({'hour': hours, 'electricity': electricity_price[visualize_scenario][visualize_year], 'cooling_demand': cooling_demand[visualize_scenario][visualize_year], 'ac': ac_cool_in[visualize_scenario][visualize_year], 'ab_ct': ab_ct_cool_in[visualize_scenario][visualize_year], 'ab_hp': ab_hp_cool_in[visualize_scenario][visualize_year], 'cp_ct': cp_ct_cool_in[visualize_scenario][visualize_year], 'cp_hp': cp_hp_cool_in[visualize_scenario][visualize_year], 'ites+': ites_cool_in[visualize_scenario][visualize_year], 'ites-': ites_cool_out[visualize_scenario][visualize_year]})
 
 fig = go.Figure()
 
@@ -264,7 +264,25 @@ fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ites-'], mode='lines', name='IT
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ites+'], mode='lines', name='ITES feed in', stackgroup='one', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cooling_demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
 
-fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
+fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
+
+fig.show()
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp'], mode='lines', name='Compression with heat pump', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_ct'], mode='lines', name='Compression with cooling tower', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_hp'], mode='lines', name='Absorption with heat pump', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_ct'], mode='lines', name='Absorption with cooling tower', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ac'], mode='lines', name='Airchiller', stackgroup='one', line=dict(color='#19D3F3')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ites-'], mode='lines', name='ITES store', stackgroup='two', line=dict(color='#FFA15A')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ites+'], mode='lines', name='ITES feed in', stackgroup='one', line=dict(color='#FFA15A')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cooling_demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
+
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['electricity'], mode='lines', name='Electricity price', line=dict(color='black', width=2), yaxis='y2'))
+
+fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Cool supply in MWh/h', titlefont=dict(size=20), range=[-1, 8 * 1.1], tickvals=np.linspace(-1, 8, 10), tickfont=dict(size=20)), yaxis2=dict(title='Electricity price in $/MWh', titlefont=dict(size=20), range=[-37.5, 300 * 1.1], tickvals=np.linspace(-37.5, 300, 10), tickfont=dict(size=20), overlaying='y', side='right'), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
+fig.update_layout(legend=dict(x=1.05, y=1, xanchor='left'), margin=dict(l=50, r=150, t=50, b=50))
 
 fig.show()
 
@@ -290,7 +308,7 @@ fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ites-'], mode='lines', name='IT
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ites+'], mode='lines', name='ITES feed in', stackgroup='one', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cooling_demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
 
-fig.update_layout(title=dict(text='Load duration curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
+fig.update_layout(title=dict(text='Load duration curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
 
 fig.show()
 
@@ -317,7 +335,7 @@ fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ites-'], mode='lines', name='IT
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ites+'], mode='lines', name='ITES feed in', stackgroup='one', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cooling_demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
 
-fig.update_layout(title=dict(text='Load duration curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
+fig.update_layout(title=dict(text='Load duration curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
 
 fig.show()
 
@@ -334,7 +352,7 @@ for technology in technologies_abb:
     for scenario in scenarios:
         fig.add_trace(go.Scatter(x=df_3['hour'][scenario], y=df_3[technology][scenario][visualize_year], mode='lines', name=scenario))
 
-    fig.update_layout(title=dict(text=technologies_name[technology], font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Scenarios', font=dict(size=20)), legend=dict(font=dict(size=20)))
+    fig.update_layout(title=dict(text=technologies_name[technology], font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Scenarios', font=dict(size=20)), legend=dict(font=dict(size=20)))
 
     fig.show()
 
@@ -355,8 +373,8 @@ fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=1)
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=2)
 
-fig.update_yaxes(title_text='cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
-fig.update_yaxes(title_text='cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
+fig.update_yaxes(title_text='Cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
+fig.update_yaxes(title_text='Cool supply in MWh/h', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
 
 fig.update_layout(title=dict(text='Airchiller', font=dict(size=30)), annotations=[dict(font=dict(size=25))], legend_title=dict(text='Scenarios', font=dict(size=20)), legend=dict(font=dict(size=20)))
 
@@ -399,7 +417,7 @@ for year in years[:5]:
 
 fig = go.Figure()
 
-fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, None]], subplot_titles=('cooling technology investments', 'Storage technology investments', 'Ratio cooling to storage capacity'))
+fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, None]], subplot_titles=('Cooling technology investments', 'Storage technology investments', 'Ratio cooling to storage capacity'))
 
 fig.add_trace(go.Scatter(x=years[:5], y=ratio_inv[:5], name='Ratio'), row=2, col=1)
 
@@ -427,7 +445,7 @@ fig.show()
 
 fig = go.Figure()
 
-fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, {'colspan': 1}]], subplot_titles=('cooling technology investments', 'Storage technology investments', 'Ratio cooling to storage capacity', 'Ratio cooling to storage capacity'))
+fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Cooling technology investments', 'Storage technology investments', 'Ratio cooling to storage capacity', 'Ratio cooling to storage capacity'))
 
 fig.add_trace(go.Scatter(x=years[:5], y=ratio_inv[:5], name='Ratio total', line=dict(color='#EF553B')), row=2, col=2)
 
@@ -460,7 +478,7 @@ fig.show()
 
 fig = go.Figure()
 
-fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('cooling technology investments', 'Storage technology investments'))
+fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Cooling technology investments', 'Storage technology investments'))
 
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
