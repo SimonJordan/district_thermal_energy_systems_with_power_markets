@@ -19,6 +19,12 @@ def add_ttes_equations(m=None):
             return m.v_ttes_k_heat[s, y, h] == m.v_ttes_k_heat_max[y] * m.p_ttes_losses[s, y] * m.p_ttes_init[s, y] + m.v_ttes_q_heat_out[s, y, h] * m.p_ttes_eta[s, y] - m.v_ttes_q_heat_in[s, y, h] / m.p_ttes_eta[s, y]
         elif h == 8759:
             return m.v_ttes_k_heat[s, y, h] == m.v_ttes_k_heat_max[y] * m.p_ttes_end[s, y]
+            if y == 2025:
+                return m.v_ttes_k_heat[s, y, h] == m.v_ttes_k_heat_max[s, y] * m.p_ttes_losses[s, y] * m.p_ttes_init[s, y] + m.v_ttes_q_heat_out[s, y, h] * m.p_ttes_eta[s, y] - m.v_ttes_q_heat_in[s, y, h] / m.p_ttes_eta[s, y]
+            else:
+                return m.v_ttes_k_heat[s, y, h] == m.v_ttes_k_heat[s, y-5, 8759] * m.p_ttes_losses[s, y] + m.v_ttes_q_heat_out[s, y, h] * m.p_ttes_eta[s, y] - m.v_ttes_q_heat_in[s, y, h] / m.p_ttes_eta[s, y]
+        elif h == 8759 and y == 2050:
+            return m.v_ttes_k_heat[s, y, h] == m.v_ttes_k_heat_max[s, y] * m.p_ttes_end[s, y]
         else:
             return m.v_ttes_k_heat[s, y, h] == m.v_ttes_k_heat[s, y, h-1] * m.p_ttes_losses[s, y] + m.v_ttes_q_heat_out[s, y, h] * m.p_ttes_eta[s, y] - m.v_ttes_q_heat_in[s, y, h] / m.p_ttes_eta[s, y]
     
