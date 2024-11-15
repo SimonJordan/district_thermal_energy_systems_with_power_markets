@@ -401,6 +401,7 @@ df_0 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand[visualize_s
 
 fig = go.Figure()
 
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_hp-'], mode='lines', name='Absorption with heat pump take out', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_hp+'], mode='lines', name='Absorption with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_ct-'], mode='lines', name='Absorption with cooling tower take out', stackgroup='two', line=dict(color='grey')))
@@ -409,7 +410,6 @@ fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['wi'], mode='lines', name='Waste
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
-fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
@@ -441,6 +441,7 @@ df_1 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_1, '
 
 fig = go.Figure()
 
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_hp-'], mode='lines', name='Absorption with heat pump take out', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_hp+'], mode='lines', name='Absorption with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_ct-'], mode='lines', name='Absorption with cooling tower take out', stackgroup='two', line=dict(color='grey')))
@@ -449,7 +450,6 @@ fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['wi'], mode='lines', name='Waste
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
@@ -482,6 +482,7 @@ df_2 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_2, '
 
 fig = go.Figure()
 
+fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_hp-'], mode='lines', name='Absorption with heat pump take out', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_hp+'], mode='lines', name='Absorption with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_ct-'], mode='lines', name='Absorption with cooling tower take out', stackgroup='two', line=dict(color='grey')))
@@ -490,7 +491,6 @@ fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['wi'], mode='lines', name='Waste
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
-fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
@@ -524,14 +524,14 @@ fig = go.Figure()
 fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Winter week', 'Summer week'))
 
 fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[0]][visualize_year][:168], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA')), row=1, col=1)
-fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[1]][visualize_year][:168], mode='lines', name='Scenario 2: high electricity price', line=dict(color='#00CC96')), row=1, col=1)
-fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_3['gt'][scenarios[0]][visualize_year][:168] + df_3['gt'][scenarios[1]][visualize_year][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[12]][visualize_year][:168], mode='lines', name='Scenario 13: zero co2 price', line=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_3['gt'][scenarios[0]][visualize_year][:168] + df_3['gt'][scenarios[12]][visualize_year][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
 
-#fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[1]][visualize_year], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
+#fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[12]][visualize_year], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
 
 fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['gt'][scenarios[0]][visualize_year][4380:4548], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA'), showlegend=False), row=1, col=2)
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['gt'][scenarios[1]][visualize_year][4380:4548], mode='lines', name='Scenario 2: high electricity price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_3['gt'][scenarios[0]][visualize_year][4380:4548] + df_3['gt'][scenarios[1]][visualize_year][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['gt'][scenarios[12]][visualize_year][4380:4548], mode='lines', name='Scenario 13: zero co2 price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_3['gt'][scenarios[0]][visualize_year][4380:4548] + df_3['gt'][scenarios[12]][visualize_year][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
 
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=1)
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=2)
@@ -548,14 +548,14 @@ fig = go.Figure()
 fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Winter week', 'Summer week'))
 
 fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ieh'][scenarios[0]][visualize_year][:168], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA')), row=1, col=1)
-fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ieh'][scenarios[1]][visualize_year][:168], mode='lines', name='Scenario 2: high electricity price', line=dict(color='#00CC96')), row=1, col=1)
-fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_3['ieh'][scenarios[0]][visualize_year][:168] + df_3['ieh'][scenarios[1]][visualize_year][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ieh'][scenarios[12]][visualize_year][:168], mode='lines', name='Scenario 13: zero co2 price', line=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_3['ieh'][scenarios[0]][visualize_year][:168] + df_3['ieh'][scenarios[12]][visualize_year][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
 
-#fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[1]][visualize_year], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
+#fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['gt'][scenarios[12]][visualize_year], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
 
 fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ieh'][scenarios[0]][visualize_year][4380:4548], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA'), showlegend=False), row=1, col=2)
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ieh'][scenarios[1]][visualize_year][4380:4548], mode='lines', name='Scenario 2: high electricity price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_3['ieh'][scenarios[0]][visualize_year][4380:4548] + df_3['ieh'][scenarios[1]][visualize_year][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ieh'][scenarios[12]][visualize_year][4380:4548], mode='lines', name='Scenario 13: zero co2 price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_3['ieh'][scenarios[0]][visualize_year][4380:4548] + df_3['ieh'][scenarios[12]][visualize_year][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
 
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=1)
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=2)
@@ -632,26 +632,23 @@ ratio_eb_inv = []
 ratio_hp_inv = []
 ratio_gt_inv = []
 ratio_ieh_inv = []
-ratio_cp_hp_inv = []
 ratio_inv = []
 index = 0
 
-for year in years[:3]:
+for year in years[:5]:
     index +=1
     
-    heating_eb_inv_sum = sum(list(eb_inv[visualize_scenario].values())[:index])
-    heating_hp_inv_sum = sum(list(hp_inv[visualize_scenario].values())[:index])
-    heating_gt_inv_sum = sum(list(gt_inv[visualize_scenario].values())[:index])
-    heating_ieh_inv_sum = sum(list(ieh_inv[visualize_scenario].values())[:index])
-    heating_cp_hp_inv_sum = sum(list(cp_hp_inv[visualize_scenario].values())[:index])
-    heating_technology_inv_sum = sum(list(eb_inv[visualize_scenario].values())[:index]) + sum(list(hp_inv[visualize_scenario].values())[:index]) + sum(list(st_inv[visualize_scenario].values())[:index]) + sum(list(wi_inv[visualize_scenario].values())[:index]) + sum(list(gt_inv[visualize_scenario].values())[:index]) + sum(list(dgt_inv[visualize_scenario].values())[:index]) + sum(list(ieh_inv[visualize_scenario].values())[:index]) + sum(list(chp_inv[visualize_scenario].values())[:index]) + sum(list(cp_hp_inv[visualize_scenario].values())[:index])
-    storage_technology_inv_sum = sum(list(ttes_inv[visualize_scenario].values())[:index])
+    heating_eb_inv_sum = sum(list(eb_inv.values())[:index])
+    heating_hp_inv_sum = sum(list(hp_inv.values())[:index])
+    heating_gt_inv_sum = sum(list(gt_inv.values())[:index])
+    heating_ieh_inv_sum = sum(list(ieh_inv.values())[:index])
+    heating_technology_inv_sum = sum(list(eb_inv.values())[:index]) + sum(list(hp_inv.values())[:index]) + sum(list(st_inv.values())[:index]) + sum(list(wi_inv.values())[:index]) + sum(list(gt_inv.values())[:index]) + sum(list(dgt_inv.values())[:index]) + sum(list(ieh_inv.values())[:index]) + sum(list(chp_inv.values())[:index])
+    storage_technology_inv_sum = sum(list(ttes_inv.values())[:index])
     
     ratio_eb_inv.append(heating_eb_inv_sum / storage_technology_inv_sum * 100)
     ratio_hp_inv.append(heating_hp_inv_sum / storage_technology_inv_sum * 100)
     ratio_gt_inv.append(heating_gt_inv_sum / storage_technology_inv_sum * 100)
     ratio_ieh_inv.append(heating_ieh_inv_sum / storage_technology_inv_sum * 100)
-    ratio_cp_hp_inv.append(heating_cp_hp_inv_sum / storage_technology_inv_sum * 100)
     ratio_inv.append(heating_technology_inv_sum / storage_technology_inv_sum * 100)
     
     technologies = ['Electric boiler', 'Heat pump', 'Solar thermal', 'Waste incineration', 'Geothermal', 'Deep geothermal', 'Industrial excess heat', 'Combined heat and power', 'Absorption with cooling tower', 'Absorption with heat pump', 'Compression with heat pump']
@@ -663,25 +660,25 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, None]], subplot_titles=('Heating technology investments', 'Storage technology investments', 'Ratio heating to storage capacity'))
 
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_inv[:3], name='Ratio'), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_inv[:5], name='Ratio'), row=2, col=1)
 
-fig.add_trace(go.Bar(x=years[:3], y=list(storages_map['Tank thermal energy storage'][visualize_scenario].values())[:3], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
+fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Tank thermal energy storage'].values())[:5], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
 
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Electric boiler'][visualize_scenario].values())[:3], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Industrial excess heat'][visualize_scenario].values())[:3], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Heat pump'][visualize_scenario].values())[:3], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Compression with heat pump'][visualize_scenario].values())[:3], name='Compression with heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Geothermal'][visualize_scenario].values())[:3], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Solar thermal'][visualize_scenario].values())[:3], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Deep geothermal'][visualize_scenario].values())[:3], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Waste incineration'][visualize_scenario].values())[:3], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Combined heat and power'][visualize_scenario].values())[:3], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with cooling tower'][visualize_scenario].values())[:3], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with heat pump'][visualize_scenario].values())[:3], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Electric boiler'].values())[:5], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Industrial excess heat'].values())[:5], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Heat pump'].values())[:5], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Geothermal'].values())[:5], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Solar thermal'].values())[:5], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Deep geothermal'].values())[:5], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Waste incineration'].values())[:5], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Combined heat and power'].values())[:5], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
 
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=1)
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=2)
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=2, col=1)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=1)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=2)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=2, col=1)
 
 fig.update_yaxes(title_text='Newly installed capacity in MW', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
 fig.update_yaxes(title_text='Newly installed capacity in MWh', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
@@ -697,32 +694,31 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=2, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}], [{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Heating technology investments', 'Storage technology investments', 'Ratio heating to storage capacity', 'Ratio heating to storage capacity'))
 
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_inv[:3], name='Ratio total', line=dict(color='#EF553B')), row=2, col=2)
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_inv[:5], name='Ratio total', line=dict(color='#EF553B')), row=2, col=2)
 
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_gt_inv[:3], name='Ratio geothermal', line=dict(color='#00CC96')), row=2, col=1)
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_cp_hp_inv[:3], name='Ratio compression with heat pump', line=dict(color='#19D3F3')), row=2, col=1)
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_hp_inv[:3], name='Ratio heat pump', line=dict(color='#19D3F3')), row=2, col=1)
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_ieh_inv[:3], name='Ratio industrial excess heat', line=dict(color='#B6E880')), row=2, col=1)
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_eb_inv[:3], name='Ratio electric boiler', line=dict(color='#FF6692')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_gt_inv[:5], name='Ratio geothermal', line=dict(color='#00CC96')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_hp_inv[:5], name='Ratio heat pump', line=dict(color='#19D3F3')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_ieh_inv[:5], name='Ratio industrial excess heat', line=dict(color='#B6E880')), row=2, col=1)
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_eb_inv[:5], name='Ratio electric boiler', line=dict(color='#FF6692')), row=2, col=1)
 
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with heat pump'][visualize_scenario].values())[:3], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with cooling tower'][visualize_scenario].values())[:3], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Combined heat and power'][visualize_scenario].values())[:3], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Waste incineration'][visualize_scenario].values())[:3], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Deep geothermal'][visualize_scenario].values())[:3], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Solar thermal'][visualize_scenario].values())[:3], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Geothermal'][visualize_scenario].values())[:3], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Compression with heat pump'][visualize_scenario].values())[:3], name='Compression with heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Heat pump'][visualize_scenario].values())[:3], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Industrial excess heat'][visualize_scenario].values())[:3], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Electric boiler'][visualize_scenario].values())[:3], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Combined heat and power'].values())[:5], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Waste incineration'].values())[:5], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Deep geothermal'].values())[:5], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Solar thermal'].values())[:5], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Geothermal'].values())[:5], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Heat pump'].values())[:5], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Industrial excess heat'].values())[:5], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Electric boiler'].values())[:5], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
 
-fig.add_trace(go.Bar(x=years[:3], y=list(storages_map['Tank thermal energy storage'][visualize_scenario].values())[:3], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
+fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Tank thermal energy storage'].values())[:5], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
 
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=1)
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=2)
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=2, col=1)
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=2, col=2)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=1)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=2)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=2, col=1)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=2, col=2)
 
 fig.update_yaxes(title_text='Newly installed capacity in MW', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
 fig.update_yaxes(title_text='Newly installed capacity in MWh', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
@@ -740,22 +736,22 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Heating technology investments', 'Storage technology investments'))
 
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with heat pump'][visualize_scenario].values())[:3], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Absorption with cooling tower'][visualize_scenario].values())[:3], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Combined heat and power'][visualize_scenario].values())[:3], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Waste incineration'][visualize_scenario].values())[:3], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Deep geothermal'][visualize_scenario].values())[:3], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Solar thermal'][visualize_scenario].values())[:3], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Geothermal'][visualize_scenario].values())[:3], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Compression with heat pump'][visualize_scenario].values())[:3], name='Compression with heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Heat pump'][visualize_scenario].values())[:3], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Industrial excess heat'][visualize_scenario].values())[:3], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:3], y=list(technologies_map['Electric boiler'][visualize_scenario].values())[:3], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Combined heat and power'].values())[:5], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Waste incineration'].values())[:5], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Deep geothermal'].values())[:5], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Solar thermal'].values())[:5], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Geothermal'].values())[:5], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Heat pump'].values())[:5], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Industrial excess heat'].values())[:5], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Electric boiler'].values())[:5], name='Electric boiler', marker=dict(color='#FF6692')), row=1, col=1)
 
-fig.add_trace(go.Bar(x=years[:3], y=list(storages_map['Tank thermal energy storage'][visualize_scenario].values())[:3], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
+fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Tank thermal energy storage'].values())[:5], name='Tank thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
 
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=1)
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3], row=1, col=2)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=1)
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=2)
 
 fig.update_yaxes(title_text='Newly installed capacity in MW', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=1)
 fig.update_yaxes(title_text='Newly installed capacity in MWh', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
@@ -766,17 +762,16 @@ fig.show()
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_eb_inv[:3], name='Ratio electric boiler', line=dict(width=4, color='#FF6692')))
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_ieh_inv[:3], name='Ratio industrial excess heat', line=dict(width=4, color='#B6E880')))
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_hp_inv[:3], name='Ratio heat pump', line=dict(width=4, color='#19D3F3')))
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_cp_hp_inv[:3], name='Ratio compression with heat pump', line=dict(width=4, color='#19D3F3')))
-fig.add_trace(go.Scatter(x=years[:3], y=ratio_gt_inv[:3], name='Ratio geothermal', line=dict(width=4, color='#00CC96')))
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_eb_inv[:5], name='Ratio electric boiler', line=dict(width=4, color='#FF6692')))
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_ieh_inv[:5], name='Ratio industrial excess heat', line=dict(width=4, color='#B6E880')))
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_hp_inv[:5], name='Ratio heat pump', line=dict(width=4, color='#19D3F3')))
+fig.add_trace(go.Scatter(x=years[:5], y=ratio_gt_inv[:5], name='Ratio geothermal', line=dict(width=4, color='#00CC96')))
 
-fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:3])
+fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5])
 
 fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20))
 
-fig.update_yaxes(range=[0, 6])
+fig.update_yaxes(range=[0, 10])
 
 fig.update_layout(title=dict(text='Investments', font=dict(size=30)), legend=dict(font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)))
 
@@ -831,6 +826,35 @@ buildings = {1: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              38: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              39: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1}}
 
+demand_heat_variation = {'1_reference': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '2_high_electricity_prices': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '3_low_electricity_prices': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '4_flexible_energy_market': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '5_energy_congestion': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '6_green_friendly': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '7_low_gas_demand': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '8_natural_gas_friendly': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '9_cold_winters': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1.1, 2050: 1.1},
+                         '10_hot_summers': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '11_warm_summers': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '12_moderate_climate': {2025: 0.9, 2030: 0.9, 2035: 0.9, 2040: 0.9, 2045: 0.9, 2050: 0.9},
+                         '13_zero_co2_price': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '14_delayed_co2_pricing': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '15_ambitious_co2_pricing': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
+                         '16_expiring_support_res': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1}}
+
+demand_heat_sum_variation = {}
+
+for building in range(1, 40):
+    variation = 0
+    
+    for scenario in scenarios:
+            
+        for year in years:
+            variation += buildings[building][year] * demand_heat_variation[scenario][year]
+    
+    demand_heat_sum_variation[building] = variation / len(scenarios)
+
 buildings_demand = {}
 buildings_demand_sum = {}
 buildings_lcoh = {}
@@ -851,12 +875,12 @@ for building in range(1, 40):
         for year in years:
             for hour in hours:
                 if building in buildings_gas:
-                    building_c_sum += buildings[building][year] * buildings_demand[building][hour] / eta_gas * (gas_price[scenario][year][hour] + co2_conversion * co2_price[scenario][year])
+                    building_c_sum += buildings[building][year] * demand_heat_variation[scenario][year] * buildings_demand[building][hour] / eta_gas * (gas_price[scenario][year][hour] + co2_conversion * co2_price[scenario][year])
                     
                 else:
-                    building_c_sum += buildings[building][year] * buildings_demand[building][hour] / eta_electricity * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
+                    building_c_sum += buildings[building][year] * demand_heat_variation[scenario][year] * buildings_demand[building][hour] / eta_electricity * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
             
-        buildings_lcoh_scenario.append(building_c_sum / (buildings_demand_sum[building] * sum(buildings[building].values())))
+        buildings_lcoh_scenario.append(building_c_sum / (buildings_demand_sum[building] * demand_heat_sum_variation[building]))
 
     buildings_lcoh[building] = buildings_lcoh_scenario
 
