@@ -16,9 +16,12 @@ def add_ites_equations(m=None):
 
     def ites_soc(m, s, y, h):
         if h == 0:
-            return m.v_ites_k_cool[s, y, h] == m.v_ites_k_cool_max[s, y] * m.p_ites_losses[s, y] * m.p_ites_init[s, y] + m.v_ites_q_cool_out[s, y, h] * m.p_ites_eta[s, y] - m.v_ites_q_cool_in[s, y, h] / m.p_ites_eta[s, y]
-        elif h == 8759:
-            return m.v_ites_k_cool[s, y, h] ==  m.v_ites_k_cool_max[s, y] * m.p_ites_end[s, y]
+            if y == 2025:
+                return m.v_ites_k_cool[s, y, h] == m.v_ites_k_cool_max[s, y] * m.p_ites_losses[s, y] * m.p_ites_init[s, y] + m.v_ites_q_cool_out[s, y, h] * m.p_ites_eta[s, y] - m.v_ites_q_cool_in[s, y, h] / m.p_ites_eta[s, y]
+            else:
+                return m.v_ites_k_cool[s, y, h] == m.v_ites_k_cool[s, y-5, 8759] * m.p_ites_losses[s, y] + m.v_ites_q_cool_out[s, y, h] * m.p_ites_eta[s, y] - m.v_ites_q_cool_in[s, y, h] / m.p_ites_eta[s, y]
+        elif h == 8759 and y == 2050:
+            return m.v_ites_k_cool[s, y, h] == m.v_ites_k_cool_max[s, y] * m.p_ites_end[s, y]
         else:
             return m.v_ites_k_cool[s, y, h] == m.v_ites_k_cool[s, y, h-1] * m.p_ites_losses[s, y] + m.v_ites_q_cool_out[s, y, h] * m.p_ites_eta[s, y] - m.v_ites_q_cool_in[s, y, h] / m.p_ites_eta[s, y]
     
