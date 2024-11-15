@@ -291,8 +291,6 @@ fig.update_layout(legend=dict(x=1.05, y=1, xanchor='left'), margin=dict(l=50, r=
 
 fig.show()
 
-
-
 cooling_demand_sorted_1 = sorted(cooling_demand[visualize_scenario][visualize_year], reverse=True)
 ac_cool_in_sorted_1 = sorted(ac_cool_in[visualize_scenario][visualize_year], reverse=True)
 ab_ct_cool_in_sorted_1 = sorted(ab_ct_cool_in[visualize_scenario][visualize_year], reverse=True)
