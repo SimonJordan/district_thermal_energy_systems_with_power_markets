@@ -48,7 +48,7 @@ heating_demand, cooling_demand, electricity_price, electricity_mean_price, elect
 
 # SERVER !!!
 from scenarios import define_scenarios
-data = define_scenarios(scenarios_weighting, year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_ites)
+data = define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, electricity_co2_share, electricity_mean_co2_share, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_gt, data_dgt, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_ites)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -179,21 +179,21 @@ model.con_demand_balance_cooling = py.Constraint(model.set_scenarios, model.set_
 #-----------------------------------------------------------------------------#
 
 def objective_function(m):
-    return sum(m.v_eb_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_st_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_wi_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_gt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gt_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_dgt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_dgt_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_ieh_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ieh_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_chp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_chp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_ac_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ac_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ac_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_ab_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_ct_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_ab_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ab_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_cp_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_cp_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
-           sum(m.v_ites_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours)
+    return sum(scenarios_weighting[s] * m.v_eb_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_eb_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_eb_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_st_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_st_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_st_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_wi_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_wi_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_wi_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_gt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_gt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_gt_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_dgt_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_dgt_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_dgt_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_ieh_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ieh_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ieh_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_chp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_chp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_chp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_ac_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ac_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ac_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_ab_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ab_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ab_ct_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_ab_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ab_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ab_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_cp_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_cp_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_cp_ct_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_cp_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_cp_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_cp_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ttes_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(scenarios_weighting[s] * m.v_ites_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ites_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(scenarios_weighting[s] * m.v_ites_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours)
 
 model.obj = py.Objective(expr=objective_function, sense=py.minimize)
 
@@ -256,7 +256,7 @@ save_output(model)
 #-----------------------------------------------------------------------------#
 
 from export import export_result
-export_result(model, data, scenarios, years, hours)
+export_result(model, data, scenarios, scenarios_weighting, years, hours)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #

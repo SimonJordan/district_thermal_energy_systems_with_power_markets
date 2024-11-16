@@ -2,14 +2,14 @@ import os
 import pandas as pd
 import pyomo.environ as py
 
-def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
+def export_result(m=None, data={}, scenarios=[], scenarios_weighting={}, years=[], hours=[]):
     cur_dir = os.path.dirname(__file__)
     path_to_result_folder = os.path.join(cur_dir, '..', 'results')
     path_to_file_scenarios = os.path.join(path_to_result_folder, 'scenarios.txt')
     
     with open(path_to_file_scenarios, 'w') as file:
         for scenario in scenarios:
-            scenario_weighting = data[scenario]['scenario_weighting']
+            scenario_weighting = scenarios_weighting[scenario]
             file.write(f'{scenario},{scenario_weighting}\n')
     
     for scenario in scenarios:
