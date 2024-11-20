@@ -712,7 +712,7 @@ lcoc_max = max(lcoc, key=lcoc.get)
 
 fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario], y=[lcoc[lcoc_min], lcoc[lcoc_min]], mode='lines', line=dict(color='rgb(253, 180, 98)'), name=lcoc_min, showlegend=False))
 fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario], y=[lcoc[lcoc_max], lcoc[lcoc_max]], mode='lines', line=dict(color='rgb(253, 180, 98)'), name=lcoc_max, showlegend=False))
-fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario, sum_cooling_demand_scenario, 0], y=[lcoc[lcoc_min], lcoc[lcoc_min], lcoc[lcoc_max], lcoc[lcoc_max]], name='DH-system', fill='toself', fillcolor='rgb(253, 180, 98)', opacity=0.5, line=dict(color='rgb(253, 180, 98)')))
+fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario, sum_cooling_demand_scenario, 0], y=[lcoc[lcoc_min], lcoc[lcoc_min], lcoc[lcoc_max], lcoc[lcoc_max]], name='DC-system', fill='toself', fillcolor='rgb(253, 180, 98)', opacity=0.5, line=dict(color='rgb(253, 180, 98)')))
 # , fillpattern=dict(shape="x",  fgcolor="black")
 
 for i in range(len(x_bar)-1):
