@@ -514,6 +514,8 @@ fig.show()
 
 #%% FIG 4 - LCOC
 
+#NOTIZ: building 35 kein cooling demand
+
 buildings = {1: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              2: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              3: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
@@ -547,12 +549,7 @@ buildings = {1: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              31: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              32: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              33: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             34: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             35: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             36: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             37: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             38: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             39: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1}}
+             34: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}}
 
 demand_cool_variation = {'1_reference': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
                          '2_high_electricity_prices': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
@@ -573,7 +570,7 @@ demand_cool_variation = {'1_reference': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 204
 
 demand_cool_sum_variation = {}
 
-for building in range(1, 40):
+for building in range(1, 35):
     variation = 0
     
     for scenario in scenarios:
@@ -593,12 +590,12 @@ buildings_lcoc = {}
 path_to_file_cooling_demand_building = os.path.join(path_to_input_folder, 'districts_cooling_demand_phase2.xlsx')
 df_cooling_demand_building = pd.read_excel(path_to_file_cooling_demand_building)
 
-for building in range(1, 40):
+for building in range(1, 35):
     cooling_demand_building = df_cooling_demand_building[f'cooling_demand_building_{building}'].tolist()
     buildings_demand[building] = cooling_demand_building
     buildings_demand_sum[building] = sum(cooling_demand_building)
 
-for building in range(1, 40):
+for building in range(1, 35):
     buildings_lcoc_scenario = []
     for scenario in scenarios:
         building_c_sum = 0
@@ -615,7 +612,7 @@ building_lcoc_max = []
 building_lcoc_min = []
 building_lcoc_avg = []
 
-for building in range(1, 40):
+for building in range(1, 35):
     building_lcoc_max.append(max(buildings_lcoc[building]))
     building_lcoc_min.append(min(buildings_lcoc[building]))
     building_lcoc_avg.append(np.mean([min(buildings_lcoc[building]), max(buildings_lcoc[building])]))
@@ -630,7 +627,7 @@ widths = []
 bases = []
 labels = []
 
-for building in range(1, 40):
+for building in range(1, 35):
     if building == 1:
         x_bar.append(buildings_demand_sum[building] / 2)
         
@@ -656,7 +653,7 @@ for scenario in scenarios:
                             ac_c_inv[scenario][year] + ab_ct_c_inv[scenario][year] + ab_hp_c_inv[scenario][year] + cp_ct_c_inv[scenario][year] + cp_hp_c_inv[scenario][year] * 1 / (1 + 1 + 1 / cp_seer) + ites_c_inv[scenario][year] + \
                             ac_c_fix[scenario][year] + ab_ct_c_fix[scenario][year] + ab_hp_c_fix[scenario][year] + cp_ct_c_fix[scenario][year] + cp_hp_c_fix[scenario][year] * 1 / (1 + 1 + 1 / cp_seer) + ites_c_fix[scenario][year]
                             
-    lcoc[scenario] = sum_cooling_cost / scenarios_weighting[scenario] / sum_cooling_demand
+    lcoc[scenario] = sum_cooling_cost / sum_cooling_demand
 
 fig = go.Figure()
 
@@ -710,7 +707,7 @@ lcoc_max = max(lcoc, key=lcoc.get)
 
 fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario], y=[lcoc[lcoc_min], lcoc[lcoc_min]], mode='lines', line=dict(color='rgb(253, 180, 98)'), name=lcoc_min, showlegend=False))
 fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario], y=[lcoc[lcoc_max], lcoc[lcoc_max]], mode='lines', line=dict(color='rgb(253, 180, 98)'), name=lcoc_max, showlegend=False))
-fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario, sum_cooling_demand_scenario, 0], y=[lcoc[lcoc_min], lcoc[lcoc_min], lcoc[lcoc_max], lcoc[lcoc_max]], name='DH-system', fill='toself', fillcolor='rgb(253, 180, 98)', opacity=0.5, line=dict(color='rgb(253, 180, 98)')))
+fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario, sum_cooling_demand_scenario, 0], y=[lcoc[lcoc_min], lcoc[lcoc_min], lcoc[lcoc_max], lcoc[lcoc_max]], name='DC-system', fill='toself', fillcolor='rgb(253, 180, 98)', opacity=0.5, line=dict(color='rgb(253, 180, 98)')))
 # , fillpattern=dict(shape="x",  fgcolor="black")
 
 for i in range(len(x_bar)-1):
