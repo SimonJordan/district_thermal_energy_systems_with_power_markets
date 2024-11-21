@@ -782,7 +782,7 @@ fig.show()
 buildings_gas = []
 buildings_electricity = [11, 16, 19, 30, 37]
 
-for building in range(1, 40):
+for building in range(1, 36):
     if building not in buildings_electricity:
         buildings_gas.append(building)
 
@@ -820,11 +820,7 @@ buildings = {1: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              32: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              33: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
              34: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             35: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             36: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             37: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             38: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             39: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1}}
+             35: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1}}
 
 demand_heat_variation = {'1_reference': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
                          '2_high_electricity_prices': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
@@ -845,7 +841,7 @@ demand_heat_variation = {'1_reference': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 204
 
 demand_heat_sum_variation = {}
 
-for building in range(1, 40):
+for building in range(1, 36):
     variation = 0
     
     for scenario in scenarios:
@@ -862,12 +858,12 @@ buildings_lcoh = {}
 path_to_file_heating_demand_building = os.path.join(path_to_input_folder, 'districts_heating_demand_phase2.xlsx')
 df_heating_demand_building = pd.read_excel(path_to_file_heating_demand_building)
 
-for building in range(1, 40):
+for building in range(1, 36):
     heating_demand_building = df_heating_demand_building[f'heating_demand_building_{building}'].tolist()
     buildings_demand[building] = heating_demand_building
     buildings_demand_sum[building] = sum(heating_demand_building)
 
-for building in range(1, 40):
+for building in range(1, 36):
     buildings_lcoh_scenario = []
     for scenario in scenarios:
         building_c_sum = 0
@@ -888,7 +884,7 @@ building_lcoh_max = []
 building_lcoh_min = []
 building_lcoh_avg = []
 
-for building in range(1, 40):
+for building in range(1, 36):
     building_lcoh_max.append(max(buildings_lcoh[building]))
     building_lcoh_min.append(min(buildings_lcoh[building]))
     building_lcoh_avg.append(np.mean([min(buildings_lcoh[building]), max(buildings_lcoh[building])]))
@@ -903,7 +899,7 @@ widths = []
 bases = []
 labels = []
 
-for building in range(1, 40):
+for building in range(1, 36):
     if building == 1:
         x_bar.append(buildings_demand_sum[building] / 2)
         
