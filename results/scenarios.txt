@@ -1,2 +1,2 @@
-1_reference
-2_high_electricity_prices
+1_reference,1
+2_high_electricity_prices,1

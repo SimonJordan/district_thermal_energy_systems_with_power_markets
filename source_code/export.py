@@ -243,8 +243,6 @@ def export_result(m=None, data={}, scenarios=[], scenarios_weighting={}, years=[
         hp_inv = []
         st_inv = []
         wi_inv = []
-        gt_inv = []
-        dgt_inv = []
         ieh_inv = []
         chp_inv = []
         ac_inv = []
@@ -259,8 +257,6 @@ def export_result(m=None, data={}, scenarios=[], scenarios_weighting={}, years=[
         hp_inv.append(py.value(m.v_hp_Q_inv[year]))
         st_inv.append(py.value(m.v_st_P_inv[year]))
         wi_inv.append(py.value(m.v_wi_Q_inv[year]))
-        gt_inv.append(py.value(m.v_gt_Q_inv[year]))
-        dgt_inv.append(py.value(m.v_dgt_Q_inv[year]))
         ieh_inv.append(py.value(m.v_ieh_Q_inv[year]))
         chp_inv.append(py.value(m.v_chp_Q_inv[year]))
         ac_inv.append(py.value(m.v_ac_Q_inv[year]))
@@ -271,7 +267,7 @@ def export_result(m=None, data={}, scenarios=[], scenarios_weighting={}, years=[
         ttes_inv.append(py.value(m.v_ttes_k_inv[year]))
         ites_inv.append(py.value(m.v_ites_k_inv[year]))
 
-        df_2.append(pd.DataFrame({'eb': eb_inv, 'hp': hp_inv, 'st': st_inv, 'wi': wi_inv, 'gt': gt_inv, 'dgt': dgt_inv, 'ieh': ieh_inv, 'chp': chp_inv, 'ac': ac_inv, 'ab_ct': ab_ct_inv, 'ab_hp': ab_hp_inv, 'cp_ct': cp_ct_inv, 'cp_hp': cp_hp_inv, 'ttes': ttes_inv, 'ites': ites_inv}))
+        df_2.append(pd.DataFrame({'eb': eb_inv, 'hp': hp_inv, 'st': st_inv, 'wi': wi_inv, 'ieh': ieh_inv, 'chp': chp_inv, 'ac': ac_inv, 'ab_ct': ab_ct_inv, 'ab_hp': ab_hp_inv, 'cp_ct': cp_ct_inv, 'cp_hp': cp_hp_inv, 'ttes': ttes_inv, 'ites': ites_inv}))
 
     with pd.ExcelWriter(path_to_inv_capacity) as writer:
         for df, year in zip(df_2, years):
