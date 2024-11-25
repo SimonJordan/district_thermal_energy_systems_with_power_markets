@@ -2,14 +2,14 @@ import pyomo.environ as py
 
 def add_ac_equations(m=None):
 
-    def ac_feed_in_max_bound(m, s, y, t):
-        return m.v_ac_q_cool_in[s, y, t] <= m.v_ac_Q_cool_max[s, y]
+    def ac_feed_in_max_bound(m, s, y, h):
+        return m.v_ac_q_cool_in[s, y, h] <= m.v_ac_Q_cool_max[s, y]
     
     # def ac_limit(m, s, y):
     #     return m.v_ac_Q_cool_max[s, y] <= 0
     
-    def ac_elec_cool(m, s, y, t):
-        return m.v_ac_q_cool_in[s, y, t] == m.v_ac_q_elec_consumption[s, y, t] * m.p_ac_eer[s, y, t]
+    def ac_elec_cool(m, s, y, h):
+        return m.v_ac_q_cool_in[s, y, h] == m.v_ac_q_elec_consumption[s, y, h] * m.p_ac_eer[s, y, h]
      
     def ac_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
@@ -26,8 +26,8 @@ def add_ac_equations(m=None):
         else:
             return m.v_ac_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_ac_c_inv[s, y] * 0.02
 
-    def ac_c_var(m, s, y, t):
-        return m.v_ac_c_var[s, y, t] == m.p_year_expansion_range[s, y] * (m.v_ac_q_elec_consumption[s, y, t] * (m.p_c_elec[s, y, t] + m.p_elec_co2_share[s, y, t] * m.p_c_co2[s, y]))
+    def ac_c_var(m, s, y, h):
+        return m.v_ac_c_var[s, y, h] == m.p_year_expansion_range[s, y] * (m.v_ac_q_elec_consumption[s, y, h] * m.p_c_elec[s, y, h])
 
     m.con_ac_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                rule = ac_feed_in_max_bound)
@@ -82,8 +82,8 @@ def add_ac_variables(m=None):
 
 def add_ac_parameters(m=None):
     
-    def init_ac_seer(m, s, y, t):
-        return m.data_values[s]['ac'][y]['p_ac_eer'][t]
+    def init_ac_seer(m, s, y, h):
+        return m.data_values[s]['ac'][y]['p_ac_eer'][h]
     
     def init_ac_c_inv(m, s, y):
         return m.data_values[s]['ac'][y]['p_ac_c_inv']
