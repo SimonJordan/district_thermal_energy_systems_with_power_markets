@@ -36,7 +36,7 @@ hours = list(range(8760))
 #-----------------------------------------------------------------------------#
 
 from initialize import initialize_parameters
-heating_demand, cooling_demand, electricity_price, electricity_mean_price, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_ites = initialize_parameters(years)
+heating_demand, cooling_demand, electricity_price, electricity_mean_price, gas_price, co2_price, data_eb, data_gb, data_hp, data_st, data_wi, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_btes, data_ites = initialize_parameters(years)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -46,7 +46,7 @@ heating_demand, cooling_demand, electricity_price, electricity_mean_price, gas_p
 
 # SERVER !!!
 from scenarios import define_scenarios
-data = define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, gas_price, co2_price, data_eb, data_hp, data_st, data_wi, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_ites)
+data = define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, gas_price, co2_price, data_eb, data_gb, data_hp, data_st, data_wi, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_btes, data_ites)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
@@ -82,6 +82,11 @@ from eb import add_eb_parameters, add_eb_variables, add_eb_equations
 add_eb_parameters(model)
 add_eb_variables(model)
 add_eb_equations(model)
+
+from gb import add_gb_parameters, add_gb_variables, add_gb_equations
+add_gb_parameters(model)
+add_gb_variables(model)
+add_gb_equations(model)
 
 from hp import add_hp_parameters, add_hp_variables, add_hp_equations
 add_hp_parameters(model)
@@ -140,6 +145,11 @@ add_ttes_parameters(model)
 add_ttes_variables(model)
 add_ttes_equations(model)
 
+from btes import add_btes_parameters, add_btes_variables, add_btes_equations
+add_btes_parameters(model)
+add_btes_variables(model)
+add_btes_equations(model)
+
 from ites import add_ites_parameters, add_ites_variables, add_ites_equations
 add_ites_parameters(model)
 add_ites_variables(model)
@@ -152,7 +162,7 @@ add_ites_equations(model)
 #-----------------------------------------------------------------------------#
 
 def demand_balance_heating(m, s, y, h):
-    return m.v_eb_q_heat_in[s, y, h] + m.v_hp_q_heat_in[s, y, h] + m.v_st_q_heat_in[s, y, h] + m.v_wi_q_heat_in[s, y, h] + m.v_ieh_q_heat_in[s, y, h] + m.v_chp_q_heat_in[s, y, h] - m.v_ab_ct_q_heat_out[s, y, h] + m.v_ab_hp_q_heat_in[s, y, h] - m.v_ab_hp_q_heat_out[s, y, h] + m.v_cp_hp_q_heat_in[s, y, h] + m.v_ttes_q_heat_in[s, y, h] - m.v_ttes_q_heat_out[s, y, h] == model.data_values[s]['heating'][y][h]
+    return m.v_eb_q_heat_in[s, y, h] + m.v_gb_q_heat_in[s, y, h] + m.v_hp_q_heat_in[s, y, h] + m.v_st_q_heat_in[s, y, h] + m.v_wi_q_heat_in[s, y, h] + m.v_ieh_q_heat_in[s, y, h] + m.v_chp_q_heat_in[s, y, h] - m.v_ab_ct_q_heat_out[s, y, h] + m.v_ab_hp_q_heat_in[s, y, h] - m.v_ab_hp_q_heat_out[s, y, h] + m.v_cp_hp_q_heat_in[s, y, h] + m.v_ttes_q_heat_in[s, y, h] - m.v_ttes_q_heat_out[s, y, h] + m.v_btes_q_heat_in[s, y, h] == model.data_values[s]['heating'][y][h]
 
 def demand_balance_cooling(m, s, y, h):
     return m.v_ac_q_cool_in[s, y, h] + m.v_ab_ct_q_cool_in[s, y, h] + m.v_ab_hp_q_cool_in[s, y, h] + m.v_cp_ct_q_cool_in[s, y, h] + m.v_cp_hp_q_cool_in[s, y, h] + m.v_ites_q_cool_in[s, y, h] - m.v_ites_q_cool_out[s, y, h] == model.data_values[s]['cooling'][y][h]
@@ -168,6 +178,7 @@ model.con_demand_balance_cooling = py.Constraint(model.set_scenarios, model.set_
 
 def objective_function(m):
     return sum(m.v_eb_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_eb_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_gb_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gb_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_gb_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
            sum(m.v_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
            sum(m.v_st_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_st_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
            sum(m.v_wi_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_wi_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \

@@ -22,7 +22,7 @@ def add_eb_equations(m=None):
     
     def eb_c_fix(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_eb_c_fix[s, y] == m.v_eb_c_fix[s, y-5] +  m.p_year_expansion_range[s, y] * m.v_eb_c_inv[s, y] * 0.02
+            return m.v_eb_c_fix[s, y] == m.v_eb_c_fix[s, y-5] + m.p_year_expansion_range[s, y] * m.v_eb_c_inv[s, y] * 0.02
         else:
             return m.v_eb_c_fix[s, y] == m.p_year_expansion_range[s, y] * m.v_eb_c_inv[s, y] * 0.02
     
