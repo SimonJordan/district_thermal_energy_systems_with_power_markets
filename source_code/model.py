@@ -190,6 +190,7 @@ def objective_function(m):
            sum(m.v_cp_ct_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_ct_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
            sum(m.v_cp_hp_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_cp_hp_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
            sum(m.v_ttes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ttes_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
+           sum(m.v_btes_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_btes_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_btes_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours) + \
            sum(m.v_ites_c_inv[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_fix[s, y] for s in m.set_scenarios for y in m.set_years) + sum(m.v_ites_c_var[s, y, h] for s in m.set_scenarios for y in m.set_years for h in m.set_hours)
 
 model.obj = py.Objective(expr=objective_function, sense=py.minimize)
