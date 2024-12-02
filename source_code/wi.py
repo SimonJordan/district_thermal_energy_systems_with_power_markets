@@ -15,7 +15,7 @@ def add_wi_equations(m=None):
         return m.v_wi_q_elec_in[s, y, h] == m.p_wi_q_waste[s, y] * m.p_wi_eta[s, y] * m.p_wi_h_waste[s, y] * m.p_wi_elec[s, y]
     
     def wi_split_heat(m, s, y, h):
-        return m.v_wi_q_heat[s, y, h] == m.v_wi_q_heat_in[s, y, h] + m.v_wi_q_heat_out[s, y, h]
+        return m.v_wi_q_heat[s, y, h] >= m.v_wi_q_heat_in[s, y, h] + m.v_wi_q_heat_out[s, y, h]
     
     def wi_Q_inv(m, y):
         if (y - 5) in m.set_years:
