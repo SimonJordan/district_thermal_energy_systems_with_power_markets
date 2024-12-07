@@ -24,8 +24,14 @@ def plot_result():
     path_to_file_bar_all_info_cooling = os.path.join(path_to_visualization_folder, 'bar_all_info_cooling.xlsx')
     path_to_file_bar_all_info_heating = os.path.join(path_to_visualization_folder, 'bar_all_info_heating.xlsx')
     
+    scenarios = []
+    scenarios_weighting = {}
+    
     with open(path_to_file_scenarios, 'r') as file:
-        scenarios = [line.strip() for line in file]
+        for line in file:
+            scenario, weighting = line.strip().split(',')
+            scenarios.append(scenario)
+            scenarios_weighting[scenario] = float(weighting)
     
     data_demand_cooling = pd.read_excel(path_to_file_demand_cooling)
     data_demand_heating = pd.read_excel(path_to_file_demand_heating)
@@ -196,9 +202,10 @@ def plot_result():
     scenarios_list = []
     values_list = []
     
+    path_to_file_inv_capacity = os.path.join(path_to_result_folder, '[all]_#_inv_capacity.xlsx')
+    
     for scenario in scenarios:
         path_to_file_elec_consumption = os.path.join(path_to_result_folder, f'[{scenario}]_#_elec_consumption.xlsx')
-        path_to_file_inv_capacity = os.path.join(path_to_result_folder, f'[{scenario}]_#_inv_capacity.xlsx')
         
         ites_capacity = 0
         ttes_capacity = 0
@@ -337,21 +344,27 @@ def plot_result():
         variation = 0
         
         for scenario in scenarios:
+            variation_scenario = 0
                 
             for year in years:
-                variation += buildings[building][year] * demand_cool_variation[scenario][year]
+                variation_scenario += buildings[building][year] * demand_cool_variation[scenario][year]
+                
+            variation += variation_scenario * scenarios_weighting[scenario]
         
-        demand_cool_sum_variation[building] = variation / len(scenarios)
+        demand_cool_sum_variation[building] = variation
     
     for building in range(1, 36):
         variation = 0
         
         for scenario in scenarios:
+            variation_scenario = 0
                 
             for year in years:
-                variation += buildings[building][year] * demand_heat_variation[scenario][year]
+                variation_scenario += buildings[building][year] * demand_heat_variation[scenario][year]
+                
+            variation += variation_scenario * scenarios_weighting[scenario]
         
-        demand_heat_sum_variation[building] = variation / len(scenarios)
+        demand_heat_sum_variation[building] = variation
     
     buildings_demand = {}
     buildings_demand_sum = {}
@@ -511,7 +524,7 @@ def plot_result():
     
     _factor = 1.35
     
-    data = pd.read_excel(os.path.join(path_to_result_folder, '[1_reference]_#_inv_capacity.xlsx'), sheet_name=None)
+    data = pd.read_excel(os.path.join(path_to_result_folder, '[all]_#_inv_capacity.xlsx'), sheet_name=None)
     _technologies = data["2025"].columns
     
     newly_installed_capacities = dict()
