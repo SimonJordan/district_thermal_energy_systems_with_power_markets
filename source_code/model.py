@@ -258,6 +258,15 @@ export_result(model, data, scenarios, years, hours)
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
+# plotting relevant results in the plots results                              #
+#                                                                             #
+#-----------------------------------------------------------------------------#
+
+from plot import plot_result
+plot_result()
+
+#-----------------------------------------------------------------------------#
+#                                                                             #
 # setting end point for runtime measurement                                   #
 #                                                                             #
 #-----------------------------------------------------------------------------#
@@ -268,7 +277,7 @@ hours_3 = elapsed_time_3 // 3600
 minutes_3 = (elapsed_time_3 % 3600) // 60
 seconds_3 = elapsed_time_3 % 60
 
-print('Script data saving/exporting time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_3, minutes_3, seconds_3))
+print('Script data saving/exporting/plotting time: {:.0f} h ; {:.0f} min ; {:.0f} sec'.format(hours_3, minutes_3, seconds_3))
 
 final_seconds = seconds_1 + seconds_2 + seconds_3
 final_minutes = minutes_1 + minutes_2 + minutes_3 + final_seconds // 60
