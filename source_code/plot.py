@@ -47,7 +47,8 @@ def plot_result():
     
     eta_gas = 0.9
     co2_conversion = 0.2
-    eta_electricity = 0.99
+    eta_electricity_cooling = 3
+    eta_electricity_heating = 0.99
     
     electricity_price = {}
     electricity_co2_share = {}
@@ -369,7 +370,7 @@ def plot_result():
             
             for year in years:
                 for hour in hours:
-                    building_c_sum += buildings[building][year] * demand_cool_variation[scenario][year] * buildings_demand[building][hour] / eta_electricity * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
+                    building_c_sum += buildings[building][year] * demand_cool_variation[scenario][year] * buildings_demand[building][hour] / eta_electricity_cooling * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
                 
             buildings_lcoc_scenario.append(building_c_sum / (buildings_demand_sum[building] * demand_cool_sum_variation[building]))
     
@@ -430,7 +431,7 @@ def plot_result():
                         building_c_sum += buildings[building][year] * demand_heat_variation[scenario][year] * buildings_demand[building][hour] / eta_gas * (gas_price[scenario][year][hour] + co2_conversion * co2_price[scenario][year])
                         
                     else:
-                        building_c_sum += buildings[building][year] * demand_heat_variation[scenario][year] * buildings_demand[building][hour] / eta_electricity * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
+                        building_c_sum += buildings[building][year] * demand_heat_variation[scenario][year] * buildings_demand[building][hour] / eta_electricity_heating * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
                 
             buildings_lcoh_scenario.append(building_c_sum / (buildings_demand_sum[building] * demand_heat_sum_variation[building]))
     
