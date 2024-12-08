@@ -420,7 +420,7 @@ def plot_result():
         labels.append(f'{building}')
         index += 1
     
-    mean_cool = {key: sum(values) / len(values) for key, values in buildings_lcoc.items()}
+    mean_cool = {key: sum(value * weighting for value, weighting in zip(values, scenarios_weighting.values())) / sum(scenarios_weighting.values()) for key, values in buildings_lcoc.items()}
     mean_cool_sorted = {key: mean_cool[key] for key in building_lcoc_max_index if key in mean_cool}
     
     output_bar_cooling = pd.DataFrame({'x_bar': x_bar, 'y_bar': y_bar, 'widths': widths, 'bases': bases, 'labels': labels, 'mean': mean_cool_sorted.values()})
@@ -484,7 +484,7 @@ def plot_result():
         labels.append(f'{building}')
         index += 1
     
-    mean_heat = {key: sum(values) / len(values) for key, values in buildings_lcoh.items()}
+    mean_heat = {key: sum(value * weighting for value, weighting in zip(values, scenarios_weighting.values())) / sum(scenarios_weighting.values()) for key, values in buildings_lcoh.items()}
     mean_heat_sorted = {key: mean_heat[key] for key in building_lcoh_max_index if key in mean_heat}
         
     output_bar_heating = pd.DataFrame({'x_bar': x_bar, 'y_bar': y_bar, 'widths': widths, 'bases': bases, 'labels': labels, 'mean': mean_heat_sorted.values()})
