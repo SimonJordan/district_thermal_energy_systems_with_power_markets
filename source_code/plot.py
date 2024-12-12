@@ -23,6 +23,8 @@ def plot_result():
     path_to_file_lcoh = os.path.join(path_to_visualization_folder, 'lcoh.xlsx')
     path_to_file_bar_all_info_cooling = os.path.join(path_to_visualization_folder, 'bar_all_info_cooling.xlsx')
     path_to_file_bar_all_info_heating = os.path.join(path_to_visualization_folder, 'bar_all_info_heating.xlsx')
+    path_to_file_mean_all_info_cooling = os.path.join(path_to_visualization_folder, 'mean_all_info_cooling.xlsx')
+    path_to_file_mean_all_info_heating = os.path.join(path_to_visualization_folder, 'mean_all_info_heating.xlsx')
     
     with open(path_to_file_scenarios, 'r') as file:
         scenarios = [line.strip() for line in file]
@@ -388,6 +390,7 @@ def plot_result():
     building_lcoc_max_index = [i + 1 for i in sorted(range(len(building_lcoc_max)), key=lambda i: building_lcoc_max[i], reverse=True)]
     
     x_bar = []
+    x_mean = []
     y_bar = []
     widths = []
     bases = []
@@ -408,11 +411,25 @@ def plot_result():
         index += 1
     
     mean_cool = {key: sum(values) / len(values) for key, values in buildings_lcoc.items()}
-    mean_cool_sorted = {key: mean_cool[key] for key in building_lcoc_max_index if key in mean_cool}
+    #mean_cool_sorted = {key: mean_cool[key] for key in building_lcoc_max_index if key in mean_cool}
+    mean_cool_sorted = {key: value for key, value in sorted(mean_cool.items(), key=lambda item: item[1], reverse=True)}
     
-    output_bar_cooling = pd.DataFrame({'x_bar': x_bar, 'y_bar': y_bar, 'widths': widths, 'bases': bases, 'labels': labels, 'mean': mean_cool_sorted.values()})
+    index = 0
+    
+    for building in list(mean_cool_sorted.keys()):
+        if building == list(mean_cool_sorted.keys())[0]:
+            x_mean.append(buildings_demand_sum[building] / 2)
+            
+        else:
+            x_mean.append(x_mean[index-1] + buildings_demand_sum[list(mean_cool_sorted.keys())[index-1]] / 2 + buildings_demand_sum[building] / 2)
+
+        index += 1
+    
+    output_bar_cooling = pd.DataFrame({'x_bar': x_bar, 'y_bar': y_bar, 'widths': widths, 'bases': bases, 'labels': labels})
+    output_mean_cooling = pd.DataFrame({'labels': list(mean_cool_sorted.keys()), 'x_mean': x_mean, 'y_mean': list(mean_cool_sorted.values())})
     
     output_bar_cooling.to_excel(path_to_file_bar_all_info_cooling, index=True)
+    output_mean_cooling.to_excel(path_to_file_mean_all_info_cooling, index=True)
     
     buildings_demand = {}
     buildings_demand_sum = {}
@@ -452,6 +469,7 @@ def plot_result():
     building_lcoh_max_index = [i + 1 for i in sorted(range(len(building_lcoh_max)), key=lambda i: building_lcoh_max[i], reverse=True)]
     
     x_bar = []
+    x_mean = []
     y_bar = []
     widths = []
     bases = []
@@ -472,11 +490,25 @@ def plot_result():
         index += 1
     
     mean_heat = {key: sum(values) / len(values) for key, values in buildings_lcoh.items()}
-    mean_heat_sorted = {key: mean_heat[key] for key in building_lcoh_max_index if key in mean_heat}
-        
-    output_bar_heating = pd.DataFrame({'x_bar': x_bar, 'y_bar': y_bar, 'widths': widths, 'bases': bases, 'labels': labels, 'mean': mean_heat_sorted.values()})
+    #mean_heat_sorted = {key: mean_heat[key] for key in building_lcoh_max_index if key in mean_heat}
+    mean_heat_sorted = {key: value for key, value in sorted(mean_heat.items(), key=lambda item: item[1], reverse=True)}
+   
+    index = 0
+    
+    for building in list(mean_heat_sorted.keys()):
+        if building == list(mean_heat_sorted.keys())[0]:
+            x_mean.append(buildings_demand_sum[building] / 2)
+            
+        else:
+            x_mean.append(x_mean[index-1] + buildings_demand_sum[list(mean_heat_sorted.keys())[index-1]] / 2 + buildings_demand_sum[building] / 2)
+
+        index += 1
+    
+    output_bar_heating = pd.DataFrame({'x_bar': x_bar, 'y_bar': y_bar, 'widths': widths, 'bases': bases, 'labels': labels})
+    output_mean_heating = pd.DataFrame({'labels': list(mean_heat_sorted.keys()), 'x_mean': x_mean, 'y_mean': list(mean_heat_sorted.values())})
     
     output_bar_heating.to_excel(path_to_file_bar_all_info_heating, index=True)
+    output_mean_heating.to_excel(path_to_file_mean_all_info_heating, index=True)
     
     #%% original
     # import pyam as py
@@ -1204,6 +1236,140 @@ def plot_result():
     plt.tight_layout()
     
     fig.savefig(os.path.join(path_to_plot_folder, "Levelized_cost_of_cooling.pdf"), dpi=1000)
+    
+    ###############################################################################
+    ####### MEAN LEVELIZED COST OF HEATING COMPARISON
+    ###############################################################################
+    
+    mean_all_info = pd.read_excel(os.path.join(path_to_visualization_folder, 'mean_all_info_heating.xlsx'), sheet_name="Sheet1", index_col=0)
+    lcoh = pd.read_excel(os.path.join(path_to_visualization_folder, 'lcoh.xlsx'), sheet_name="Sheet1", index_col=0)
+    sum_heating_demand_scenario = pd.read_excel(os.path.join(path_to_visualization_folder, 'sum_heating_demand_scenario.xlsx'), sheet_name="Sheet1", index_col=0)["sum_heating_demand_scenario"]
+    
+    
+    fig, ax = plt.subplots(figsize=(_factor * 6, _factor * 3))
+    
+    lcoh_mean = np.mean(lcoh.values.flatten().tolist())
+        
+    _color = "#F09319"
+    ax.plot(
+        [0, sum_heating_demand_scenario.iloc[0].item()],
+        [lcoh_mean, lcoh_mean],
+        color=_color,
+        linestyle="solid",
+        label="District heating",
+    )
+    
+    x_value = mean_all_info['x_mean']
+    y_value = mean_all_info['y_mean']
+    
+    ax.plot(
+        x_value,
+        y_value,
+        marker='d',            
+        color="#3D5300",
+        linestyle="solid",
+        linewidth=1.0,
+        zorder=0,
+        label="Buildings 1-35",
+    )
+    
+    
+    ax.grid(which="major", axis="y", color="#758D99", alpha=0.2, zorder=1)
+    
+    _legend = ax.legend(
+        loc="upper right",
+        facecolor="white",
+        fontsize=14,
+        handlelength=1,
+        handletextpad=0.5,
+        ncol=1,
+        borderpad=0.5,
+        columnspacing=1,
+        edgecolor="black",
+        frameon=True,
+        bbox_to_anchor=(1, 1),
+        shadow=False,
+        framealpha=1,
+    )
+    
+    # ax.set_ylim([0, 4.15])
+    
+    formatter = ticker.ScalarFormatter(useMathText=True)
+    formatter.set_scientific(True)
+    formatter.set_powerlimits((-3, 4))
+    
+    ax.set_ylabel("Mean LCOH (in $/MWh)", fontsize=14)
+    
+    plt.tight_layout()
+    
+    fig.savefig(os.path.join(path_to_plot_folder, "Mean_levelized_cost_of_heating.pdf"), dpi=1000)
+    
+    
+    ###############################################################################
+    ####### MEAN LEVELIZED COST OF COOLING COMPARISON
+    ###############################################################################
+    
+    mean_all_info = pd.read_excel(os.path.join(path_to_visualization_folder, 'mean_all_info_cooling.xlsx'), sheet_name="Sheet1", index_col=0)
+    lcoh = pd.read_excel(os.path.join(path_to_visualization_folder, 'lcoc.xlsx'), sheet_name="Sheet1", index_col=0)
+    sum_heating_demand_scenario = pd.read_excel(os.path.join(path_to_visualization_folder, 'sum_cooling_demand_scenario.xlsx'), sheet_name="Sheet1", index_col=0)["sum_cooling_demand_scenario"]
+    
+    fig, ax = plt.subplots(figsize=(_factor * 6, _factor * 3))
+    
+    lcoh_mean = np.mean(lcoh.values.flatten().tolist())
+    
+    _color = "#FFE31A"
+    ax.plot(
+        [0, sum_heating_demand_scenario.iloc[0].item()],
+        [lcoh_mean, lcoh_mean],
+        color=_color,
+        linestyle="solid",
+        label="District cooling",
+    )
+    
+    _dict_linewidth = {0: 0}
+    
+    x_value = mean_all_info['x_mean']
+    y_value = mean_all_info['y_mean']
+    
+    ax.plot(
+        x_value,
+        y_value,
+        marker='d',
+        color="#3A6D8C",
+        linestyle="solid",
+        linewidth=1.0,
+        zorder=0,
+        label="Buildings 1-35",
+    )
+    
+    
+    ax.grid(which="major", axis="y", color="#758D99", alpha=0.2, zorder=1)
+    
+    _legend = ax.legend(
+        loc="upper right",
+        facecolor="white",
+        fontsize=14,
+        handlelength=1,
+        handletextpad=0.5,
+        ncol=1,
+        borderpad=0.5,
+        columnspacing=1,
+        edgecolor="black",
+        frameon=True,
+        bbox_to_anchor=(1, 1),
+        shadow=False,
+        framealpha=1,
+    )
+    
+    formatter = ticker.ScalarFormatter(useMathText=True)
+    formatter.set_scientific(True)
+    formatter.set_powerlimits((-3, 4))
+    
+    ax.set_ylabel("Mean LCOC (in $/MWh)", fontsize=14)
+    
+    plt.tight_layout()
+    
+    fig.savefig(os.path.join(path_to_plot_folder, "Mean_levelized_cost_of_cooling.pdf"), dpi=1000)
     
     ###############################################################################
     ####### SCATTER PLOT
