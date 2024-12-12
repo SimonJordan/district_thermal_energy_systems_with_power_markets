@@ -423,11 +423,9 @@ def plot_result():
         labels.append(f'{building}')
         index += 1
     
-    mean_cool = {key: sum(values) / len(values) for key, values in buildings_lcoc.items()}
+    mean_cool = {key: sum(value * weighting for value, weighting in zip(values, scenarios_weighting.values())) / sum(scenarios_weighting.values()) for key, values in buildings_lcoc.items()}
     #mean_cool_sorted = {key: mean_cool[key] for key in building_lcoc_max_index if key in mean_cool}
     mean_cool_sorted = {key: value for key, value in sorted(mean_cool.items(), key=lambda item: item[1], reverse=True)}
-    mean_cool = {key: sum(value * weighting for value, weighting in zip(values, scenarios_weighting.values())) / sum(scenarios_weighting.values()) for key, values in buildings_lcoc.items()}
-    mean_cool_sorted = {key: mean_cool[key] for key in building_lcoc_max_index if key in mean_cool}
     
     index = 0
     
@@ -504,12 +502,10 @@ def plot_result():
         labels.append(f'{building}')
         index += 1
     
-    mean_heat = {key: sum(values) / len(values) for key, values in buildings_lcoh.items()}
+    mean_heat = {key: sum(value * weighting for value, weighting in zip(values, scenarios_weighting.values())) / sum(scenarios_weighting.values()) for key, values in buildings_lcoh.items()}
     #mean_heat_sorted = {key: mean_heat[key] for key in building_lcoh_max_index if key in mean_heat}
     mean_heat_sorted = {key: value for key, value in sorted(mean_heat.items(), key=lambda item: item[1], reverse=True)}
-    mean_heat = {key: sum(value * weighting for value, weighting in zip(values, scenarios_weighting.values())) / sum(scenarios_weighting.values()) for key, values in buildings_lcoh.items()}
-    mean_heat_sorted = {key: mean_heat[key] for key in building_lcoh_max_index if key in mean_heat}
-   
+    
     index = 0
     
     for building in list(mean_heat_sorted.keys()):
@@ -1265,7 +1261,7 @@ def plot_result():
     
     fig, ax = plt.subplots(figsize=(_factor * 6, _factor * 3))
     
-    lcoh_mean = np.mean(lcoh.values.flatten().tolist())
+    lcoh_mean = sum(value * weighting for value, weighting in zip(lcoh.values.flatten().tolist(), scenarios_weighting.values())) / sum(scenarios_weighting.values())
         
     _color = "#F09319"
     ax.plot(
@@ -1332,7 +1328,7 @@ def plot_result():
     
     fig, ax = plt.subplots(figsize=(_factor * 6, _factor * 3))
     
-    lcoh_mean = np.mean(lcoh.values.flatten().tolist())
+    lcoh_mean = sum(value * weighting for value, weighting in zip(lcoh.values.flatten().tolist(), scenarios_weighting.values())) / sum(scenarios_weighting.values())
     
     _color = "#FFE31A"
     ax.plot(
