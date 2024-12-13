@@ -655,9 +655,9 @@ def plot_result():
     _bottom = np.zeros(len(x_axis))
     for _key, _label, _color in [
         ["eb", "Electric boiler", "#E6D9A2"],
-        ["hp", "Air-sourced HP", "#CDC1FF"],
+        ["hp", "Air-source HP", "#CDC1FF"],
         ["ieh", "Excess heat", "#c51b8a"],
-        ["gt", "Geothermal", "#7a0177"],
+        ["gt", "Geothermal HP", "#7a0177"],
     ]:
         if _key in newly_installed_capacities.keys():
             ax.bar(
@@ -888,11 +888,11 @@ def plot_result():
         elif _name == "ieh":
             sorted_keys[_index] = "Excess heat"
         elif _name == "gt":
-            sorted_keys[_index] = "Geothermal"
+            sorted_keys[_index] = "Geothermal HP"
         elif _name == "cp_hp+":
-            sorted_keys[_index] = "HP (C)"
+            sorted_keys[_index] = "Compressor (HP)"
         elif _name == "hp":
-            sorted_keys[_index] = "HP (AS)"
+            sorted_keys[_index] = "Air-source HP"
         elif _name == "ttes+":
             sorted_keys[_index] = "Tank TES"
     
@@ -1159,6 +1159,7 @@ def plot_result():
     formatter.set_powerlimits((-3, 4))
     
     ax.set_ylabel("Min-Max range of LCOH (in $/MWh)", fontsize=14)
+    ax.set_xlabel("Annual building heat demand (in MWh)", fontsize=14)
     
     plt.tight_layout()
     
@@ -1245,6 +1246,7 @@ def plot_result():
     formatter.set_powerlimits((-3, 4))
     
     ax.set_ylabel("Min-Max range of LCOC (in $/MWh)", fontsize=14)
+    ax.set_xlabel("Annual building cold demand (in MWh)", fontsize=14)
     
     plt.tight_layout()
     
@@ -1312,6 +1314,7 @@ def plot_result():
     formatter.set_powerlimits((-3, 4))
     
     ax.set_ylabel("Mean LCOH (in $/MWh)", fontsize=14)
+    ax.set_xlabel("Annual building heat demand (in MWh)", fontsize=14)
     
     plt.tight_layout()
     
@@ -1379,6 +1382,7 @@ def plot_result():
     formatter.set_powerlimits((-3, 4))
     
     ax.set_ylabel("Mean LCOC (in $/MWh)", fontsize=14)
+    ax.set_xlabel("Annual building cold demand (in MWh)", fontsize=14)
     
     plt.tight_layout()
     
@@ -1522,7 +1526,7 @@ def plot_result():
         ].item()
         if index == supply_heat.index[-1]:
             ax.scatter(
-                _x, _y, color="#5A6C57", marker=marker_dict.get(row.Year, "o"), s=16, zorder=3, label='Cost-effective'
+                _x, _y, color="#5A6C57", marker=marker_dict.get(row.Year, "o"), s=16, zorder=3, label='Scenarios'
             )
         else:
             ax.scatter(
@@ -1603,7 +1607,7 @@ def plot_result():
                 "Values",
             ].item()
             ax.scatter(
-                _x, _y, color="#5A6C57", marker=marker_dict.get(row.Year, "o"), s=16, zorder=3, label='Cost-effective'
+                _x, _y, color="#5A6C57", marker=marker_dict.get(row.Year, "o"), s=16, zorder=3, label='Scenarios'
             )
             _array1.append(_x)
             _array2.append(_y)
