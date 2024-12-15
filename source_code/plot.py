@@ -1,5 +1,5 @@
 def plot_result():
-    #%% create visualization data
+    #%% set paths
     import os
     import numpy as np
     import pandas as pd
@@ -26,6 +26,7 @@ def plot_result():
     path_to_file_mean_all_info_cooling = os.path.join(path_to_visualization_folder, 'mean_all_info_cooling.xlsx')
     path_to_file_mean_all_info_heating = os.path.join(path_to_visualization_folder, 'mean_all_info_heating.xlsx')
     
+    #%% create visualization data
     scenarios = []
     scenarios_weighting = {}
     
@@ -638,7 +639,7 @@ def plot_result():
     
     ax.yaxis.set_major_formatter(formatter)
     
-    ax.set_ylabel("Cooling generation additions (in kW)", fontsize=14)
+    ax.set_ylabel("Cold generation additions (in kW)", fontsize=15)
     
     plt.tight_layout()
     fig.savefig(os.path.join(path_to_plot_folder, "Newly_installed_cooling_generation_capacities.pdf"), dpi=1000)
@@ -701,7 +702,7 @@ def plot_result():
     
     ax.yaxis.set_major_formatter(formatter)
     
-    ax.set_ylabel("Heat generation additions (in kW)", fontsize=14)
+    ax.set_ylabel("Heat generation additions (in kW)", fontsize=15)
     
     plt.tight_layout()
     fig.savefig(os.path.join(path_to_plot_folder, "Newly_installed_heating_generation_capacities.pdf"), dpi=1000)
@@ -764,7 +765,7 @@ def plot_result():
     
     ax.set_ylim([0, 7.25])
     
-    ax.set_ylabel("Cooling storage additions (in MWh)", fontsize=14)
+    ax.set_ylabel("Cold storage additions (in MWh)", fontsize=15)
     
     plt.tight_layout()
     fig.savefig(os.path.join(path_to_plot_folder, "Newly_installed_cooling_storage_capacities.pdf"), dpi=1000)
@@ -825,7 +826,7 @@ def plot_result():
     
     ax.yaxis.set_major_formatter(formatter)
     
-    ax.set_ylabel("Heating storage additions (in MWh)", fontsize=14)
+    ax.set_ylabel("Heat storage additions (in MWh)", fontsize=15)
     
     plt.tight_layout()
     fig.savefig(os.path.join(path_to_plot_folder, "Newly_installed_heating_storage_capacities.pdf"), dpi=1000)
@@ -851,7 +852,7 @@ def plot_result():
         label="Demand",
     )
     
-    ax.set_ylabel("Heating duration curve (in MWh)", fontsize=14)
+    ax.set_ylabel("Heat duration curve (in MWh)", fontsize=15)
     
     ax.grid(which="major", axis="y", color="#758D99", alpha=0.2, zorder=1)
     
@@ -970,7 +971,7 @@ def plot_result():
         label="Demand",
     )
     
-    ax.set_ylabel("Cooling duration curve (in MWh)", fontsize=14)
+    ax.set_ylabel("Cold duration curve (in MWh)", fontsize=15)
     
     ax.grid(which="major", axis="y", color="#758D99", alpha=0.2, zorder=1)
     
