@@ -762,7 +762,7 @@ def plot_result():
     
     ax.yaxis.set_major_formatter(formatter)
     
-    ax.set_ylim([0, 6.25])
+    ax.set_ylim([0, 7.25])
     
     ax.set_ylabel("Cooling storage additions (in MWh)", fontsize=14)
     
@@ -943,7 +943,7 @@ def plot_result():
     formatter.set_scientific(True)
     formatter.set_powerlimits((-3, 4))
     
-    ax.set_ylim([0, 4.15])
+    ax.set_ylim([0, 4.5])
     
     plt.tight_layout()
     fig.savefig(os.path.join(path_to_plot_folder, "Load_duration_curve_heating.pdf"), dpi=1000)
@@ -1067,7 +1067,7 @@ def plot_result():
         framealpha=1,
     )
     
-    ax.set_ylim([0, 4.15])
+    ax.set_ylim([0, 4.5])
     
     formatter = ticker.ScalarFormatter(useMathText=True)
     formatter.set_scientific(True)
@@ -1564,8 +1564,8 @@ def plot_result():
     formatter.set_powerlimits((-3, 4))
     ax.yaxis.set_major_formatter(formatter)
     ax.xaxis.set_major_formatter(formatter)
-    ax.set_xlim([0, 8000])
-    ax.set_ylim([0, 1500])
+    ax.set_xlim([0, 8900])
+    ax.set_ylim([0, 2000])
     
     _legend = ax.legend(
         loc="lower right",
@@ -1654,8 +1654,8 @@ def plot_result():
     ax.yaxis.set_major_formatter(formatter)
     ax.xaxis.set_major_formatter(formatter)
     
-    ax.set_xlim([0, 8000])
-    ax.set_ylim([0, 1500])
+    ax.set_xlim([0, 8900])
+    ax.set_ylim([0, 2000])
     
     _legend = ax.legend(
         loc="lower right",
