@@ -2,17 +2,15 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     data = {}
     
     shifted_co2_price = {}
-    stored_co2_price = []
-    
+    stored_co2_price = list(co2_price.values())
+    i = 0
+        
     for year, value in co2_price.items():
         if year in [2025, 2030]:
             shifted_co2_price[year] = value * 0
-            stored_co2_price.append(value)
         else:
-            if stored_co2_price == []:
-                shifted_co2_price[year] = value
-            else:
-                shifted_co2_price[year] = stored_co2_price.pop(0)
+            shifted_co2_price[year] = stored_co2_price[i]
+            i += 1
     
     data['1_reference'] = {'year_expansion_range': year_expansion_range,
                            'heating': heating_demand,
