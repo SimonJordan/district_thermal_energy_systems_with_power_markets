@@ -1,19 +1,6 @@
 def define_scenarios(year_expansion_range, heating_demand, cooling_demand, electricity_price, electricity_mean_price, gas_price, co2_price, data_eb, data_gb, data_hp, data_st, data_wi, data_ieh, data_chp, data_ac, data_ab, data_cp, data_ttes, data_btes, data_ites):
     data = {}
-    
-    shifted_co2_price = {}
-    stored_co2_price = []
-    
-    for year, value in co2_price.items():
-        if year in [2025, 2030]:
-            shifted_co2_price[year] = value * 0
-            stored_co2_price.append(value)
-        else:
-            if stored_co2_price == []:
-                shifted_co2_price[year] = value
-            else:
-                shifted_co2_price[year] = stored_co2_price.pop(0)
-    
+        
     data['1_reference'] = {'year_expansion_range': year_expansion_range,
                            'heating': heating_demand,
                            'cooling': cooling_demand,
@@ -266,49 +253,28 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                'btes': data_btes,
     #                                'ites': data_ites}
     
-    # data['13_zero_co2_price'] = {'year_expansion_range': year_expansion_range,
-    #                              'heating': heating_demand,
-    #                              'cooling': cooling_demand,
-    #                              'electricity_price': electricity_price,
-    #                              'electricity_mean_price': electricity_mean_price,
-    #                              'gas_price': gas_price,
-    #                              'co2_price': {year: value * 0 for year, value in co2_price.items()},
-    #                              'eb': data_eb,
-    #                              'gb': data_gb,
-    #                              'hp': data_hp,
-    #                              'st': data_st,
-    #                              'wi': data_wi,
-    #                              'ieh': data_ieh,
-    #                              'chp': data_chp,
-    #                              'ac': data_ac,
-    #                              'ab': data_ab,
-    #                              'cp': data_cp,
-    #                              'ttes': data_ttes,
-    #                              'btes': data_btes,
-    #                              'ites': data_ites}
+    # data['13_stagnating_co2_pricing'] = {'year_expansion_range': year_expansion_range,
+    #                                      'heating': heating_demand,
+    #                                      'cooling': cooling_demand,
+    #                                      'electricity_price': electricity_price,
+    #                                      'electricity_mean_price': electricity_mean_price,
+    #                                      'gas_price': gas_price,
+    #                                      'co2_price': {year: co2_price[min(co2_price.keys())] for year in co2_price.keys()},
+    #                                      'eb': data_eb,
+    #                                      'gb': data_gb,
+    #                                      'hp': data_hp,
+    #                                      'st': data_st,
+    #                                      'wi': data_wi,
+    #                                      'ieh': data_ieh,
+    #                                      'chp': data_chp,
+    #                                      'ac': data_ac,
+    #                                      'ab': data_ab,
+    #                                      'cp': data_cp,
+    #                                      'ttes': data_ttes,
+    #                                      'btes': data_btes,
+    #                                      'ites': data_ites}
     
-    # data['14_delayed_co2_pricing'] = {'year_expansion_range': year_expansion_range,
-    #                                   'heating': heating_demand,
-    #                                   'cooling': cooling_demand,
-    #                                   'electricity_price': electricity_price,
-    #                                   'electricity_mean_price': electricity_mean_price,
-    #                                   'gas_price': gas_price,
-    #                                   'co2_price': {year: value for year, value in shifted_co2_price.items()},
-    #                                   'eb': data_eb,
-    #                                   'gb': data_gb,
-    #                                   'hp': data_hp,
-    #                                   'st': data_st,
-    #                                   'wi': data_wi,
-    #                                   'ieh': data_ieh,
-    #                                   'chp': data_chp,
-    #                                   'ac': data_ac,
-    #                                   'ab': data_ab,
-    #                                   'cp': data_cp,
-    #                                   'ttes': data_ttes,
-    #                                   'btes': data_btes,
-    #                                   'ites': data_ites}
-    
-    # data['15_ambitious_co2_pricing'] = {'year_expansion_range': year_expansion_range,
+    # data['14_ambitious_co2_pricing'] = {'year_expansion_range': year_expansion_range,
     #                                     'heating': heating_demand,
     #                                     'cooling': cooling_demand,
     #                                     'electricity_price': electricity_price,
@@ -329,7 +295,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                     'btes': data_btes,
     #                                     'ites': data_ites}
     
-    # data['16_expiring_support_res'] = {'year_expansion_range': year_expansion_range,
+    # data['15_expiring_support_res'] = {'year_expansion_range': year_expansion_range,
     #                                    'heating': heating_demand,
     #                                    'cooling': cooling_demand,
     #                                    'electricity_price': electricity_price,
