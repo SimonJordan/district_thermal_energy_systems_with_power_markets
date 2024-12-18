@@ -7,7 +7,6 @@ import plotly.subplots as sp
 
 # assumptions
 eta_electricity = 3
-co2_conversion = 0.2
 cp_seer = 5
 cp_hp_cop = 6.0525
 
@@ -514,134 +513,6 @@ fig.show()
 
 #%% FIG 4 - LCOC
 
-buildings = {1: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             2: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             3: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             4: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             5: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             6: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             7: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             8: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             9: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             10: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             11: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             12: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             13: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             14: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             15: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             16: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             17: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             18: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             19: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             20: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             21: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             22: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             23: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             24: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             25: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             26: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             27: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             28: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             29: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             30: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             31: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             32: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             33: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             34: {2025: 0, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             35: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             36: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             37: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             38: {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1},
-             39: {2025: 0, 2030: 0, 2035: 5, 2040: 5, 2045: 5, 2050: 1}}
-
-demand_cool_variation = {'1_reference': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '2_high_electricity_prices': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '3_low_electricity_prices': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '4_flexible_energy_market': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '5_energy_congestion': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '6_green_friendly': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '7_low_gas_demand': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '8_natural_gas_friendly': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '9_cold_winters': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '10_hot_summers': {2025: 1, 2030: 1.1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '11_warm_summers': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1.05, 2050: 1.05},
-                         '12_moderate_climate': {2025: 0.9, 2030: 0.9, 2035: 0.9, 2040: 0.9, 2045: 0.9, 2050: 0.9},
-                         '13_zero_co2_price': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '14_delayed_co2_pricing': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '15_ambitious_co2_pricing': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1},
-                         '16_expiring_support_res': {2025: 1, 2030: 1, 2035: 1, 2040: 1, 2045: 1, 2050: 1}}
-
-demand_cool_sum_variation = {}
-
-for building in range(1, 40):
-    variation = 0
-    
-    for scenario in scenarios:
-        variation_scenario = 0
-            
-        for year in years:
-            variation_scenario += buildings[building][year] * demand_cool_variation[scenario][year]
-            
-        variation += variation_scenario * scenarios_weighting[scenario]
-    
-    demand_cool_sum_variation[building] = variation
-
-buildings_demand = {}
-buildings_demand_sum = {}
-buildings_lcoc = {}
-
-path_to_file_cooling_demand_building = os.path.join(path_to_input_folder, 'districts_cooling_demand_phase2.xlsx')
-df_cooling_demand_building = pd.read_excel(path_to_file_cooling_demand_building)
-
-for building in range(1, 40):
-    cooling_demand_building = df_cooling_demand_building[f'cooling_demand_building_{building}'].tolist()
-    buildings_demand[building] = cooling_demand_building
-    buildings_demand_sum[building] = sum(cooling_demand_building)
-
-for building in range(1, 40):
-    buildings_lcoc_scenario = []
-    for scenario in scenarios:
-        building_c_sum = 0
-        
-        for year in years:
-            for hour in hours:
-                building_c_sum += buildings[building][year] * demand_cool_variation[scenario][year] * buildings_demand[building][hour] / eta_electricity * (electricity_price[scenario][year][hour] + electricity_co2_share[scenario][year][hour] * co2_price[scenario][year])
-            
-        buildings_lcoc_scenario.append(building_c_sum / (buildings_demand_sum[building] * demand_cool_sum_variation[building]))
-
-    buildings_lcoc[building] = buildings_lcoc_scenario
-
-building_lcoc_max = []
-building_lcoc_min = []
-building_lcoc_avg = []
-
-for building in range(1, 40):
-    building_lcoc_max.append(max(buildings_lcoc[building]))
-    building_lcoc_min.append(min(buildings_lcoc[building]))
-    building_lcoc_avg.append(np.mean([min(buildings_lcoc[building]), max(buildings_lcoc[building])]))
-
-building_lcoc_max_index = [i + 1 for i in sorted(range(len(building_lcoc_max)), key=lambda i: building_lcoc_max[i], reverse=True)]
-building_lcoc_min_index = [i + 1 for i in sorted(range(len(building_lcoc_min)), key=lambda i: building_lcoc_min[i], reverse=True)]
-building_lcoc_avg_index = [i + 1 for i in sorted(range(len(building_lcoc_avg)), key=lambda i: building_lcoc_avg[i], reverse=True)]
-
-x_bar = []
-y_bar = []
-widths = []
-bases = []
-labels = []
-
-for building in range(1, 40):
-    if building == 1:
-        x_bar.append(buildings_demand_sum[building] / 2)
-        
-    else:
-        x_bar.append(x_bar[building-2] + buildings_demand_sum[building-1] / 2 + buildings_demand_sum[building] / 2)
-    
-    y_bar.append(max(buildings_lcoc[building]) - min(buildings_lcoc[building]))
-    widths.append(buildings_demand_sum[building])
-    bases.append(min(buildings_lcoc[building]))
-    labels.append(f'Building_{building}')
-
 lcoc = {}
 
 for scenario in scenarios:
@@ -671,34 +542,11 @@ fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario], y=[lcoc[lcoc_max], 
 fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario, sum_cooling_demand_scenario, 0], y=[lcoc[lcoc_min], lcoc[lcoc_min], lcoc[lcoc_max], lcoc[lcoc_max]],  fill='toself', fillcolor='gray', opacity=0.5, line=dict(color='gray'), showlegend=False))
 # , fillpattern=dict(shape="x",  fgcolor="black")
 
-for i in range(len(x_bar)):
-    fig.add_trace(go.Bar(x=[x_bar[i]], y=[y_bar[i]], width=widths[i], base=bases[i], text=labels[i], textposition='outside', textangle=0, name=labels[i]))
-
 fig.update_xaxes(range=[0, sum_cooling_demand_scenario])
 
 fig.update_layout(title=dict(text='Levelized costs of cooling', font=dict(size=30)), xaxis=dict(title='Annual building cool demand in MWh', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Lcoc in $/MWh', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='Buildings', font=dict(size=20)), legend=dict(font=dict(size=20)), barmode='overlay', bargap=0)
 
 fig.show()
-
-x_bar = []
-y_bar = []
-widths = []
-bases = []
-labels = []
-index = 0
-
-for building in building_lcoc_max_index:
-    if building == building_lcoc_max_index[0]:
-        x_bar.append(buildings_demand_sum[building] / 2)
-        
-    else:
-        x_bar.append(x_bar[index-1] + buildings_demand_sum[building_lcoc_max_index[index-1]] / 2 + buildings_demand_sum[building] / 2)
-    
-    y_bar.append(max(buildings_lcoc[building]) - min(buildings_lcoc[building]))
-    widths.append(buildings_demand_sum[building])
-    bases.append(min(buildings_lcoc[building]))
-    labels.append(f'{building}')
-    index += 1
 
 fig = go.Figure()
 
@@ -713,13 +561,7 @@ fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario], y=[lcoc[lcoc_max], 
 fig.add_trace(go.Scatter(x=[0, sum_cooling_demand_scenario, sum_cooling_demand_scenario, 0], y=[lcoc[lcoc_min], lcoc[lcoc_min], lcoc[lcoc_max], lcoc[lcoc_max]], name='DC-system', fill='toself', fillcolor='rgb(253, 180, 98)', opacity=0.5, line=dict(color='rgb(253, 180, 98)')))
 # , fillpattern=dict(shape="x",  fgcolor="black")
 
-for i in range(len(x_bar)-1):
-    fig.add_trace(go.Bar(x=[x_bar[i]], y=[y_bar[i]], width=widths[i], base=bases[i], marker=dict(color='rgb(128, 177, 211)'), showlegend=False))
-
-fig.add_trace(go.Bar(x=[x_bar[i+1]], y=[y_bar[i+1]], width=widths[i+1], base=bases[i+1], marker=dict(color='rgb(128, 177, 211)'), name='Buildings'))
-
 fig.update_xaxes(range=[0, sum_cooling_demand_scenario])
-fig.update_yaxes(range=[0, bases[0]+y_bar[0]+20])
 
 fig.update_layout(title=dict(text='Levelized costs of cooling', font=dict(size=30)), uniformtext_minsize=10, uniformtext_mode='show', xaxis=dict(title='Annual building cool demand in MWh', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Lcoc in $/MWh', titlefont=dict(size=20), tickfont=dict(size=20)), legend_title=dict(text='lcoc', font=dict(size=20)), legend=dict(font=dict(size=20)), barmode='overlay', bargap=0)
 
