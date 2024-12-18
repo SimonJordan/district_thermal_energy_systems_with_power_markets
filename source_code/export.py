@@ -59,6 +59,7 @@ def export_result(m=None, data={}, scenarios=[], scenarios_weighting={}, years=[
             cp_hp_cool_in = []
             ites_cool_in = []
             ites_cool_out = []
+            
             eb_c_inv = []
             gb_c_inv = []
             hp_c_inv = []
@@ -123,6 +124,7 @@ def export_result(m=None, data={}, scenarios=[], scenarios_weighting={}, years=[
             ttes_soc = []
             btes_soc = []
             ites_soc = []
+            
             eb_c_inv.append(py.value(m.v_eb_c_inv[scenario, year]))
             gb_c_inv.append(py.value(m.v_gb_c_inv[scenario, year]))
             hp_c_inv.append(py.value(m.v_hp_c_inv[scenario, year]))
@@ -264,6 +266,7 @@ def export_result(m=None, data={}, scenarios=[], scenarios_weighting={}, years=[
 
     for year in years:
         eb_inv = []
+        gb_inv = []
         hp_inv = []
         st_inv = []
         wi_inv = []
@@ -275,9 +278,11 @@ def export_result(m=None, data={}, scenarios=[], scenarios_weighting={}, years=[
         cp_ct_inv = []
         cp_hp_inv = []
         ttes_inv = []
+        btes_inv = []
         ites_inv = []
         
         eb_inv.append(py.value(m.v_eb_Q_inv[year]))
+        gb_inv.append(py.value(m.v_gb_Q_inv[year]))
         hp_inv.append(py.value(m.v_hp_Q_inv[year]))
         st_inv.append(py.value(m.v_st_P_inv[year]))
         wi_inv.append(py.value(m.v_wi_Q_inv[year]))
@@ -289,9 +294,10 @@ def export_result(m=None, data={}, scenarios=[], scenarios_weighting={}, years=[
         cp_ct_inv.append(py.value(m.v_cp_ct_Q_inv[year]))
         cp_hp_inv.append(py.value(m.v_cp_hp_Q_inv[year]))
         ttes_inv.append(py.value(m.v_ttes_k_inv[year]))
+        btes_inv.append(py.value(m.v_btes_k_inv[year]))
         ites_inv.append(py.value(m.v_ites_k_inv[year]))
 
-        df_2.append(pd.DataFrame({'eb': eb_inv, 'hp': hp_inv, 'st': st_inv, 'wi': wi_inv, 'ieh': ieh_inv, 'chp': chp_inv, 'ac': ac_inv, 'ab_ct': ab_ct_inv, 'ab_hp': ab_hp_inv, 'cp_ct': cp_ct_inv, 'cp_hp': cp_hp_inv, 'ttes': ttes_inv, 'ites': ites_inv}))
+        df_2.append(pd.DataFrame({'eb': eb_inv, 'gb': gb_inv, 'hp': hp_inv, 'st': st_inv, 'wi': wi_inv, 'ieh': ieh_inv, 'chp': chp_inv, 'ac': ac_inv, 'ab_ct': ab_ct_inv, 'ab_hp': ab_hp_inv, 'cp_ct': cp_ct_inv, 'cp_hp': cp_hp_inv, 'ttes': ttes_inv, 'btes': btes_inv, 'ites': ites_inv}))
 
     with pd.ExcelWriter(path_to_inv_capacity) as writer:
         for df, year in zip(df_2, years):
