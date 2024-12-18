@@ -56,10 +56,6 @@ def add_gb_variables(m=None):
                               domain = py.NonNegativeReals,
                               doc = 'heat energy feed in from gas boiler per scenario, year and hour')
 
-    m.v_gb_q_elec_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
-                              domain = py.NonNegativeReals,
-                              doc = 'electricity feed in from gas boiler per scenario, year and hour')
-
     m.v_gb_q_gas = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                            domain = py.NonNegativeReals,
                            doc = 'gas consumption from gas boiler per scenario, year and hour')
