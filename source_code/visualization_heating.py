@@ -37,11 +37,10 @@ visualize_year = 2035
 
 heating_demand = {}
 eb_heat_in = {}
+gb_heat_in = {}
 hp_heat_in = {}
 st_heat_in = {}
 wi_heat_in = {}
-gt_heat_in = {}
-dgt_heat_in = {}
 ieh_heat_in = {}
 chp_heat_in = {}
 ab_ct_heat_out = {}
@@ -50,71 +49,73 @@ ab_hp_heat_out = {}
 cp_hp_heat_in = {}
 ttes_heat_in = {}
 ttes_heat_out = {}
+btes_heat_in = {}
+btes_heat_out = {}
 
 eb_inv = {}
+gb_inv = {}
 hp_inv = {}
 st_inv = {}
 wi_inv = {}
-gt_inv = {}
-dgt_inv = {}
 ieh_inv = {}
 chp_inv = {}
 ab_ct_inv = {}
 ab_hp_inv = {}
 cp_hp_inv = {}
 ttes_inv = {}
+btes_inv = {}
 
 eb_c_inv = {}
+gb_c_inv = {}
 hp_c_inv = {}
 st_c_inv = {}
 wi_c_inv = {}
-gt_c_inv = {}
-dgt_c_inv = {}
 ieh_c_inv = {}
 chp_c_inv = {}
 ab_ct_c_inv = {}
 ab_hp_c_inv = {}
 cp_hp_c_inv = {}
 ttes_c_inv = {}
+btes_c_inv = {}
 
 eb_c_fix = {}
+gb_c_fix = {}
 hp_c_fix = {}
 st_c_fix = {}
 wi_c_fix = {}
-gt_c_fix = {}
-dgt_c_fix = {}
 ieh_c_fix = {}
 chp_c_fix = {}
 ab_ct_c_fix = {}
 ab_hp_c_fix = {}
 cp_hp_c_fix = {}
 ttes_c_fix = {}
+btes_c_fix = {}
 
 eb_c_var = {}
+gb_c_var = {}
 hp_c_var = {}
 st_c_var = {}
 wi_c_var = {}
-gt_c_var = {}
-dgt_c_var = {}
 ieh_c_var = {}
 chp_c_var = {}
 ab_ct_c_var = {}
 ab_hp_c_var = {}
 cp_hp_c_var = {}
 ttes_c_var = {}
+btes_c_var = {}
 
 eb_elec = {}
 hp_elec = {}
 st_elec = {}
-gt_elec = {}
-dgt_elec = {}
 ieh_elec = {}
 ab_ct_elec = {}
 ab_hp_elec = {}
 cp_hp_elec = {}
 ttes_elec = {}
+btes_elec = {}
 
 ttes_soc = {}
+btes_soc = {}
 
 electricity_price = {}
 electricity_co2_share = {}
@@ -124,11 +125,10 @@ co2_price = {}
 for scenario in scenarios:
     heating_demand_scenario = {}
     eb_heat_in_scenario = {}
+    gb_heat_in_scenario = {}
     hp_heat_in_scenario = {}
     st_heat_in_scenario = {}
     wi_heat_in_scenario = {}
-    gt_heat_in_scenario = {}
-    dgt_heat_in_scenario = {}
     ieh_heat_in_scenario = {}
     chp_heat_in_scenario = {}
     ab_ct_heat_out_scenario = {}
@@ -137,58 +137,59 @@ for scenario in scenarios:
     cp_hp_heat_in_scenario = {}
     ttes_heat_in_scenario = {}
     ttes_heat_out_scenario = {}
-    
+    btes_heat_in_scenario = {}
+    btes_heat_out_scenario = {}
     eb_c_inv_scenario = {}
+    gb_c_inv_scenario = {}
     hp_c_inv_scenario = {}
     st_c_inv_scenario = {}
     wi_c_inv_scenario = {}
-    gt_c_inv_scenario = {}
-    dgt_c_inv_scenario = {}
     ieh_c_inv_scenario = {}
     chp_c_inv_scenario = {}
     ab_ct_c_inv_scenario = {}
     ab_hp_c_inv_scenario = {}
     cp_hp_c_inv_scenario = {}
     ttes_c_inv_scenario = {}
+    btes_c_inv_scenario = {}
     
     eb_c_fix_scenario = {}
+    gb_c_fix_scenario = {}
     hp_c_fix_scenario = {}
     st_c_fix_scenario = {}
     wi_c_fix_scenario = {}
-    gt_c_fix_scenario = {}
-    dgt_c_fix_scenario = {}
     ieh_c_fix_scenario = {}
     chp_c_fix_scenario = {}
     ab_ct_c_fix_scenario = {}
     ab_hp_c_fix_scenario = {}
     cp_hp_c_fix_scenario = {}
     ttes_c_fix_scenario = {}
+    btes_c_fix_scenario = {}
     
     eb_c_var_scenario = {}
+    gb_c_var_scenario = {}
     hp_c_var_scenario = {}
     st_c_var_scenario = {}
     wi_c_var_scenario = {}
-    gt_c_var_scenario = {}
-    dgt_c_var_scenario = {}
     ieh_c_var_scenario = {}
     chp_c_var_scenario = {}
     ab_ct_c_var_scenario = {}
     ab_hp_c_var_scenario = {}
     cp_hp_c_var_scenario = {}
     ttes_c_var_scenario = {}
+    btes_c_var_scenario = {}
     
     eb_elec_scenario = {}
     hp_elec_scenario = {}
     st_elec_scenario = {}
-    gt_elec_scenario = {}
-    dgt_elec_scenario = {}
     ieh_elec_scenario = {}
     ab_ct_elec_scenario = {}
     ab_hp_elec_scenario = {}
     cp_hp_elec_scenario = {}
     ttes_elec_scenario = {}
+    btes_elec_scenario = {}
     
     ttes_soc_scenario = {}
+    btes_soc_scenario = {}
     
     electricity_price_scenario = {}
     electricity_co2_share_scenario = {}
@@ -216,11 +217,10 @@ for scenario in scenarios:
         
         heating_demand_scenario[year] = df_heat_supply['heating'].tolist()
         eb_heat_in_scenario[year] = df_heat_supply['eb'].tolist()
+        gb_heat_in_scenario[year] = df_heat_supply['gb'].tolist()
         hp_heat_in_scenario[year] = df_heat_supply['hp'].tolist()
         st_heat_in_scenario[year] = df_heat_supply['st'].tolist()
         wi_heat_in_scenario[year] = df_heat_supply['wi'].tolist()
-        gt_heat_in_scenario[year] = df_heat_supply['gt'].tolist()
-        dgt_heat_in_scenario[year] = df_heat_supply['dgt'].tolist()
         ieh_heat_in_scenario[year] = df_heat_supply['ieh'].tolist()
         chp_heat_in_scenario[year] = df_heat_supply['chp'].tolist()
         ab_ct_heat_out_scenario[year] = df_heat_supply['ab_ct-'].tolist()
@@ -229,58 +229,59 @@ for scenario in scenarios:
         cp_hp_heat_in_scenario[year] = df_heat_supply['cp_hp+'].tolist()
         ttes_heat_in_scenario[year] = df_heat_supply['ttes+'].tolist()
         ttes_heat_out_scenario[year] = df_heat_supply['ttes-'].tolist()
-        
+        btes_heat_in_scenario[year] = df_heat_supply['btes+'].tolist()
+        btes_heat_out_scenario[year] = df_heat_supply['btes-'].tolist()
         eb_c_inv_scenario[year] = df_inv_cost['eb'].tolist()[0]
+        gb_c_inv_scenario[year] = df_inv_cost['gb'].tolist()[0]
         hp_c_inv_scenario[year] = df_inv_cost['hp'].tolist()[0]
         st_c_inv_scenario[year] = df_inv_cost['st'].tolist()[0]
         wi_c_inv_scenario[year] = df_inv_cost['wi'].tolist()[0]
-        gt_c_inv_scenario[year] = df_inv_cost['gt'].tolist()[0]
-        dgt_c_inv_scenario[year] = df_inv_cost['dgt'].tolist()[0]
         ieh_c_inv_scenario[year] = df_inv_cost['ieh'].tolist()[0]
         chp_c_inv_scenario[year] = df_inv_cost['chp'].tolist()[0]
         ab_ct_c_inv_scenario[year] = df_inv_cost['ab_ct'].tolist()[0]
         ab_hp_c_inv_scenario[year] = df_inv_cost['ab_hp'].tolist()[0]
         cp_hp_c_inv_scenario[year] = df_inv_cost['cp_hp'].tolist()[0]
         ttes_c_inv_scenario[year] = df_inv_cost['ttes'].tolist()[0]
+        btes_c_inv_scenario[year] = df_inv_cost['btes'].tolist()[0]
         
         eb_c_fix_scenario[year] = df_fix_cost['eb'].tolist()[0]
+        gb_c_fix_scenario[year] = df_fix_cost['gb'].tolist()[0]
         hp_c_fix_scenario[year] = df_fix_cost['hp'].tolist()[0]
         st_c_fix_scenario[year] = df_fix_cost['st'].tolist()[0]
         wi_c_fix_scenario[year] = df_fix_cost['wi'].tolist()[0]
-        gt_c_fix_scenario[year] = df_fix_cost['gt'].tolist()[0]
-        dgt_c_fix_scenario[year] = df_fix_cost['dgt'].tolist()[0]
         ieh_c_fix_scenario[year] = df_fix_cost['ieh'].tolist()[0]
         chp_c_fix_scenario[year] = df_fix_cost['chp'].tolist()[0]
         ab_ct_c_fix_scenario[year] = df_fix_cost['ab_ct'].tolist()[0]
         ab_hp_c_fix_scenario[year] = df_fix_cost['ab_hp'].tolist()[0]
         cp_hp_c_fix_scenario[year] = df_fix_cost['cp_ct'].tolist()[0]
         ttes_c_fix_scenario[year] = df_fix_cost['ttes'].tolist()[0]
+        btes_c_fix_scenario[year] = df_fix_cost['btes'].tolist()[0]
         
         eb_c_var_scenario[year] = df_var_cost['eb'].tolist()
+        gb_c_var_scenario[year] = df_var_cost['gb'].tolist()
         hp_c_var_scenario[year] = df_var_cost['hp'].tolist()
         st_c_var_scenario[year] = df_var_cost['st'].tolist()
         wi_c_var_scenario[year] = df_var_cost['wi'].tolist()
-        gt_c_var_scenario[year] = df_var_cost['gt'].tolist()
-        dgt_c_var_scenario[year] = df_var_cost['dgt'].tolist()
         ieh_c_var_scenario[year] = df_var_cost['ieh'].tolist()
         chp_c_var_scenario[year] = df_var_cost['chp'].tolist()
         ab_ct_c_var_scenario[year] = df_var_cost['ab_ct'].tolist()
         ab_hp_c_var_scenario[year] = df_var_cost['ab_hp'].tolist()
         cp_hp_c_var_scenario[year] = df_var_cost['cp_hp'].tolist()
         ttes_c_var_scenario[year] = df_var_cost['ttes'].tolist()
+        btes_c_var_scenario[year] = df_var_cost['btes'].tolist()
         
         eb_elec_scenario[year] = df_elec_consumption['eb'].tolist()
         hp_elec_scenario[year] = df_elec_consumption['hp'].tolist()
         st_elec_scenario[year] = df_elec_consumption['st'].tolist()
-        gt_elec_scenario[year] = df_elec_consumption['gt'].tolist()
-        dgt_elec_scenario[year] = df_elec_consumption['dgt'].tolist()
         ieh_elec_scenario[year] = df_elec_consumption['ieh'].tolist()
         ab_ct_elec_scenario[year] = df_elec_consumption['ab_ct'].tolist()
         ab_hp_elec_scenario[year] = df_elec_consumption['ab_hp'].tolist()
         cp_hp_elec_scenario[year] = [value * cp_seer / (cp_seer + cp_hp_cop) for value in df_elec_consumption['cp_hp'].tolist()]
         ttes_elec_scenario[year] = df_elec_consumption['ttes'].tolist()
+        btes_elec_scenario[year] = df_elec_consumption['btes'].tolist()
         
         ttes_soc_scenario[year] = df_storage_soc['ttes'].tolist()
+        btes_soc_scenario[year] = df_storage_soc['btes'].tolist()
         
         electricity_price_scenario[year] = df_elec_price_co2_share_gas_price['elec'].tolist()
         electricity_co2_share_scenario[year] = df_elec_price_co2_share_gas_price['co2'].tolist()
@@ -289,11 +290,10 @@ for scenario in scenarios:
         
     heating_demand[scenario] = heating_demand_scenario
     eb_heat_in[scenario] = eb_heat_in_scenario
+    gb_heat_in[scenario] = gb_heat_in_scenario
     hp_heat_in[scenario] = hp_heat_in_scenario
     st_heat_in[scenario] = st_heat_in_scenario
     wi_heat_in[scenario] = wi_heat_in_scenario
-    gt_heat_in[scenario] = gt_heat_in_scenario
-    dgt_heat_in[scenario] = dgt_heat_in_scenario
     ieh_heat_in[scenario] = ieh_heat_in_scenario
     chp_heat_in[scenario] = chp_heat_in_scenario
     ab_ct_heat_out[scenario] = ab_ct_heat_out_scenario
@@ -302,58 +302,59 @@ for scenario in scenarios:
     cp_hp_heat_in[scenario] = cp_hp_heat_in_scenario
     ttes_heat_in[scenario] = ttes_heat_in_scenario
     ttes_heat_out[scenario] = ttes_heat_out_scenario
-    
+    btes_heat_in[scenario] = btes_heat_in_scenario
+    btes_heat_out[scenario] = btes_heat_out_scenario
     eb_c_inv[scenario] = eb_c_inv_scenario
+    gb_c_inv[scenario] = gb_c_inv_scenario
     hp_c_inv[scenario] = hp_c_inv_scenario
     st_c_inv[scenario] = st_c_inv_scenario
     wi_c_inv[scenario] = wi_c_inv_scenario
-    gt_c_inv[scenario] = gt_c_inv_scenario
-    dgt_c_inv[scenario] = dgt_c_inv_scenario
     ieh_c_inv[scenario] = ieh_c_inv_scenario
     chp_c_inv[scenario] = chp_c_inv_scenario
     ab_ct_c_inv[scenario] = ab_ct_c_inv_scenario
     ab_hp_c_inv[scenario] = ab_hp_c_inv_scenario
     cp_hp_c_inv[scenario] = cp_hp_c_inv_scenario
     ttes_c_inv[scenario] = ttes_c_inv_scenario
+    btes_c_inv[scenario] = btes_c_inv_scenario
     
     eb_c_fix[scenario] = eb_c_fix_scenario
+    gb_c_fix[scenario] = gb_c_fix_scenario
     hp_c_fix[scenario] = hp_c_fix_scenario
     st_c_fix[scenario] = st_c_fix_scenario
     wi_c_fix[scenario] = wi_c_fix_scenario
-    gt_c_fix[scenario] = gt_c_fix_scenario
-    dgt_c_fix[scenario] = dgt_c_fix_scenario
     ieh_c_fix[scenario] = ieh_c_fix_scenario
     chp_c_fix[scenario] = chp_c_fix_scenario
     ab_ct_c_fix[scenario] = ab_ct_c_fix_scenario
     ab_hp_c_fix[scenario] = ab_hp_c_fix_scenario
     cp_hp_c_fix[scenario] = cp_hp_c_fix_scenario
     ttes_c_fix[scenario] = ttes_c_fix_scenario
+    btes_c_fix[scenario] = btes_c_fix_scenario
     
     eb_c_var[scenario] = eb_c_var_scenario
+    gb_c_var[scenario] = gb_c_var_scenario
     hp_c_var[scenario] = hp_c_var_scenario
     st_c_var[scenario] = st_c_var_scenario
     wi_c_var[scenario] = wi_c_var_scenario
-    gt_c_var[scenario] = gt_c_var_scenario
-    dgt_c_var[scenario] = dgt_c_var_scenario
     ieh_c_var[scenario] = ieh_c_var_scenario
     chp_c_var[scenario] = chp_c_var_scenario
     ab_ct_c_var[scenario] = ab_ct_c_var_scenario
     ab_hp_c_var[scenario] = ab_hp_c_var_scenario
     cp_hp_c_var[scenario] = cp_hp_c_var_scenario
     ttes_c_var[scenario] = ttes_c_var_scenario
+    btes_c_var[scenario] = btes_c_var_scenario
     
     eb_elec[scenario] = eb_elec_scenario
     hp_elec[scenario] = hp_elec_scenario
     st_elec[scenario] = st_elec_scenario
-    gt_elec[scenario] = gt_elec_scenario
-    dgt_elec[scenario] = dgt_elec_scenario
     ieh_elec[scenario] = ieh_elec_scenario
     ab_ct_elec[scenario] = ab_ct_elec_scenario
     ab_hp_elec[scenario] = ab_hp_elec_scenario
     cp_hp_elec[scenario] = cp_hp_elec_scenario
     ttes_elec[scenario] = ttes_elec_scenario
+    btes_elec[scenario] = btes_elec_scenario
     
     ttes_soc[scenario] = ttes_soc_scenario
+    btes_soc[scenario] = btes_soc_scenario
     
     electricity_price[scenario] = electricity_price_scenario
     electricity_co2_share[scenario] = electricity_co2_share_scenario
