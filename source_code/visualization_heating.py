@@ -48,7 +48,6 @@ cp_hp_heat_in = {}
 ttes_heat_in = {}
 ttes_heat_out = {}
 btes_heat_in = {}
-btes_heat_out = {}
 
 eb_inv = {}
 gb_inv = {}
@@ -136,7 +135,7 @@ for scenario in scenarios:
     ttes_heat_in_scenario = {}
     ttes_heat_out_scenario = {}
     btes_heat_in_scenario = {}
-    btes_heat_out_scenario = {}
+    
     eb_c_inv_scenario = {}
     gb_c_inv_scenario = {}
     hp_c_inv_scenario = {}
@@ -228,7 +227,7 @@ for scenario in scenarios:
         ttes_heat_in_scenario[year] = df_heat_supply['ttes+'].tolist()
         ttes_heat_out_scenario[year] = df_heat_supply['ttes-'].tolist()
         btes_heat_in_scenario[year] = df_heat_supply['btes+'].tolist()
-        btes_heat_out_scenario[year] = df_heat_supply['btes-'].tolist()
+        
         eb_c_inv_scenario[year] = df_inv_cost['eb'].tolist()[0]
         gb_c_inv_scenario[year] = df_inv_cost['gb'].tolist()[0]
         hp_c_inv_scenario[year] = df_inv_cost['hp'].tolist()[0]
@@ -301,7 +300,7 @@ for scenario in scenarios:
     ttes_heat_in[scenario] = ttes_heat_in_scenario
     ttes_heat_out[scenario] = ttes_heat_out_scenario
     btes_heat_in[scenario] = btes_heat_in_scenario
-    btes_heat_out[scenario] = btes_heat_out_scenario
+    
     eb_c_inv[scenario] = eb_c_inv_scenario
     gb_c_inv[scenario] = gb_c_inv_scenario
     hp_c_inv[scenario] = hp_c_inv_scenario
@@ -379,7 +378,7 @@ for year in years:
     
 #%% FIG 0 - Demand dispatch
 
-df_0 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand[visualize_scenario][visualize_year], 'eb': eb_heat_in[visualize_scenario][visualize_year], 'gb': gb_heat_in[visualize_scenario][visualize_year], 'hp': hp_heat_in[visualize_scenario][visualize_year], 'st': st_heat_in[visualize_scenario][visualize_year], 'wi': wi_heat_in[visualize_scenario][visualize_year], 'ieh': ieh_heat_in[visualize_scenario][visualize_year], 'chp': chp_heat_in[visualize_scenario][visualize_year], 'ab_ct-': ab_ct_heat_out[visualize_scenario][visualize_year], 'ab_hp+': ab_hp_heat_in[visualize_scenario][visualize_year], 'ab_hp-': ab_hp_heat_out[visualize_scenario][visualize_year], 'cp_hp+': cp_hp_heat_in[visualize_scenario][visualize_year], 'ttes+': ttes_heat_in[visualize_scenario][visualize_year], 'ttes-': ttes_heat_out[visualize_scenario][visualize_year], 'btes+': btes_heat_in[visualize_scenario][visualize_year], 'btes-': btes_heat_out[visualize_scenario][visualize_year]})
+df_0 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand[visualize_scenario][visualize_year], 'eb': eb_heat_in[visualize_scenario][visualize_year], 'gb': gb_heat_in[visualize_scenario][visualize_year], 'hp': hp_heat_in[visualize_scenario][visualize_year], 'st': st_heat_in[visualize_scenario][visualize_year], 'wi': wi_heat_in[visualize_scenario][visualize_year], 'ieh': ieh_heat_in[visualize_scenario][visualize_year], 'chp': chp_heat_in[visualize_scenario][visualize_year], 'ab_ct-': ab_ct_heat_out[visualize_scenario][visualize_year], 'ab_hp+': ab_hp_heat_in[visualize_scenario][visualize_year], 'ab_hp-': ab_hp_heat_out[visualize_scenario][visualize_year], 'cp_hp+': cp_hp_heat_in[visualize_scenario][visualize_year], 'ttes+': ttes_heat_in[visualize_scenario][visualize_year], 'ttes-': ttes_heat_out[visualize_scenario][visualize_year], 'btes+': btes_heat_in[visualize_scenario][visualize_year]})
 
 fig = go.Figure()
 
@@ -396,7 +395,6 @@ fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['wi'], mode='lines', name='Waste
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
-fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['btes-'], mode='lines', name='BTES store', stackgroup='two', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['btes+'], mode='lines', name='BTES feed in', stackgroup='one', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['heating_demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
 
@@ -419,9 +417,8 @@ cp_hp_heat_in_sorted_1 = sorted(cp_hp_heat_in[visualize_scenario][visualize_year
 ttes_heat_in_sorted_1 = sorted(ttes_heat_in[visualize_scenario][visualize_year], reverse=True)
 ttes_heat_out_sorted_1 = sorted(ttes_heat_out[visualize_scenario][visualize_year])
 btes_heat_in_sorted_1 = sorted(btes_heat_in[visualize_scenario][visualize_year], reverse=True)
-btes_heat_out_sorted_1 = sorted(btes_heat_out[visualize_scenario][visualize_year])
 
-df_1 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_1, 'eb': eb_heat_in_sorted_1, 'gb': gb_heat_in_sorted_1, 'hp': hp_heat_in_sorted_1, 'st': st_heat_in_sorted_1, 'wi': wi_heat_in_sorted_1, 'ieh': ieh_heat_in_sorted_1, 'chp': chp_heat_in_sorted_1, 'ab_ct-': ab_ct_heat_out_sorted_1, 'ab_hp+': ab_hp_heat_in_sorted_1, 'ab_hp-': ab_hp_heat_out_sorted_1, 'cp_hp+': cp_hp_heat_in_sorted_1, 'ttes+': ttes_heat_in_sorted_1, 'ttes-': ttes_heat_out_sorted_1, 'btes+': btes_heat_in_sorted_1, 'btes-': btes_heat_out_sorted_1})
+df_1 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_1, 'eb': eb_heat_in_sorted_1, 'gb': gb_heat_in_sorted_1, 'hp': hp_heat_in_sorted_1, 'st': st_heat_in_sorted_1, 'wi': wi_heat_in_sorted_1, 'ieh': ieh_heat_in_sorted_1, 'chp': chp_heat_in_sorted_1, 'ab_ct-': ab_ct_heat_out_sorted_1, 'ab_hp+': ab_hp_heat_in_sorted_1, 'ab_hp-': ab_hp_heat_out_sorted_1, 'cp_hp+': cp_hp_heat_in_sorted_1, 'ttes+': ttes_heat_in_sorted_1, 'ttes-': ttes_heat_out_sorted_1, 'btes+': btes_heat_in_sorted_1})
 
 fig = go.Figure()
 
@@ -438,7 +435,6 @@ fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['wi'], mode='lines', name='Waste
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['btes-'], mode='lines', name='BTES store', stackgroup='two', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['btes+'], mode='lines', name='BTES feed in', stackgroup='one', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['heating_demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
 
@@ -462,9 +458,8 @@ cp_hp_heat_in_sorted_2 = [cp_hp_heat_in[visualize_scenario][visualize_year][i] f
 ttes_heat_in_sorted_2 = [ttes_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
 ttes_heat_out_sorted_2 = [ttes_heat_out[visualize_scenario][visualize_year][i] for i in index_sorted]
 btes_heat_in_sorted_2 = [btes_heat_in[visualize_scenario][visualize_year][i] for i in index_sorted]
-btes_heat_out_sorted_2 = [btes_heat_out[visualize_scenario][visualize_year][i] for i in index_sorted]
 
-df_2 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_2, 'eb': eb_heat_in_sorted_2, 'gb': gb_heat_in_sorted_2, 'hp': hp_heat_in_sorted_2, 'st': st_heat_in_sorted_2, 'wi': wi_heat_in_sorted_2, 'ieh': ieh_heat_in_sorted_2, 'chp': chp_heat_in_sorted_2, 'ab_ct-': ab_ct_heat_out_sorted_2, 'ab_hp+': ab_hp_heat_in_sorted_2, 'ab_hp-': ab_hp_heat_out_sorted_2, 'cp_hp+': cp_hp_heat_in_sorted_2, 'ttes+': ttes_heat_in_sorted_2, 'ttes-': ttes_heat_out_sorted_2, 'btes+': btes_heat_in_sorted_2, 'btes-': btes_heat_out_sorted_2})
+df_2 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_2, 'eb': eb_heat_in_sorted_2, 'gb': gb_heat_in_sorted_2, 'hp': hp_heat_in_sorted_2, 'st': st_heat_in_sorted_2, 'wi': wi_heat_in_sorted_2, 'ieh': ieh_heat_in_sorted_2, 'chp': chp_heat_in_sorted_2, 'ab_ct-': ab_ct_heat_out_sorted_2, 'ab_hp+': ab_hp_heat_in_sorted_2, 'ab_hp-': ab_hp_heat_out_sorted_2, 'cp_hp+': cp_hp_heat_in_sorted_2, 'ttes+': ttes_heat_in_sorted_2, 'ttes-': ttes_heat_out_sorted_2, 'btes+': btes_heat_in_sorted_2})
 
 fig = go.Figure()
 
@@ -481,7 +476,6 @@ fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['wi'], mode='lines', name='Waste
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['eb'], mode='lines', name='Electric boiler', stackgroup='one', line=dict(color='#FF6692')))
-fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['btes-'], mode='lines', name='BTES store', stackgroup='two', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['btes+'], mode='lines', name='BTES feed in', stackgroup='one', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['heating_demand'], mode='lines', name='Demand', line=dict(color='#EF553B', width=2)))
 
@@ -491,10 +485,10 @@ fig.show()
 
 #%% FIG 1 - Technology dispatch
 
-df_3 = pd.DataFrame({'hour': dict(zip(scenarios, [hours]*len(scenarios))), 'eb': eb_heat_in, 'gb': gb_heat_in, 'hp': hp_heat_in, 'st': st_heat_in, 'wi': wi_heat_in, 'ieh': ieh_heat_in, 'chp': chp_heat_in, 'ab_ct-': ab_ct_heat_out, 'ab_hp+': ab_hp_heat_in, 'ab_hp-': ab_hp_heat_out, 'cp_hp+': cp_hp_heat_in, 'ttes+': ttes_heat_in, 'ttes-': ttes_heat_out, 'btes+': btes_heat_in, 'btes-': btes_heat_out})
+df_3 = pd.DataFrame({'hour': dict(zip(scenarios, [hours]*len(scenarios))), 'eb': eb_heat_in, 'gb': gb_heat_in, 'hp': hp_heat_in, 'st': st_heat_in, 'wi': wi_heat_in, 'ieh': ieh_heat_in, 'chp': chp_heat_in, 'ab_ct-': ab_ct_heat_out, 'ab_hp+': ab_hp_heat_in, 'ab_hp-': ab_hp_heat_out, 'cp_hp+': cp_hp_heat_in, 'ttes+': ttes_heat_in, 'ttes-': ttes_heat_out, 'btes+': btes_heat_in})
 
-technologies_abb = ['eb', 'gb','hp', 'st', 'wi', 'ieh', 'chp', 'ab_ct-', 'ab_hp+', 'ab_hp-', 'cp_hp+', 'ttes+', 'ttes-', 'btes+', 'btes-']
-technologies_name = {'eb': 'Electric boiler', 'gb': 'Gas boiler','hp': 'Heat pump', 'st': 'Solar thermal', 'wi': 'Waste incineration', 'ieh': 'Industrial excess heat', 'chp': 'Combined heat and power', 'ab_ct-': 'Absorption with cooling tower take out', 'ab_hp+': 'Absorption with heat pump feed in', 'ab_hp-': 'Absorption with heat pump take out', 'cp_hp+': 'Compression with heat pump feed in', 'ttes+': 'TTES feed in', 'ttes-': 'TTES store', 'btes+': 'BTES feed in', 'btes-': 'BTES store'}
+technologies_abb = ['eb', 'gb','hp', 'st', 'wi', 'ieh', 'chp', 'ab_ct-', 'ab_hp+', 'ab_hp-', 'cp_hp+', 'ttes+', 'ttes-', 'btes+']
+technologies_name = {'eb': 'Electric boiler', 'gb': 'Gas boiler','hp': 'Heat pump', 'st': 'Solar thermal', 'wi': 'Waste incineration', 'ieh': 'Industrial excess heat', 'chp': 'Combined heat and power', 'ab_ct-': 'Absorption with cooling tower take out', 'ab_hp+': 'Absorption with heat pump feed in', 'ab_hp-': 'Absorption with heat pump take out', 'cp_hp+': 'Compression with heat pump feed in', 'ttes+': 'TTES feed in', 'ttes-': 'TTES store', 'btes+': 'BTES feed in'}
 
 for technology in technologies_abb: 
     fig = go.Figure()
