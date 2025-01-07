@@ -5,7 +5,7 @@ def add_gb_equations(m=None):
     def gb_feed_in_max_bound(m, s, y, h):
         return m.v_gb_q_heat_in[s, y, h] <= m.v_gb_Q_heat_max[y]
     
-    # def gb_limit(m, s, y):
+    # def gb_limit(m, y):
     #     return m.v_gb_Q_heat_max[y] <= 0
     
     def gb_gas_heat(m, s, y, h):
@@ -47,7 +47,7 @@ def add_gb_equations(m=None):
     m.con_gb_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                     rule = gb_c_var)
     
-    # m.con_gb_limit = py.Constraint(m.set_scenarios, m.set_years,
+    # m.con_gb_limit = py.Constraint(m.set_years,
     #                                rule = gb_limit)
 
 def add_gb_variables(m=None):
