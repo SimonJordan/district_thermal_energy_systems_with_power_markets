@@ -3,22 +3,22 @@ import pyomo.environ as py
 def add_gb_equations(m=None):
     
     def gb_feed_in_max_bound(m, s, y, h):
-        return m.v_gb_q_heat_in[s, y, h] <= m.v_gb_Q_heat_max[s, y]
+        return m.v_gb_q_heat_in[s, y, h] <= m.v_gb_Q_heat_max[y]
     
     # def gb_limit(m, s, y):
-    #     return m.v_gb_Q_heat_max[s, y] <= 0
+    #     return m.v_gb_Q_heat_max[y] <= 0
     
     def gb_gas_heat(m, s, y, h):
         return m.v_gb_q_heat_in[s, y, h] == m.v_gb_q_gas[s, y, h] * m.p_gb_eta[s, y]
     
     def gb_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
-            return m.v_gb_Q_inv[s, y] == m.v_gb_Q_heat_max[s, y] - m.v_gb_Q_heat_max[s, y-5]
+            return m.v_gb_Q_inv[y] == m.v_gb_Q_heat_max[y] - m.v_gb_Q_heat_max[y-5]
         else:
-            return m.v_gb_Q_inv[s, y] == m.v_gb_Q_heat_max[s, y]
+            return m.v_gb_Q_inv[y] == m.v_gb_Q_heat_max[y]
     
     def gb_c_inv(m, s, y):
-        return m.v_gb_c_inv[s, y] == m.v_gb_Q_inv[s, y] * m.p_gb_c_inv[s, y]
+        return m.v_gb_c_inv[s, y] == m.v_gb_Q_inv[y] * m.p_gb_c_inv[s, y]
    
     def gb_c_fix(m, s, y):
         if (y - 5) in m.set_years:
@@ -60,11 +60,11 @@ def add_gb_variables(m=None):
                            domain = py.NonNegativeReals,
                            doc = 'gas consumption from gas boiler per scenario, year and hour')
 
-    m.v_gb_Q_heat_max = py.Var(m.set_scenarios, m.set_years,
+    m.v_gb_Q_heat_max = py.Var(m.set_years,
                                domain = py.NonNegativeReals,
                                doc = 'max energy feed in from gas boiler per scenario, year and hour')
     
-    m.v_gb_Q_inv = py.Var(m.set_scenarios, m.set_years,
+    m.v_gb_Q_inv = py.Var(m.set_years,
                           domain = py.NonNegativeReals,
                           doc = 'new installed power of gas boiler per scenario and year')
    
