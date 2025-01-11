@@ -189,7 +189,6 @@ for scenario in scenarios:
     btes_soc_scenario = {}
     
     electricity_price_scenario = {}
-    electricity_co2_share_scenario = {}
     gas_price_scenario = {}
     co2_price_scenario = {}
     
@@ -282,6 +281,7 @@ for scenario in scenarios:
         
         electricity_price_scenario[year] = df_elec_price_gas_price['elec'].tolist()
         gas_price_scenario[year] = df_elec_price_gas_price['gas'].tolist()
+        co2_price_scenario[year] = df_co2_price['co2'].tolist()[0]
         
     heating_demand[scenario] = heating_demand_scenario
     eb_heat_in[scenario] = eb_heat_in_scenario
@@ -352,7 +352,6 @@ for scenario in scenarios:
     btes_soc[scenario] = btes_soc_scenario
     
     electricity_price[scenario] = electricity_price_scenario
-    electricity_co2_share[scenario] = electricity_co2_share_scenario
     gas_price[scenario] = gas_price_scenario
     co2_price[scenario] = co2_price_scenario
 
