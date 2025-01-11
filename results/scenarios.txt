@@ -10,7 +10,6 @@
 10_hot_summers
 11_warm_summers
 12_moderate_climate
-13_zero_co2_price
-14_delayed_co2_pricing
-15_ambitious_co2_pricing
-16_expiring_support_res
+13_stagnating_co2_pricing
+14_ambitious_co2_pricing
+15_expiring_support_res
