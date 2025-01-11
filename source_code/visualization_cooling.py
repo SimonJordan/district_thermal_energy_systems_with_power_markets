@@ -126,7 +126,6 @@ for scenario in scenarios:
     ites_soc_scenario = {}
     
     electricity_price_scenario = {}
-    electricity_co2_share_scenario = {}
     gas_price_scenario = {}
     co2_price_scenario = {}
     
@@ -136,7 +135,7 @@ for scenario in scenarios:
     path_to_fix_cost = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_fix_cost.xlsx')
     path_to_var_cost = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_var_cost.xlsx')
     path_to_elec_consumption = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_consumption.xlsx')
-    path_to_elec_price_co2_share_gas_price = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_price_co2_share_gas_price.xlsx')
+    path_to_elec_price_gas_price = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_price_gas_price.xlsx')
     path_to_co2_price = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_co2_price.xlsx')
     path_to_storage_soc = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_storage_soc.xlsx')
     
@@ -147,7 +146,7 @@ for scenario in scenarios:
         df_fix_cost = pd.read_excel(path_to_fix_cost, sheet_name=str(year))
         df_var_cost = pd.read_excel(path_to_var_cost, sheet_name=str(year))
         df_elec_consumption = pd.read_excel(path_to_elec_consumption, sheet_name=str(year))
-        df_elec_price_co2_share_gas_price = pd.read_excel(path_to_elec_price_co2_share_gas_price, sheet_name=str(year))
+        df_elec_price_gas_price = pd.read_excel(path_to_elec_price_gas_price, sheet_name=str(year))
         df_co2_price = pd.read_excel(path_to_co2_price, sheet_name=str(year))
         df_storage_soc = pd.read_excel(path_to_storage_soc, sheet_name=str(year))
         
@@ -197,9 +196,8 @@ for scenario in scenarios:
         
         ites_soc_scenario[year] = df_storage_soc['ites'].tolist()
         
-        electricity_price_scenario[year] = df_elec_price_co2_share_gas_price['elec'].tolist()
-        electricity_co2_share_scenario[year] = df_elec_price_co2_share_gas_price['co2'].tolist()
-        gas_price_scenario[year] = df_elec_price_co2_share_gas_price['gas'].tolist()
+        electricity_price_scenario[year] = df_elec_price_gas_price['elec'].tolist()
+        gas_price_scenario[year] = df_elec_price_gas_price['gas'].tolist()
         co2_price_scenario[year] = df_co2_price['co2'].tolist()[0]
         
     cooling_demand[scenario] = cooling_demand_scenario
@@ -249,7 +247,6 @@ for scenario in scenarios:
     ites_soc[scenario] = ites_soc_scenario
     
     electricity_price[scenario] = electricity_price_scenario
-    electricity_co2_share[scenario] = electricity_co2_share_scenario
     gas_price[scenario] = gas_price_scenario
     co2_price[scenario] = co2_price_scenario
 
@@ -285,7 +282,7 @@ fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cooling_demand'], mode='lines',
 
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['electricity'], mode='lines', name='Electricity price', line=dict(color='black', width=2), yaxis='y2'))
 
-fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Cool supply in MWh/h', titlefont=dict(size=20), range=[-1, 8 * 1.1], tickvals=np.linspace(-1, 8, 10), tickfont=dict(size=20)), yaxis2=dict(title='Electricity price in $/MWh', titlefont=dict(size=20), range=[-37.5, 300 * 1.1], tickvals=np.linspace(-37.5, 300, 10), tickfont=dict(size=20), overlaying='y', side='right'), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
+fig.update_layout(title=dict(text='Load curve', font=dict(size=30)), xaxis=dict(title='Hour', tickformat=',', titlefont=dict(size=20), tickfont=dict(size=20)), yaxis=dict(title='Cool supply in MWh/h', titlefont=dict(size=20), range=[-0.5, 2 * 1.1], tickvals=np.linspace(-0.5, 2, 6), tickfont=dict(size=20)), yaxis2=dict(title='Electricity price in $/MWh', titlefont=dict(size=20), range=[-25, 100 * 1.1], tickvals=np.linspace(-25, 100, 6), tickfont=dict(size=20), overlaying='y', side='right'), legend_title=dict(text='Technologies', font=dict(size=20)), legend=dict(font=dict(size=20)))
 fig.update_layout(legend=dict(x=1.05, y=1, xanchor='left'), margin=dict(l=50, r=150, t=50, b=50))
 
 fig.show()
@@ -365,14 +362,14 @@ fig = go.Figure()
 fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Winter week', 'Summer week'))
 
 fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ac'][scenarios[0]][visualize_year][:168], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA')), row=1, col=1)
-fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ac'][scenarios[12]][visualize_year][:168], mode='lines', name='Scenario 13: zero co2 price', line=dict(color='#00CC96')), row=1, col=1)
-fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_3['ac'][scenarios[0]][visualize_year][:168] + df_3['ac'][scenarios[12]][visualize_year][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ac'][scenarios[11]][visualize_year][:168], mode='lines', name='Scenario 12: moderate climate', line=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Scatter(x=list(range(168)) + list(range(168))[::-1], y=df_3['ac'][scenarios[0]][visualize_year][:168] + df_3['ac'][scenarios[11]][visualize_year][:168][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=1)
 
-#fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ac'][scenarios[12]][visualize_year], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
+#fig.add_trace(go.Scatter(x=list(range(168)), y=df_3['ac'][scenarios[11]][visualize_year], mode='lines', name='Scenario 1: high electricity price', fill='tonexty', fillcolor='#00CC96'))
 
 fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ac'][scenarios[0]][visualize_year][4380:4548], mode='lines', name='Scenario 1: reference', line=dict(color='#636EFA'), showlegend=False), row=1, col=2)
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ac'][scenarios[12]][visualize_year][4380:4548], mode='lines', name='Scenario 13: zero co2 price', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
-fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_3['ac'][scenarios[0]][visualize_year][4380:4548] + df_3['ac'][scenarios[12]][visualize_year][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)), y=df_3['ac'][scenarios[11]][visualize_year][4380:4548], mode='lines', name='Scenario 12: moderate climate', line=dict(color='#00CC96'), showlegend=False), row=1, col=2)
+fig.add_trace(go.Scatter(x=list(range(4380, 4548)) + list(range(4380, 4548))[::-1], y=df_3['ac'][scenarios[0]][visualize_year][4380:4548] + df_3['ac'][scenarios[11]][visualize_year][4380:4548][::-1], fill='toself', fillcolor='rgba(128, 128, 128, 0.1)', fillpattern=dict(shape='/', fgcolor='black'), line=dict(color='rgba(255,255,255,0)'), showlegend=False), row=1, col=2)
 
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=1)
 fig.update_xaxes(title_text='Hour', titlefont=dict(size=20), tickformat=',', tickfont=dict(size=20), row=1, col=2)
@@ -441,7 +438,7 @@ fig.update_yaxes(title_text='Newly installed capacity in MW', titlefont=dict(siz
 fig.update_yaxes(title_text='Newly installed capacity in MWh', titlefont=dict(size=20), tickfont=dict(size=20), row=1, col=2)
 fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20), row=2, col=1)
 
-fig.update_yaxes(range=[0, 40], row=2, col=1)
+fig.update_yaxes(range=[0, 5], row=2, col=1)
 
 fig.update_layout(title=dict(text='Investments', font=dict(size=30)), annotations=[dict(font=dict(size=25))], legend=dict(x=0.7, y=0, traceorder='normal', font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), barmode='stack', width=1200, height=900)
 
@@ -473,8 +470,8 @@ fig.update_yaxes(title_text='Newly installed capacity in MWh', titlefont=dict(si
 fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20), row=2, col=1)
 fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20), row=2, col=2)
 
-fig.update_yaxes(range=[0, 40], row=2, col=1)
-fig.update_yaxes(range=[0, 40], row=2, col=2)
+fig.update_yaxes(range=[0, 5], row=2, col=1)
+fig.update_yaxes(range=[0, 5], row=2, col=2)
 
 fig.update_layout(title=dict(text='Investments', font=dict(size=30)), annotations=[dict(font=dict(size=25))], legend=dict(font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)), barmode='stack')
 
@@ -510,7 +507,7 @@ fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont
 
 fig.update_yaxes(title_text='Ratio in %', titlefont=dict(size=20), tickfont=dict(size=20))
 
-fig.update_yaxes(range=[0, 40])
+fig.update_yaxes(range=[0, 5])
 
 fig.update_layout(title=dict(text='Investments', font=dict(size=30)), legend=dict(font=dict(size=20)), legend_title=dict(text='Technologies', font=dict(size=20)))
 
