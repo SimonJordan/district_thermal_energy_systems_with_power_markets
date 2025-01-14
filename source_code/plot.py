@@ -591,11 +591,11 @@ def plot_result():
     
     _bottom = np.zeros(len(x_axis))
     for _key, _label, _color in [
-        ["ac", "Air chiller", "#BCF2F6"],
+        ["ac", "Air-cooled chiller", "#BCF2F6"],
         ["ab_ct", "Absorber (+ cold tower)", "red"],
         ["ab_hp", "Absorber (+ hp)", "red"],
-        ["cp_ct", "Compressor (CT)", "#08C2FF"],
-        ["cp_hp", "Compressor (HP)", "#006BFF"],
+        ["cp_ct", "Water-cooled chiller", "#08C2FF"],
+        ["cp_hp", "Heat recovery chiller", "#006BFF"],
     ]:
         if _key in newly_installed_capacities.keys():
             ax.bar(
@@ -891,7 +891,7 @@ def plot_result():
         elif _name == "gt":
             sorted_keys[_index] = "Geothermal HP"
         elif _name == "cp_hp+":
-            sorted_keys[_index] = "Compressor (HP)"
+            sorted_keys[_index] = "Heat recovery chiller"
         elif _name == "hp":
             sorted_keys[_index] = "Air-source HP"
         elif _name == "ttes+":
@@ -1004,11 +1004,11 @@ def plot_result():
     
     for _index, _name in enumerate(sorted_keys):
         if _name == "ac":
-            sorted_keys[_index] = "Air chiller"
+            sorted_keys[_index] = "Air-cooled chiller"
         elif _name == "cp_ct":
-            sorted_keys[_index] = "Compressor (CT)"
+            sorted_keys[_index] = "Water-cooled chiller"
         elif _name == "cp_hp":
-            sorted_keys[_index] = "Compressor (HP)"
+            sorted_keys[_index] = "Heat recovery chiller"
         elif _name == "ites+":
             sorted_keys[_index] = "Ice TES"
         elif _name == "hp":
