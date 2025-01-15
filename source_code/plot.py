@@ -1040,16 +1040,18 @@ def plot_result():
     handles, labels = ax.get_legend_handles_labels()
     
     # Sort labels alphabetically, but ensure 'Demand' comes first
-    labels, handles = zip(
-        *sorted(
-            zip(labels, handles),
-            key=lambda t: (
-                0 if t[0] == "Demand" else 1,
-                t[0],
-            ),  # 'Demand' gets priority (0)
-        )
-    )
+    # labels, handles = zip(
+    #     *sorted(
+    #         zip(labels, handles),
+    #         key=lambda t: (
+    #             0 if t[0] == "Demand" else 1,
+    #             t[0],
+    #         ),  # 'Demand' gets priority (0)
+    #     )
+    # )
     
+    labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
+        
     _legend = ax.legend(
         handles=handles,
         labels=labels,
