@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_ac_equations(m=None):
-
+    """This section defines the equations of the air-cooled chiller"""
     def ac_feed_in_max_bound(m, s, y, h):
         return m.v_ac_q_cool_in[s, y, h] <= m.v_ac_Q_cool_max[y]
     
@@ -51,7 +51,7 @@ def add_ac_equations(m=None):
     #                                rule = ac_limit)
 
 def add_ac_variables(m=None):
-    
+    """This section defines the variables of the air-cooled chiller"""
     m.v_ac_q_cool_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                               domain = py.NonNegativeReals,
                               doc = 'cool energy feed in from large-scale airchiller per scenario, year, and hour')
@@ -81,7 +81,7 @@ def add_ac_variables(m=None):
                           doc = 'var costs of ac per scenario, year and hour in USD')
 
 def add_ac_parameters(m=None):
-    
+    """This section defines the parameters of the air-cooled chiller"""
     def init_ac_seer(m, s, y, h):
         return m.data_values[s]['ac'][y]['p_ac_eer'][h]
     

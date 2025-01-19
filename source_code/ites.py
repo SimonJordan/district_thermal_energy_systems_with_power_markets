@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_ites_equations(m=None):
-    
+    """This section defines the equations of the ice thermal energy storage"""
     def ites_feed_in_max_bound(m, s, y, h):
         return m.v_ites_q_cool_out[s, y, h] <= m.v_ites_ac_Q_max[y]
     
@@ -86,7 +86,7 @@ def add_ites_equations(m=None):
     #                                    rule = ites_limit_2)
 
 def add_ites_variables(m=None):
-    """This section defines the variables for ITES"""
+    """This section defines the variables of the ice thermal energy storage"""
     m.v_ites_q_cool_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                                 domain = py.NonNegativeReals,
                                 doc = 'cool energy feed in per scenario, year and hour')
@@ -132,8 +132,7 @@ def add_ites_variables(m=None):
                             doc = 'var costs of ITES per scenario, year and hour in USD')
     
 def add_ites_parameters(m=None):
-    """This section defines the parameters for ITES"""
-    
+    """This section defines the parameters of the ice thermal energy storage"""
     def init_ites_losses(m, s, y):
         return m.data_values[s]['ites'][y]['p_ites_losses']
     

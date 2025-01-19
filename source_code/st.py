@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_st_equations(m=None):
-
+    """This section defines the equations of the solar thermal"""
     def st_feed_in_max_bound(m, s, y, h):
         return m.v_st_q_heat_in[s, y, h] <= m.v_st_Q_heat_max[y]
     
@@ -71,9 +71,8 @@ def add_st_equations(m=None):
     # m.con_st_limit = py.Constraint(m.set_years,
     #                                rule = st_limit)
     
-     
 def add_st_variables(m=None):
-    
+    """This section defines the variables of the ice thermal energy storage"""
     m.v_st_q_heat_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                               domain = py.NonNegativeReals,
                               doc = 'heat energy feed in from solar thermal per scenario, year and hour')
@@ -115,7 +114,7 @@ def add_st_variables(m=None):
                             doc = 'var costs of st per scenario, year and hour in USD')
 
 def add_st_parameters(m=None):
-    
+    """This section defines the parameters of the ice thermal energy storage"""
     def init_st_eta(m, s, y):
         return m.data_values[s]['st'][y]['p_st_eta']
     

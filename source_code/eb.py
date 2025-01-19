@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_eb_equations(m=None):
-
+    """This section defines the equations of the electric boiler"""
     def eb_feed_in_max_bound(m, s, y, h):
         return m.v_eb_q_heat_in[s, y, h] <= m.v_eb_Q_heat_max[y]
     
@@ -51,7 +51,7 @@ def add_eb_equations(m=None):
     #                                rule = eb_limit)
 
 def add_eb_variables(m=None):
-    
+    """This section defines the variables of the electric boiler"""
     m.v_eb_q_heat_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                               domain = py.NonNegativeReals,
                               doc = 'heat energy feed in from electric boiler per scenario, year, and hour')
@@ -81,7 +81,7 @@ def add_eb_variables(m=None):
                           doc = 'var costs of eb per scenario, year and hour in USD')
 
 def add_eb_parameters(m=None):
-    
+    """This section defines the parameters of the electric boiler"""
     def init_eb_eta(m, s, y):
         return m.data_values[s]['eb'][y]['p_eb_eta']
     

@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_ab_equations(m=None):
-
+    """This section defines the equations of the absorber"""
     def ab_ct_feed_in_max_bound(m, s, y, h):
         return m.v_ab_ct_q_cool_in[s, y, h] <= m.v_ab_ct_Q_cool_max[y]
     
@@ -117,7 +117,7 @@ def add_ab_equations(m=None):
     #                                   rule = ab_hp_limit)
 
 def add_ab_variables(m=None):
-    
+    """This section defines the variables of the absorber"""
     m.v_ab_ct_q_cool_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                                  domain = py.NonNegativeReals,
                                  doc = 'cool energy feed in from large-scale absorber with cooling tower per scenario, year, and hour')
@@ -187,7 +187,7 @@ def add_ab_variables(m=None):
                              doc = 'var costs of ab_hp per scenario, year and hour in USD')
 
 def add_ab_parameters(m=None):
-    
+    """This section defines the parameters of the absorber"""
     def init_ab_eer(m, s, y):
         return m.data_values[s]['ab'][y]['p_ab_eer']
     

@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_wi_equations(m=None):
-
+    """This section defines the equations of the waste incineration"""
     def wi_feed_in_max_bound(m, s, y, h):
         return m.v_wi_q_heat_in[s, y, h] + m.v_wi_q_elec_in[s, y, h] <= m.v_wi_Q_mix_max[y]
     
@@ -63,7 +63,7 @@ def add_wi_equations(m=None):
     #                                rule = wi_limit)
 
 def add_wi_variables(m=None):
-    
+    """This section defines the variables of the waste incineration"""
     m.v_wi_q_heat_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                               domain = py.NonNegativeReals,
                               doc = 'heat energy feed in from waste incineration per scenario, year and hour')
@@ -97,7 +97,7 @@ def add_wi_variables(m=None):
                           doc = 'var costs of wi per scenario, year and hour in USD')
     
 def add_wi_parameters(m=None):
-
+    """This section defines the parameters of the waste incineration"""
     def init_wi_eta(m, s, y):
         return m.data_values[s]['wi'][y]['p_wi_eta']
     

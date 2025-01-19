@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>source_code.scenarios &mdash; FLXenabler 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FLXenabler
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">district_thermal_energy_systems_with_power_markets</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FLXenabler</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">source_code.scenarios</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for source_code.scenarios</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="define_scenarios"><a class="viewcode-back" href="../../source_code.html#source_code.scenarios.define_scenarios">[docs]</a><span></span><span class="k">def</span> <span class="nf">define_scenarios</span><span class="p">(</span><span class="n">year_expansion_range</span><span class="p">,</span> <span class="n">heating_demand</span><span class="p">,</span> <span class="n">cooling_demand</span><span class="p">,</span> <span class="n">electricity_price</span><span class="p">,</span> <span class="n">electricity_mean_price</span><span class="p">,</span> <span class="n">electricity_co2_share</span><span class="p">,</span> <span class="n">electricity_mean_co2_share</span><span class="p">,</span> <span class="n">gas_price</span><span class="p">,</span> <span class="n">co2_price</span><span class="p">,</span> <span class="n">data_eb</span><span class="p">,</span> <span class="n">data_hp</span><span class="p">,</span> <span class="n">data_st</span><span class="p">,</span> <span class="n">data_wi</span><span class="p">,</span> <span class="n">data_gt</span><span class="p">,</span> <span class="n">data_dgt</span><span class="p">,</span> <span class="n">data_ieh</span><span class="p">,</span> <span class="n">data_chp</span><span class="p">,</span> <span class="n">data_ac</span><span class="p">,</span> <span class="n">data_ab</span><span class="p">,</span> <span class="n">data_cp</span><span class="p">,</span> <span class="n">data_ttes</span><span class="p">,</span> <span class="n">data_ites</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="n">shifted_co2_price</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">stored_co2_price</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">co2_price</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        
+    <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">co2_price</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">2030</span><span class="p">]:</span>
+            <span class="n">shifted_co2_price</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> <span class="o">*</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shifted_co2_price</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">stored_co2_price</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;1_reference&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;year_expansion_range&#39;</span><span class="p">:</span> <span class="n">year_expansion_range</span><span class="p">,</span>
+                           <span class="s1">&#39;heating&#39;</span><span class="p">:</span> <span class="n">heating_demand</span><span class="p">,</span>
+                           <span class="s1">&#39;cooling&#39;</span><span class="p">:</span> <span class="n">cooling_demand</span><span class="p">,</span>
+                           <span class="s1">&#39;electricity_price&#39;</span><span class="p">:</span> <span class="n">electricity_price</span><span class="p">,</span>
+                           <span class="s1">&#39;electricity_mean_price&#39;</span><span class="p">:</span> <span class="n">electricity_mean_price</span><span class="p">,</span>
+                           <span class="s1">&#39;electricity_co2_share&#39;</span><span class="p">:</span> <span class="n">electricity_co2_share</span><span class="p">,</span>
+                           <span class="s1">&#39;electricity_mean_co2_share&#39;</span><span class="p">:</span> <span class="n">electricity_mean_co2_share</span><span class="p">,</span>
+                           <span class="s1">&#39;gas_price&#39;</span><span class="p">:</span> <span class="n">gas_price</span><span class="p">,</span>
+                           <span class="s1">&#39;co2_price&#39;</span><span class="p">:</span> <span class="n">co2_price</span><span class="p">,</span>
+                           <span class="s1">&#39;eb&#39;</span><span class="p">:</span> <span class="n">data_eb</span><span class="p">,</span>
+                           <span class="s1">&#39;hp&#39;</span><span class="p">:</span> <span class="n">data_hp</span><span class="p">,</span>
+                           <span class="s1">&#39;st&#39;</span><span class="p">:</span> <span class="n">data_st</span><span class="p">,</span>
+                           <span class="s1">&#39;wi&#39;</span><span class="p">:</span> <span class="n">data_wi</span><span class="p">,</span>
+                           <span class="s1">&#39;gt&#39;</span><span class="p">:</span> <span class="n">data_gt</span><span class="p">,</span>
+                           <span class="s1">&#39;dgt&#39;</span><span class="p">:</span> <span class="n">data_dgt</span><span class="p">,</span>
+                           <span class="s1">&#39;ieh&#39;</span><span class="p">:</span> <span class="n">data_ieh</span><span class="p">,</span>
+                           <span class="s1">&#39;chp&#39;</span><span class="p">:</span> <span class="n">data_chp</span><span class="p">,</span>
+                           <span class="s1">&#39;ac&#39;</span><span class="p">:</span> <span class="n">data_ac</span><span class="p">,</span>
+                           <span class="s1">&#39;ab&#39;</span><span class="p">:</span> <span class="n">data_ab</span><span class="p">,</span>
+                           <span class="s1">&#39;cp&#39;</span><span class="p">:</span> <span class="n">data_cp</span><span class="p">,</span>
+                           <span class="s1">&#39;ttes&#39;</span><span class="p">:</span> <span class="n">data_ttes</span><span class="p">,</span>
+                           <span class="s1">&#39;ites&#39;</span><span class="p">:</span> <span class="n">data_ites</span><span class="p">}</span>
+    
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;2_high_electricity_prices&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;year_expansion_range&#39;</span><span class="p">:</span> <span class="n">year_expansion_range</span><span class="p">,</span>
+                                         <span class="s1">&#39;heating&#39;</span><span class="p">:</span> <span class="n">heating_demand</span><span class="p">,</span>
+                                         <span class="s1">&#39;cooling&#39;</span><span class="p">:</span> <span class="n">cooling_demand</span><span class="p">,</span>
+                                         <span class="s1">&#39;electricity_price&#39;</span><span class="p">:</span> <span class="p">{</span><span class="n">year</span><span class="p">:</span> <span class="p">[</span><span class="n">value</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span> <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">electricity_price</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+                                         <span class="s1">&#39;electricity_mean_price&#39;</span><span class="p">:</span> <span class="p">{</span><span class="n">year</span><span class="p">:</span> <span class="n">value</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">electricity_mean_price</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+                                         <span class="s1">&#39;electricity_co2_share&#39;</span><span class="p">:</span> <span class="n">electricity_co2_share</span><span class="p">,</span>
+                                         <span class="s1">&#39;electricity_mean_co2_share&#39;</span><span class="p">:</span> <span class="n">electricity_mean_co2_share</span><span class="p">,</span>
+                                         <span class="s1">&#39;gas_price&#39;</span><span class="p">:</span> <span class="n">gas_price</span><span class="p">,</span>
+                                         <span class="s1">&#39;co2_price&#39;</span><span class="p">:</span> <span class="n">co2_price</span><span class="p">,</span>
+                                         <span class="s1">&#39;eb&#39;</span><span class="p">:</span> <span class="n">data_eb</span><span class="p">,</span>
+                                         <span class="s1">&#39;hp&#39;</span><span class="p">:</span> <span class="n">data_hp</span><span class="p">,</span>
+                                         <span class="s1">&#39;st&#39;</span><span class="p">:</span> <span class="n">data_st</span><span class="p">,</span>
+                                         <span class="s1">&#39;wi&#39;</span><span class="p">:</span> <span class="n">data_wi</span><span class="p">,</span>
+                                         <span class="s1">&#39;gt&#39;</span><span class="p">:</span> <span class="n">data_gt</span><span class="p">,</span>
+                                         <span class="s1">&#39;dgt&#39;</span><span class="p">:</span> <span class="n">data_dgt</span><span class="p">,</span>
+                                         <span class="s1">&#39;ieh&#39;</span><span class="p">:</span> <span class="n">data_ieh</span><span class="p">,</span>
+                                         <span class="s1">&#39;chp&#39;</span><span class="p">:</span> <span class="n">data_chp</span><span class="p">,</span>
+                                         <span class="s1">&#39;ac&#39;</span><span class="p">:</span> <span class="n">data_ac</span><span class="p">,</span>
+                                         <span class="s1">&#39;ab&#39;</span><span class="p">:</span> <span class="n">data_ab</span><span class="p">,</span>
+                                         <span class="s1">&#39;cp&#39;</span><span class="p">:</span> <span class="n">data_cp</span><span class="p">,</span>
+                                         <span class="s1">&#39;ttes&#39;</span><span class="p">:</span> <span class="n">data_ttes</span><span class="p">,</span>
+                                         <span class="s1">&#39;ites&#39;</span><span class="p">:</span> <span class="n">data_ites</span><span class="p">}</span>
+    
+    <span class="c1"># data[&#39;3_low_electricity_prices&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                                     &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                                     &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                                     &#39;electricity_price&#39;: {year: [value * 0.8 for value in values] for year, values in electricity_price.items()},</span>
+    <span class="c1">#                                     &#39;electricity_mean_price&#39;: {year: value * 0.8 for year, value in electricity_mean_price.items()},</span>
+    <span class="c1">#                                     &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                                     &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                                     &#39;gas_price&#39;: gas_price,</span>
+    <span class="c1">#                                     &#39;co2_price&#39;: co2_price,</span>
+    <span class="c1">#                                     &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                                     &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                                     &#39;st&#39;: data_st,</span>
+    <span class="c1">#                                     &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                                     &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                                     &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                                     &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                                     &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                                     &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                                     &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                                     &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                                     &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                                     &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;4_flexible_energy_market&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                                     &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                                     &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                                     &#39;electricity_price&#39;: {year: [max(0, value) for value in values] for year, values in electricity_price.items()},</span>
+    <span class="c1">#                                     &#39;electricity_mean_price&#39;: {year: sum(values)/len(values) for year, values in {year: [max(0, value) for value in values] for year, values in electricity_price.items()}.items()},</span>
+    <span class="c1">#                                     &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                                     &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                                     &#39;gas_price&#39;: gas_price,</span>
+    <span class="c1">#                                     &#39;co2_price&#39;: co2_price,</span>
+    <span class="c1">#                                     &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                                     &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                                     &#39;st&#39;: data_st,</span>
+    <span class="c1">#                                     &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                                     &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                                     &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                                     &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                                     &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                                     &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                                     &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                                     &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                                     &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                                     &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;5_energy_congestion&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                                &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                                &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                                &#39;electricity_price&#39;: {year: [value * 1.1 for value in values] if year in [2035] else values for year, values in electricity_price.items()},</span>
+    <span class="c1">#                                &#39;electricity_mean_price&#39;: {year: value * 1.1 if year in [2035] else value for year, value in electricity_mean_price.items()},</span>
+    <span class="c1">#                                &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                                &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                                &#39;gas_price&#39;: {year: [value * 1.2 for value in values] if year in [2035] else values for year, values in gas_price.items()},</span>
+    <span class="c1">#                                &#39;co2_price&#39;: co2_price,</span>
+    <span class="c1">#                                &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                                &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                                &#39;st&#39;: data_st,</span>
+    <span class="c1">#                                &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                                &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                                &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                                &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                                &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                                &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                                &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                                &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                                &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                                &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;6_green_friendly&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                             &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                             &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                             &#39;electricity_price&#39;: electricity_price,</span>
+    <span class="c1">#                             &#39;electricity_mean_price&#39;: electricity_mean_price,</span>
+    <span class="c1">#                             &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                             &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                             &#39;gas_price&#39;: gas_price,</span>
+    <span class="c1">#                             &#39;co2_price&#39;: {year: value * 1.1 for year, value in co2_price.items()},</span>
+    <span class="c1">#                             &#39;eb&#39;: {year: {name: (value * 0.8 if name == &#39;p_eb_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_eb.items()},</span>
+    <span class="c1">#                             &#39;hp&#39;: {year: {name: (value * 0.8 if name == &#39;p_hp_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_hp.items()},</span>
+    <span class="c1">#                             &#39;st&#39;: {year: {name: (value * 0.8 if name == &#39;p_st_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_st.items()},</span>
+    <span class="c1">#                             &#39;wi&#39;: {year: {name: (value * 0.8 if name == &#39;p_wi_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_wi.items()},</span>
+    <span class="c1">#                             &#39;gt&#39;: {year: {name: (value * 0.8 if name == &#39;p_gt_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_gt.items()},</span>
+    <span class="c1">#                             &#39;dgt&#39;: {year: {name: (value * 0.8 if name == &#39;p_dgt_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_dgt.items()},</span>
+    <span class="c1">#                             &#39;ieh&#39;: {year: {name: (value * 0.8 if name == &#39;p_ieh_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_ieh.items()},</span>
+    <span class="c1">#                             &#39;chp&#39;: {year: {name: (value * 0.8 if name == &#39;p_chp_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_chp.items()},</span>
+    <span class="c1">#                             &#39;ac&#39;: {year: {name: (value * 0.8 if name == &#39;p_ac_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_ac.items()},</span>
+    <span class="c1">#                             &#39;ab&#39;: {year: {name: (value * 0.8 if name == &#39;p_ab_c_inv&#39; or &#39;p_ct_ab_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_ab.items()},</span>
+    <span class="c1">#                             &#39;cp&#39;: {year: {name: (value * 0.8 if name == &#39;p_cp_c_inv&#39; or &#39;p_ct_cp_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_cp.items()},</span>
+    <span class="c1">#                             &#39;ttes&#39;: {year: {name: (value * 0.8 if name == &#39;p_ttes_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()},</span>
+    <span class="c1">#                             &#39;ites&#39;: {year: {name: (value * 0.8 if name == &#39;p_ites_c_inv&#39; else value) for name, value in dict_items.items()} for year, dict_items in data_ites.items()}}</span>
+    
+    <span class="c1"># data[&#39;7_low_gas_demand&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                             &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                             &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                             &#39;electricity_price&#39;: {year: [value * 0.85 for value in values] for year, values in electricity_price.items()},</span>
+    <span class="c1">#                             &#39;electricity_mean_price&#39;: {year: value * 0.85 for year, value in electricity_mean_price.items()},</span>
+    <span class="c1">#                             &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                             &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                             &#39;gas_price&#39;: {year: [value * 0.95 for value in values] for year, values in gas_price.items()},</span>
+    <span class="c1">#                             &#39;co2_price&#39;: {year: value * 1.25 for year, value in co2_price.items()},</span>
+    <span class="c1">#                             &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                             &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                             &#39;st&#39;: data_st,</span>
+    <span class="c1">#                             &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                             &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                             &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                             &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                             &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                             &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                             &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                             &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                             &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                             &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;8_natural_gas_friendly&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                                   &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                                   &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                                   &#39;electricity_price&#39;: electricity_price,</span>
+    <span class="c1">#                                   &#39;electricity_mean_price&#39;: electricity_mean_price,</span>
+    <span class="c1">#                                   &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                                   &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share, </span>
+    <span class="c1">#                                   &#39;gas_price&#39;: {year: [value * 0.85 for value in values] if year in [2040] else values for year, values in gas_price.items()},</span>
+    <span class="c1">#                                   &#39;co2_price&#39;: {year: value * 0 if year in [2040] else value for year, value in co2_price.items()},</span>
+    <span class="c1">#                                   &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                                   &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                                   &#39;st&#39;: data_st,</span>
+    <span class="c1">#                                   &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                                   &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                                   &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                                   &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                                   &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                                   &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                                   &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                                   &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                                   &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                                   &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;9_cold_winters&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                           &#39;heating&#39;: {year: [value * 1.1 for value in values] if year in [2045, 2050] else values for year, values in heating_demand.items()},</span>
+    <span class="c1">#                           &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                           &#39;electricity_price&#39;: {year: [value * 1.05 for value in values] if year in [2045, 2050] else values for year, values in electricity_price.items()},</span>
+    <span class="c1">#                           &#39;electricity_mean_price&#39;: {year: value * 1.05 if year in [2045, 2050] else value for year, value in electricity_mean_price.items()},</span>
+    <span class="c1">#                           &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                           &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                           &#39;gas_price&#39;: {year: [value * 1.1 for value in values] if year in [2045, 2050] else values for year, values in gas_price.items()},</span>
+    <span class="c1">#                           &#39;co2_price&#39;: co2_price,</span>
+    <span class="c1">#                           &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                           &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                           &#39;st&#39;: data_st,</span>
+    <span class="c1">#                           &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                           &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                           &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                           &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                           &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                           &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                           &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                           &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                           &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                           &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;10_hot_summers&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                           &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                           &#39;cooling&#39;: {year: [value * 1.1 for value in values] if year in [2030] else values for year, values in cooling_demand.items()},</span>
+    <span class="c1">#                           &#39;electricity_price&#39;: {year: [value * 1.1 for value in values] if year in [2030] else values for year, values in electricity_price.items()},</span>
+    <span class="c1">#                           &#39;electricity_mean_price&#39;: {year: value * 1.1 if year in [2030] else value for year, value in electricity_mean_price.items()},</span>
+    <span class="c1">#                           &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                           &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                           &#39;gas_price&#39;: gas_price,</span>
+    <span class="c1">#                           &#39;co2_price&#39;: co2_price,</span>
+    <span class="c1">#                           &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                           &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                           &#39;st&#39;: data_st,</span>
+    <span class="c1">#                           &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                           &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                           &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                           &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                           &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                           &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                           &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                           &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                           &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                           &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;11_warm_summers&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                            &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                            &#39;cooling&#39;: {year: [value * 1.05 for value in values] if year in [2045, 2050] else values for year, values in cooling_demand.items()},</span>
+    <span class="c1">#                            &#39;electricity_price&#39;: electricity_price,</span>
+    <span class="c1">#                            &#39;electricity_mean_price&#39;: electricity_mean_price,</span>
+    <span class="c1">#                            &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                            &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                            &#39;gas_price&#39;: gas_price,</span>
+    <span class="c1">#                            &#39;co2_price&#39;: co2_price,</span>
+    <span class="c1">#                            &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                            &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                            &#39;st&#39;: data_st,</span>
+    <span class="c1">#                            &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                            &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                            &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                            &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                            &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                            &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                            &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                            &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                            &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                            &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;12_moderate_climate&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                                &#39;heating&#39;: {year: [value * 0.9 for value in values] for year, values in heating_demand.items()},</span>
+    <span class="c1">#                                &#39;cooling&#39;: {year: [value * 0.9 for value in values] for year, values in cooling_demand.items()},</span>
+    <span class="c1">#                                &#39;electricity_price&#39;: {year: [value * 0.9 for value in values] for year, values in electricity_price.items()},</span>
+    <span class="c1">#                                &#39;electricity_mean_price&#39;: {year: value * 0.9 for year, value in electricity_mean_price.items()},</span>
+    <span class="c1">#                                &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                                &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                                &#39;gas_price&#39;: {year: [value * 0.8 for value in values] for year, values in gas_price.items()},</span>
+    <span class="c1">#                                &#39;co2_price&#39;: co2_price,</span>
+    <span class="c1">#                                &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                                &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                                &#39;st&#39;: data_st,</span>
+    <span class="c1">#                                &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                                &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                                &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                                &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                                &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                                &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                                &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                                &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                                &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                                &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;13_zero_co2_price&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                              &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                              &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                              &#39;electricity_price&#39;: electricity_price,</span>
+    <span class="c1">#                              &#39;electricity_mean_price&#39;: electricity_mean_price,</span>
+    <span class="c1">#                              &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                              &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share, </span>
+    <span class="c1">#                              &#39;gas_price&#39;: gas_price,</span>
+    <span class="c1">#                              &#39;co2_price&#39;: {year: value * 0 for year, value in co2_price.items()},</span>
+    <span class="c1">#                              &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                              &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                              &#39;st&#39;: data_st,</span>
+    <span class="c1">#                              &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                              &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                              &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                              &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                              &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                              &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                              &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                              &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                              &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                              &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;14_delayed_co2_pricing&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                                   &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                                   &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                                   &#39;electricity_price&#39;: electricity_price,</span>
+    <span class="c1">#                                   &#39;electricity_mean_price&#39;: electricity_mean_price,</span>
+    <span class="c1">#                                   &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                                   &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share, </span>
+    <span class="c1">#                                   &#39;gas_price&#39;: gas_price,</span>
+    <span class="c1">#                                   &#39;co2_price&#39;: {year: value for year, value in shifted_co2_price.items()},</span>
+    <span class="c1">#                                   &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                                   &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                                   &#39;st&#39;: data_st,</span>
+    <span class="c1">#                                   &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                                   &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                                   &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                                   &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                                   &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                                   &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                                   &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                                   &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                                   &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                                   &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;15_ambitious_co2_pricing&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                                     &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                                     &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                                     &#39;electricity_price&#39;: electricity_price,</span>
+    <span class="c1">#                                     &#39;electricity_mean_price&#39;: electricity_mean_price,</span>
+    <span class="c1">#                                     &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                                     &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                                     &#39;gas_price&#39;: gas_price,</span>
+    <span class="c1">#                                     &#39;co2_price&#39;: {year: value * 1.25 for year, value in co2_price.items()},</span>
+    <span class="c1">#                                     &#39;eb&#39;: data_eb,</span>
+    <span class="c1">#                                     &#39;hp&#39;: data_hp,</span>
+    <span class="c1">#                                     &#39;st&#39;: data_st,</span>
+    <span class="c1">#                                     &#39;wi&#39;: data_wi,</span>
+    <span class="c1">#                                     &#39;gt&#39;: data_gt,</span>
+    <span class="c1">#                                     &#39;dgt&#39;: data_dgt,</span>
+    <span class="c1">#                                     &#39;ieh&#39;: data_ieh,</span>
+    <span class="c1">#                                     &#39;chp&#39;: data_chp,</span>
+    <span class="c1">#                                     &#39;ac&#39;: data_ac,</span>
+    <span class="c1">#                                     &#39;ab&#39;: data_ab,</span>
+    <span class="c1">#                                     &#39;cp&#39;: data_cp,</span>
+    <span class="c1">#                                     &#39;ttes&#39;: data_ttes,</span>
+    <span class="c1">#                                     &#39;ites&#39;: data_ites}</span>
+    
+    <span class="c1"># data[&#39;16_expiring_support_res&#39;] = {&#39;year_expansion_range&#39;: year_expansion_range,</span>
+    <span class="c1">#                                    &#39;heating&#39;: heating_demand,</span>
+    <span class="c1">#                                    &#39;cooling&#39;: cooling_demand,</span>
+    <span class="c1">#                                    &#39;electricity_price&#39;: electricity_price,</span>
+    <span class="c1">#                                    &#39;electricity_mean_price&#39;: electricity_mean_price,</span>
+    <span class="c1">#                                    &#39;electricity_co2_share&#39;: electricity_co2_share,</span>
+    <span class="c1">#                                    &#39;electricity_mean_co2_share&#39;: electricity_mean_co2_share,</span>
+    <span class="c1">#                                    &#39;gas_price&#39;: gas_price,</span>
+    <span class="c1">#                                    &#39;co2_price&#39;: co2_price,</span>
+    <span class="c1">#                                    &#39;eb&#39;: {year: {name: (value * 0.7 if name == &#39;p_eb_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_eb.items()},</span>
+    <span class="c1">#                                    &#39;hp&#39;: {year: {name: (value * 0.7 if name == &#39;p_hp_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_hp.items()},</span>
+    <span class="c1">#                                    &#39;st&#39;: {year: {name: (value * 0.7 if name == &#39;p_st_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_st.items()},</span>
+    <span class="c1">#                                    &#39;wi&#39;: {year: {name: (value * 0.7 if name == &#39;p_wi_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_wi.items()},</span>
+    <span class="c1">#                                    &#39;gt&#39;: {year: {name: (value * 0.7 if name == &#39;p_gt_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_gt.items()},</span>
+    <span class="c1">#                                    &#39;dgt&#39;: {year: {name: (value * 0.7 if name == &#39;p_dgt_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_dgt.items()},</span>
+    <span class="c1">#                                    &#39;ieh&#39;: {year: {name: (value * 0.7 if name == &#39;p_ieh_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ieh.items()},</span>
+    <span class="c1">#                                    &#39;chp&#39;: {year: {name: (value * 0.7 if name == &#39;p_chp_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_chp.items()},</span>
+    <span class="c1">#                                    &#39;ac&#39;: {year: {name: (value * 0.7 if name == &#39;p_ac_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ac.items()},</span>
+    <span class="c1">#                                    &#39;ab&#39;: {year: {name: (value * 0.7 if name == (&#39;p_ab_c_inv&#39; or &#39;p_ct_ab_c_inv&#39;) and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ab.items()},</span>
+    <span class="c1">#                                    &#39;cp&#39;: {year: {name: (value * 0.7 if name == (&#39;p_cp_c_inv&#39; or &#39;p_ct_cp_c_inv&#39;) and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_cp.items()},</span>
+    <span class="c1">#                                    &#39;ttes&#39;: {year: {name: (value * 0.7 if name == &#39;p_ttes_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ttes.items()},</span>
+    <span class="c1">#                                    &#39;ites&#39;: {year: {name: (value * 0.7 if name == &#39;p_ites_c_inv&#39; and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ites.items()}}</span>
+    
+    <span class="k">return</span> <span class="n">data</span></div>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Simon Jordan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

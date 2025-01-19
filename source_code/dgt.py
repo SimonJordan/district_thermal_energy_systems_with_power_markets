@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_dgt_equations(m=None):
-
+    """This section defines the equations of the deep geothermal"""
     def dgt_feed_in_max_bound(m, s, y, h):
         return m.v_dgt_q_heat_in[s, y, h] <= m.v_dgt_Q_heat_max[y]
     
@@ -51,7 +51,7 @@ def add_dgt_equations(m=None):
                                     rule = dgt_limit)
 
 def add_dgt_variables(m=None):
-    
+    """This section defines the variables of the deep geothermal"""
     m.v_dgt_q_heat_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                                domain = py.NonNegativeReals,
                                doc = 'heat energy feed in from large-scale deep geothermal per scenario, year, and hour')
@@ -81,7 +81,7 @@ def add_dgt_variables(m=None):
                            doc = 'var costs of dgt per scenario, year and hour in USD')
 
 def add_dgt_parameters(m=None):
-    
+    """This section defines the parameters of the deep geothermal"""
     def init_dgt_elec(m, s, y):
         return m.data_values[s]['dgt'][y]['p_dgt_elec']
        
