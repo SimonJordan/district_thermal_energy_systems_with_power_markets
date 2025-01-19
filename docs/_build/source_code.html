@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>source_code package &mdash; FLXenabler 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="district_thermal_energy_systems_with_power_markets" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            FLXenabler
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">district_thermal_energy_systems_with_power_markets</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">source_code package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.ab">source_code.ab module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.ac">source_code.ac module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.chp">source_code.chp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.cp">source_code.cp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.dgt">source_code.dgt module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.eb">source_code.eb module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.export">source_code.export module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.general">source_code.general module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.gt">source_code.gt module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.hp">source_code.hp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.ieh">source_code.ieh module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.initialize">source_code.initialize module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.ites">source_code.ites module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-code-model-module">source_code.model module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.plot">source_code.plot module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.save">source_code.save module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.scenarios">source_code.scenarios module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.st">source_code.st module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.ttes">source_code.ttes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-code-visualization-cooling-module">source_code.visualization_cooling module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#source-code-visualization-heating-module">source_code.visualization_heating module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code.wi">source_code.wi module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-source_code">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FLXenabler</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">district_thermal_energy_systems_with_power_markets</a></li>
+      <li class="breadcrumb-item active">source_code package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/source_code.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="source-code-package">
+<h1>source_code package<a class="headerlink" href="#source-code-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-source_code.ab">
+<span id="source-code-ab-module"></span><h2>source_code.ab module<a class="headerlink" href="#module-source_code.ab" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ab.add_ab_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.ab.</span></span><span class="sig-name descname"><span class="pre">add_ab_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ab.html#add_ab_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ab.add_ab_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the absorber</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ab.add_ab_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.ab.</span></span><span class="sig-name descname"><span class="pre">add_ab_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ab.html#add_ab_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ab.add_ab_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the absorber</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ab.add_ab_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.ab.</span></span><span class="sig-name descname"><span class="pre">add_ab_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ab.html#add_ab_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ab.add_ab_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the absorber</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.ac">
+<span id="source-code-ac-module"></span><h2>source_code.ac module<a class="headerlink" href="#module-source_code.ac" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ac.add_ac_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.ac.</span></span><span class="sig-name descname"><span class="pre">add_ac_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ac.html#add_ac_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ac.add_ac_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the air-cooled chiller</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ac.add_ac_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.ac.</span></span><span class="sig-name descname"><span class="pre">add_ac_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ac.html#add_ac_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ac.add_ac_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the air-cooled chiller</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ac.add_ac_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.ac.</span></span><span class="sig-name descname"><span class="pre">add_ac_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ac.html#add_ac_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ac.add_ac_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the air-cooled chiller</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.chp">
+<span id="source-code-chp-module"></span><h2>source_code.chp module<a class="headerlink" href="#module-source_code.chp" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.chp.add_chp_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.chp.</span></span><span class="sig-name descname"><span class="pre">add_chp_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/chp.html#add_chp_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.chp.add_chp_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the combined heat and power</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.chp.add_chp_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.chp.</span></span><span class="sig-name descname"><span class="pre">add_chp_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/chp.html#add_chp_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.chp.add_chp_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the combined heat and power</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.chp.add_chp_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.chp.</span></span><span class="sig-name descname"><span class="pre">add_chp_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/chp.html#add_chp_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.chp.add_chp_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the combined heat and power</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.cp">
+<span id="source-code-cp-module"></span><h2>source_code.cp module<a class="headerlink" href="#module-source_code.cp" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.cp.add_cp_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.cp.</span></span><span class="sig-name descname"><span class="pre">add_cp_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/cp.html#add_cp_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.cp.add_cp_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the compressor</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.cp.add_cp_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.cp.</span></span><span class="sig-name descname"><span class="pre">add_cp_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/cp.html#add_cp_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.cp.add_cp_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the compressor</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.cp.add_cp_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.cp.</span></span><span class="sig-name descname"><span class="pre">add_cp_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/cp.html#add_cp_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.cp.add_cp_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the compressor</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.dgt">
+<span id="source-code-dgt-module"></span><h2>source_code.dgt module<a class="headerlink" href="#module-source_code.dgt" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.dgt.add_dgt_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.dgt.</span></span><span class="sig-name descname"><span class="pre">add_dgt_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/dgt.html#add_dgt_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.dgt.add_dgt_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the deep geothermal</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.dgt.add_dgt_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.dgt.</span></span><span class="sig-name descname"><span class="pre">add_dgt_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/dgt.html#add_dgt_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.dgt.add_dgt_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the deep geothermal</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.dgt.add_dgt_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.dgt.</span></span><span class="sig-name descname"><span class="pre">add_dgt_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/dgt.html#add_dgt_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.dgt.add_dgt_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the deep geothermal</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.eb">
+<span id="source-code-eb-module"></span><h2>source_code.eb module<a class="headerlink" href="#module-source_code.eb" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.eb.add_eb_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.eb.</span></span><span class="sig-name descname"><span class="pre">add_eb_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/eb.html#add_eb_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.eb.add_eb_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the electric boiler</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.eb.add_eb_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.eb.</span></span><span class="sig-name descname"><span class="pre">add_eb_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/eb.html#add_eb_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.eb.add_eb_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the electric boiler</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.eb.add_eb_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.eb.</span></span><span class="sig-name descname"><span class="pre">add_eb_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/eb.html#add_eb_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.eb.add_eb_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the electric boiler</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.export">
+<span id="source-code-export-module"></span><h2>source_code.export module<a class="headerlink" href="#module-source_code.export" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.export.export_result">
+<span class="sig-prename descclassname"><span class="pre">source_code.export.</span></span><span class="sig-name descname"><span class="pre">export_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scenarios</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">years</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/export.html#export_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.export.export_result" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-source_code.general">
+<span id="source-code-general-module"></span><h2>source_code.general module<a class="headerlink" href="#module-source_code.general" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.general.add_general_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.general.</span></span><span class="sig-name descname"><span class="pre">add_general_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/general.html#add_general_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.general.add_general_parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-source_code.gt">
+<span id="source-code-gt-module"></span><h2>source_code.gt module<a class="headerlink" href="#module-source_code.gt" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.gt.add_gt_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.gt.</span></span><span class="sig-name descname"><span class="pre">add_gt_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/gt.html#add_gt_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.gt.add_gt_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the geothermal</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.gt.add_gt_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.gt.</span></span><span class="sig-name descname"><span class="pre">add_gt_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/gt.html#add_gt_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.gt.add_gt_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the geothermal</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.gt.add_gt_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.gt.</span></span><span class="sig-name descname"><span class="pre">add_gt_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/gt.html#add_gt_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.gt.add_gt_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the geothermal</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.hp">
+<span id="source-code-hp-module"></span><h2>source_code.hp module<a class="headerlink" href="#module-source_code.hp" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.hp.add_hp_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.hp.</span></span><span class="sig-name descname"><span class="pre">add_hp_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/hp.html#add_hp_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.hp.add_hp_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the heat pump</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.hp.add_hp_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.hp.</span></span><span class="sig-name descname"><span class="pre">add_hp_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/hp.html#add_hp_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.hp.add_hp_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the heat pump</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.hp.add_hp_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.hp.</span></span><span class="sig-name descname"><span class="pre">add_hp_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/hp.html#add_hp_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.hp.add_hp_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the heat pump</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.ieh">
+<span id="source-code-ieh-module"></span><h2>source_code.ieh module<a class="headerlink" href="#module-source_code.ieh" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ieh.add_ieh_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.ieh.</span></span><span class="sig-name descname"><span class="pre">add_ieh_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ieh.html#add_ieh_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ieh.add_ieh_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the industrial excess heat</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ieh.add_ieh_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.ieh.</span></span><span class="sig-name descname"><span class="pre">add_ieh_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ieh.html#add_ieh_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ieh.add_ieh_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the industrial excess heat</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ieh.add_ieh_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.ieh.</span></span><span class="sig-name descname"><span class="pre">add_ieh_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ieh.html#add_ieh_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ieh.add_ieh_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the industrial excess heat</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.initialize">
+<span id="source-code-initialize-module"></span><h2>source_code.initialize module<a class="headerlink" href="#module-source_code.initialize" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.initialize.initialize_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.initialize.</span></span><span class="sig-name descname"><span class="pre">initialize_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">years</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/initialize.html#initialize_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.initialize.initialize_parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-source_code.ites">
+<span id="source-code-ites-module"></span><h2>source_code.ites module<a class="headerlink" href="#module-source_code.ites" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ites.add_ites_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.ites.</span></span><span class="sig-name descname"><span class="pre">add_ites_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ites.html#add_ites_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ites.add_ites_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the ice thermal energy storage</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ites.add_ites_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.ites.</span></span><span class="sig-name descname"><span class="pre">add_ites_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ites.html#add_ites_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ites.add_ites_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the ice thermal energy storage</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ites.add_ites_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.ites.</span></span><span class="sig-name descname"><span class="pre">add_ites_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ites.html#add_ites_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ites.add_ites_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the ice thermal energy storage</p>
+</dd></dl>
+
+</section>
+<section id="source-code-model-module">
+<h2>source_code.model module<a class="headerlink" href="#source-code-model-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-source_code.plot">
+<span id="source-code-plot-module"></span><h2>source_code.plot module<a class="headerlink" href="#module-source_code.plot" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.plot.plot_result">
+<span class="sig-prename descclassname"><span class="pre">source_code.plot.</span></span><span class="sig-name descname"><span class="pre">plot_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/plot.html#plot_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.plot.plot_result" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-source_code.save">
+<span id="source-code-save-module"></span><h2>source_code.save module<a class="headerlink" href="#module-source_code.save" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.save.save_output">
+<span class="sig-prename descclassname"><span class="pre">source_code.save.</span></span><span class="sig-name descname"><span class="pre">save_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/save.html#save_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.save.save_output" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-source_code.scenarios">
+<span id="source-code-scenarios-module"></span><h2>source_code.scenarios module<a class="headerlink" href="#module-source_code.scenarios" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.scenarios.define_scenarios">
+<span class="sig-prename descclassname"><span class="pre">source_code.scenarios.</span></span><span class="sig-name descname"><span class="pre">define_scenarios</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year_expansion_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_demand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling_demand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electricity_price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electricity_mean_price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electricity_co2_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electricity_mean_co2_share</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gas_price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2_price</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_eb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_hp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_st</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_wi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_gt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dgt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ieh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_chp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_cp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ttes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ites</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/scenarios.html#define_scenarios"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.scenarios.define_scenarios" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-source_code.st">
+<span id="source-code-st-module"></span><h2>source_code.st module<a class="headerlink" href="#module-source_code.st" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.st.add_st_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.st.</span></span><span class="sig-name descname"><span class="pre">add_st_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/st.html#add_st_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.st.add_st_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the solar thermal</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.st.add_st_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.st.</span></span><span class="sig-name descname"><span class="pre">add_st_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/st.html#add_st_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.st.add_st_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the ice thermal energy storage</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.st.add_st_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.st.</span></span><span class="sig-name descname"><span class="pre">add_st_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/st.html#add_st_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.st.add_st_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the ice thermal energy storage</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code.ttes">
+<span id="source-code-ttes-module"></span><h2>source_code.ttes module<a class="headerlink" href="#module-source_code.ttes" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ttes.add_ttes_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.ttes.</span></span><span class="sig-name descname"><span class="pre">add_ttes_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ttes.html#add_ttes_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ttes.add_ttes_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the tank thermal energy storage</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ttes.add_ttes_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.ttes.</span></span><span class="sig-name descname"><span class="pre">add_ttes_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ttes.html#add_ttes_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ttes.add_ttes_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the tank thermal energy storage</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.ttes.add_ttes_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.ttes.</span></span><span class="sig-name descname"><span class="pre">add_ttes_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/ttes.html#add_ttes_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.ttes.add_ttes_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the tank thermal energy storage</p>
+</dd></dl>
+
+</section>
+<section id="source-code-visualization-cooling-module">
+<h2>source_code.visualization_cooling module<a class="headerlink" href="#source-code-visualization-cooling-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="source-code-visualization-heating-module">
+<h2>source_code.visualization_heating module<a class="headerlink" href="#source-code-visualization-heating-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-source_code.wi">
+<span id="source-code-wi-module"></span><h2>source_code.wi module<a class="headerlink" href="#module-source_code.wi" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.wi.add_wi_equations">
+<span class="sig-prename descclassname"><span class="pre">source_code.wi.</span></span><span class="sig-name descname"><span class="pre">add_wi_equations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/wi.html#add_wi_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.wi.add_wi_equations" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the equations of the waste incineration</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.wi.add_wi_parameters">
+<span class="sig-prename descclassname"><span class="pre">source_code.wi.</span></span><span class="sig-name descname"><span class="pre">add_wi_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/wi.html#add_wi_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.wi.add_wi_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the parameters of the waste incineration</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_code.wi.add_wi_variables">
+<span class="sig-prename descclassname"><span class="pre">source_code.wi.</span></span><span class="sig-name descname"><span class="pre">add_wi_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/source_code/wi.html#add_wi_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#source_code.wi.add_wi_variables" title="Permalink to this definition"></a></dt>
+<dd><p>This section defines the variables of the waste incineration</p>
+</dd></dl>
+
+</section>
+<section id="module-source_code">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-source_code" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="district_thermal_energy_systems_with_power_markets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Simon Jordan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

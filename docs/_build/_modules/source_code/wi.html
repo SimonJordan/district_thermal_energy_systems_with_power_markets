@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>source_code.wi &mdash; FLXenabler 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FLXenabler
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">district_thermal_energy_systems_with_power_markets</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FLXenabler</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">source_code.wi</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for source_code.wi</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pyomo.environ</span> <span class="k">as</span> <span class="nn">py</span>
+
+<div class="viewcode-block" id="add_wi_equations"><a class="viewcode-back" href="../../source_code.html#source_code.wi.add_wi_equations">[docs]</a><span class="k">def</span> <span class="nf">add_wi_equations</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This section defines the equations of the waste incineration&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">wi_feed_in_max_bound</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_q_heat_in</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_q_elec_in</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_Q_mix_max</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+    
+    <span class="c1"># def wi_limit(m, s, y):</span>
+    <span class="c1">#     return m.v_wi_Q_mix_max[s, y] &lt;= 0</span>
+    
+    <span class="k">def</span> <span class="nf">wi_waste_heat</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_q_heat_in</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_q_waste</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_eta</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_h_waste</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_heat</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_p_scale</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span>
+        
+    <span class="k">def</span> <span class="nf">wi_waste_elec</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_q_elec_in</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_q_waste</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_eta</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_h_waste</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_elec</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_p_scale</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">wi_p_scale</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_p_scale</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span>
+    
+    <span class="k">def</span> <span class="nf">wi_Q_inv</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_Q_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_Q_mix_max</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_Q_mix_max</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_Q_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_Q_mix_max</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">wi_c_inv</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_Q_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_c_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+   
+    <span class="k">def</span> <span class="nf">wi_c_fix</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_fix</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_fix</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">p_year_expansion_range</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.02</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_fix</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">p_year_expansion_range</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.02</span>
+    
+    <span class="k">def</span> <span class="nf">wi_c_var</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_var</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">p_year_expansion_range</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">p_wi_q_waste</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_c_waste</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_p_scale</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_q_waste</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_wi_co2_share</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_c_co2</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_p_scale</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="o">.</span><span class="n">v_wi_q_elec_in</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_c_elec</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">])</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_wi_feed_in_max_bound</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                                               <span class="n">rule</span> <span class="o">=</span> <span class="n">wi_feed_in_max_bound</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_wi_waste_heat</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                                        <span class="n">rule</span> <span class="o">=</span> <span class="n">wi_waste_heat</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_wi_waste_elec</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                                        <span class="n">rule</span> <span class="o">=</span> <span class="n">wi_waste_elec</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_wi_p_scale</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                                     <span class="n">rule</span> <span class="o">=</span> <span class="n">wi_p_scale</span><span class="p">)</span>
+        
+    <span class="n">m</span><span class="o">.</span><span class="n">con_wi_Q_inv</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                                   <span class="n">rule</span> <span class="o">=</span> <span class="n">wi_Q_inv</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_wi_c_inv</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                                   <span class="n">rule</span> <span class="o">=</span> <span class="n">wi_c_inv</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_wi_c_fix</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                                   <span class="n">rule</span> <span class="o">=</span> <span class="n">wi_c_fix</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_wi_c_var</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                                   <span class="n">rule</span> <span class="o">=</span> <span class="n">wi_c_var</span><span class="p">)</span></div>
+    
+    <span class="c1"># m.con_wi_limit = py.Constraint(m.set_scenarios, m.set_years,</span>
+    <span class="c1">#                                rule = wi_limit)</span>
+
+<div class="viewcode-block" id="add_wi_variables"><a class="viewcode-back" href="../../source_code.html#source_code.wi.add_wi_variables">[docs]</a><span class="k">def</span> <span class="nf">add_wi_variables</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This section defines the variables of the waste incineration&quot;&quot;&quot;</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">v_wi_q_heat_in</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                              <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                              <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;heat energy feed in from waste incineration per scenario, year and hour&#39;</span><span class="p">)</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">v_wi_q_elec_in</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                              <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                              <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;electricity feed in from waste incineration per scenario, year and hour&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">v_wi_p_scale</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                            <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                            <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;scale size of waste incineration per scenario, year and hour&#39;</span><span class="p">)</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">v_wi_Q_mix_max</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                              <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                              <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;max energy feed in from waste incineration per scenario, year and hour&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">v_wi_Q_inv</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                          <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                          <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;new installed power of waste incineration per scenario and year&#39;</span><span class="p">)</span>
+   
+    <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_inv</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                          <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                          <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;inv costs of wi per scenario and year in USD&#39;</span><span class="p">)</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_fix</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                         <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                         <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;fix costs of wi per scenario and year in USD&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">v_wi_c_var</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                          <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Reals</span><span class="p">,</span>
+                          <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;var costs of wi per scenario, year and hour in USD&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="add_wi_parameters"><a class="viewcode-back" href="../../source_code.html#source_code.wi.add_wi_parameters">[docs]</a><span class="k">def</span> <span class="nf">add_wi_parameters</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This section defines the parameters of the waste incineration&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">init_wi_eta</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;wi&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_wi_eta&#39;</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">init_wi_q_waste</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;wi&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_wi_q_waste&#39;</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">init_wi_c_waste</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;wi&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_wi_c_waste&#39;</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">init_wi_h_waste</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;wi&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_wi_h_waste&#39;</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">init_wi_heat</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;wi&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_wi_heat&#39;</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">init_wi_elec</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;wi&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_wi_elec&#39;</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">init_wi_co2_share</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;wi&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_wi_co2_share&#39;</span><span class="p">]</span>
+        
+    <span class="k">def</span> <span class="nf">init_wi_c_inv</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;wi&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_wi_c_inv&#39;</span><span class="p">]</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">p_wi_eta</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                          <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_wi_eta</span><span class="p">,</span>
+                          <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                          <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;efficiency of the wi&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">p_wi_q_waste</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                              <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_wi_q_waste</span><span class="p">,</span>
+                              <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                              <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;amount of waste for wi&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">p_wi_c_waste</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                              <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_wi_c_waste</span><span class="p">,</span>
+                              <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                              <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;price of waste for wi&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">p_wi_h_waste</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                              <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_wi_h_waste</span><span class="p">,</span>
+                              <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                              <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;calorific value of waste for wi&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">p_wi_heat</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                            <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_wi_heat</span><span class="p">,</span>
+                            <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                            <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;share of heat output of the wi&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">p_wi_elec</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                           <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_wi_elec</span><span class="p">,</span>
+                           <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                           <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;share of electric output of the wi&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">p_wi_co2_share</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                                <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_wi_co2_share</span><span class="p">,</span>
+                                <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                                <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;share of CO2 of the waste for wi&#39;</span><span class="p">)</span>
+        
+    <span class="n">m</span><span class="o">.</span><span class="n">p_wi_c_inv</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                            <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_wi_c_inv</span><span class="p">,</span>
+                            <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                            <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;specific inv cost of wi&#39;</span><span class="p">)</span></div>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Simon Jordan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

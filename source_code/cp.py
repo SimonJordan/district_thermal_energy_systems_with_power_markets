@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_cp_equations(m=None):
-
+    """This section defines the equations of the compressor"""
     def cp_ct_feed_in_max_bound(m, s, y, h):
         return m.v_cp_ct_q_cool_in[s, y, h] <= m.v_cp_ct_Q_cool_max[s, y]
     
@@ -105,7 +105,7 @@ def add_cp_equations(m=None):
     #                                   rule = cp_hp_limit)
 
 def add_cp_variables(m=None):
-    
+    """This section defines the variables of the compressor"""
     m.v_cp_ct_q_cool_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                                  domain = py.NonNegativeReals,
                                  doc = 'cool energy feed in from large-scale compressor with cooling tower per scenario, year, and hour')
@@ -167,7 +167,7 @@ def add_cp_variables(m=None):
                              doc = 'var costs of cp_hp per scenario, year and hour in USD')
 
 def add_cp_parameters(m=None):
-    
+    """This section defines the parameters of the compressor"""
     def init_cp_ct_seer(m, s, y):
         return m.data_values[s]['cp'][y]['p_cp_ct_seer']
     

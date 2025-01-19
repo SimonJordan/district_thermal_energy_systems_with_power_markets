@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_chp_equations(m=None):
-
+    """This section defines the equations of the combined heat and power"""
     def chp_feed_in_max_bound(m, s, y, h):
         return m.v_chp_q_heat_in[s, y, h] + m.v_chp_q_elec_in[s, y, h] <= m.v_chp_Q_mix_max[s, y]
     
@@ -57,7 +57,7 @@ def add_chp_equations(m=None):
     #                                rule = chp_limit)
 
 def add_chp_variables(m=None):
-    
+    """This section defines the variables of the combined heat and power"""
     m.v_chp_q_heat_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                               domain = py.NonNegativeReals,
                               doc = 'heat energy feed in from combined heat and power per scenario, year and hour')
@@ -91,7 +91,7 @@ def add_chp_variables(m=None):
                           doc = 'var costs of chp per scenario, year and hour in USD')
     
 def add_chp_parameters(m=None):
-
+    """This section defines the parameters of the combined heat and power"""
     def init_chp_eta(m, s, y):
         return m.data_values[s]['chp'][y]['p_chp_eta']
        

@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_ieh_equations(m=None):
-
+    """This section defines the equations of the industrial excess heat"""
     def ieh_feed_in_max_bound(m, s, y, h):
         return m.v_ieh_q_heat_in[s, y, h] <= m.v_ieh_Q_heat_max[s, y]
     
@@ -51,7 +51,7 @@ def add_ieh_equations(m=None):
                                     rule = ieh_c_var)
     
 def add_ieh_variables(m=None):
-    
+    """This section defines the variables of the industrial excess heat"""
     m.v_ieh_q_heat_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                                domain = py.NonNegativeReals,
                                doc = 'heat energy feed in from industrial excess heat per scenario, year and hour')
@@ -81,7 +81,7 @@ def add_ieh_variables(m=None):
                            doc = 'var costs of ieh per scenario, year and hour in USD')
 
 def add_ieh_parameters(m=None):
-    
+    """This section defines the parameters of the industrial excess heat"""
     def init_ieh_c_inv(m, s, y):
         return m.data_values[s]['ieh'][y]['p_ieh_c_inv']
     

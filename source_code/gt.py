@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_gt_equations(m=None):
-
+    """This section defines the equations of the geothermal"""
     def gt_feed_in_max_bound(m, s, y, h):
         return m.v_gt_q_heat_in[s, y, h] <= m.v_gt_Q_heat_max[s, y]
     
@@ -51,7 +51,7 @@ def add_gt_equations(m=None):
     #                                rule = gt_limit)
 
 def add_gt_variables(m=None):
-    
+    """This section defines the variables of the geothermal"""
     m.v_gt_q_heat_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                               domain = py.NonNegativeReals,
                               doc = 'heat energy feed in from large-scale geothermal per scenario, year, and hour')
@@ -81,7 +81,7 @@ def add_gt_variables(m=None):
                           doc = 'var costs of gt per scenario, year and hour in USD')
 
 def add_gt_parameters(m=None):
-       
+    """This section defines the parameters of the geothermal"""
     def init_gt_c_inv(m, s, y):
         return m.data_values[s]['gt'][y]['p_gt_c_inv']
     

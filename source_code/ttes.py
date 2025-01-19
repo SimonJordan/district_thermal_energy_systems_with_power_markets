@@ -1,7 +1,7 @@
 import pyomo.environ as py
 
 def add_ttes_equations(m=None):
-    
+    """This section defines the equations of the tank thermal energy storage"""
     def ttes_feed_in_max_bound(m, s, y, h):
         return m.v_ttes_q_heat_out[s, y, h] <= m.v_ttes_hp_Q_max[s, y]
     
@@ -86,7 +86,7 @@ def add_ttes_equations(m=None):
     #                                   rule = ttes_limit_2)
 
 def add_ttes_variables(m=None):
-    """This section defines the variables for TTES"""
+    """This section defines the variables of the tank thermal energy storage"""
     m.v_ttes_q_heat_in = py.Var(m.set_scenarios, m.set_years, m.set_hours,
                                 domain = py.NonNegativeReals,
                                 doc = 'heat energy feed in per scenario, year and hour')
@@ -132,8 +132,7 @@ def add_ttes_variables(m=None):
                             doc = 'var costs of TTES per scenario, year and hour in USD')
     
 def add_ttes_parameters(m=None):
-    """This section defines the parameters for TTES"""
-    
+    """This section defines the parameters of the tank thermal energy storage"""
     def init_ttes_losses(m, s, y):
         return m.data_values[s]['ttes'][y]['p_ttes_losses']
     

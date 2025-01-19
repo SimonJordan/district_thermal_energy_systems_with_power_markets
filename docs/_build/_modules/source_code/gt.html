@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>source_code.gt &mdash; FLXenabler 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            FLXenabler
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">district_thermal_energy_systems_with_power_markets</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">FLXenabler</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">source_code.gt</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for source_code.gt</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pyomo.environ</span> <span class="k">as</span> <span class="nn">py</span>
+
+<div class="viewcode-block" id="add_gt_equations"><a class="viewcode-back" href="../../source_code.html#source_code.gt.add_gt_equations">[docs]</a><span class="k">def</span> <span class="nf">add_gt_equations</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This section defines the equations of the geothermal&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">gt_feed_in_max_bound</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_q_heat_in</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_Q_heat_max</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+    
+    <span class="c1"># def gt_limit(m, s, y):</span>
+    <span class="c1">#     return m.v_gt_Q_heat_max[s, y] &lt;= 0</span>
+    
+    <span class="k">def</span> <span class="nf">gt_elec_heat</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span> 
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_q_heat_in</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_q_elec_consumption</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_gt_cop</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+     
+    <span class="k">def</span> <span class="nf">gt_Q_inv</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_Q_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_Q_heat_max</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_Q_heat_max</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_Q_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_Q_heat_max</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">gt_c_inv</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_Q_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">p_gt_c_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">p_hp_c_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+  
+    <span class="k">def</span> <span class="nf">gt_c_fix</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_fix</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_fix</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">p_year_expansion_range</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.02</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_fix</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">p_year_expansion_range</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_inv</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.02</span>
+
+    <span class="k">def</span> <span class="nf">gt_c_var</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_var</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">p_year_expansion_range</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">v_gt_q_elec_consumption</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">p_c_elec</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">p_elec_co2_share</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">p_c_co2</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">]))</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">con_gt_feed_in_max_bound</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                                               <span class="n">rule</span> <span class="o">=</span> <span class="n">gt_feed_in_max_bound</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_gt_elec_heat</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                                       <span class="n">rule</span> <span class="o">=</span> <span class="n">gt_elec_heat</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_gt_Q_inv</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                                   <span class="n">rule</span> <span class="o">=</span> <span class="n">gt_Q_inv</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_gt_c_inv</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                                   <span class="n">rule</span> <span class="o">=</span> <span class="n">gt_c_inv</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_gt_c_fix</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                                   <span class="n">rule</span> <span class="o">=</span> <span class="n">gt_c_fix</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">con_gt_c_var</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                                   <span class="n">rule</span> <span class="o">=</span> <span class="n">gt_c_var</span><span class="p">)</span></div>
+    
+    <span class="c1"># m.con_gt_limit = py.Constraint(m.set_scenarios, m.set_years,</span>
+    <span class="c1">#                                rule = gt_limit)</span>
+
+<div class="viewcode-block" id="add_gt_variables"><a class="viewcode-back" href="../../source_code.html#source_code.gt.add_gt_variables">[docs]</a><span class="k">def</span> <span class="nf">add_gt_variables</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This section defines the variables of the geothermal&quot;&quot;&quot;</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">v_gt_q_heat_in</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                              <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                              <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;heat energy feed in from large-scale geothermal per scenario, year, and hour&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">v_gt_q_elec_consumption</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                                       <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                                       <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;electricity input of large-scale geothermal per scenario, year, and hour&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">v_gt_Q_heat_max</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                               <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                               <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;max heat feed in from large-scale geothermal for district heating&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">v_gt_Q_inv</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                          <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                          <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;new istalled gt capacity per scenario and year&#39;</span><span class="p">)</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_inv</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                          <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                          <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;inv costs of gt per scenario and year in USD&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_fix</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                          <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                          <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;fix costs of gt per scenario and year in USD&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">v_gt_c_var</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Var</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_hours</span><span class="p">,</span>
+                          <span class="n">domain</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Reals</span><span class="p">,</span>
+                          <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;var costs of gt per scenario, year and hour in USD&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_gt_parameters"><a class="viewcode-back" href="../../source_code.html#source_code.gt.add_gt_parameters">[docs]</a><span class="k">def</span> <span class="nf">add_gt_parameters</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This section defines the parameters of the geothermal&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">init_gt_c_inv</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;gt&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_gt_c_inv&#39;</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">init_gt_cop</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">data_values</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s1">&#39;gt&#39;</span><span class="p">][</span><span class="n">y</span><span class="p">][</span><span class="s1">&#39;p_gt_cop&#39;</span><span class="p">]</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">p_gt_c_inv</span> <span class="o">=</span><span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                           <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_gt_c_inv</span><span class="p">,</span>
+                           <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                           <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;specific inv cost of geothermal&#39;</span><span class="p">)</span>
+    
+    <span class="n">m</span><span class="o">.</span><span class="n">p_gt_cop</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">Param</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">set_scenarios</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">set_years</span><span class="p">,</span>
+                          <span class="n">initialize</span> <span class="o">=</span> <span class="n">init_gt_cop</span><span class="p">,</span>
+                          <span class="n">within</span> <span class="o">=</span> <span class="n">py</span><span class="o">.</span><span class="n">NonNegativeReals</span><span class="p">,</span>
+                          <span class="n">doc</span> <span class="o">=</span> <span class="s1">&#39;coefficient of performance of the hp for the gt&#39;</span><span class="p">)</span></div>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Simon Jordan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
