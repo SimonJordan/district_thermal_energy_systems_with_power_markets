@@ -9,3 +9,33 @@
 
 
 This repository includes all the work related to the stochastic paper, titled: **Stochastic portfolio optimization with recourse: open-source modeling the decarbonization of centralized heat networks**.
+
+branches
+
+main: individual optimization US case study
+
+scenarios: joint optimization US case study
+
+norway_main: individual optimization Norwegian case study
+
+norway_scenarios: joint optimization Norwegian case study
+
+Folder structure:
+
+data: general data, which are not imported by the model
+
+docs: sphinx documentation
+
+format: python scripts to format the data of the data folder
+
+inputs: data, which is imported by the model and used for the optimization
+
+outputs: optimization output of the first two scenarios
+
+plots: includes plots for the paper
+
+results: relevant results for the visualization
+
+source_code: python scripts for the optimization
+
+visualization: visualization data, which is used to generate the plots
