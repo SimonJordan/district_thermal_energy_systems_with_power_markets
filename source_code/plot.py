@@ -25,6 +25,8 @@ def plot_result():
     path_to_file_bar_all_info_heating = os.path.join(path_to_visualization_folder, 'bar_all_info_heating.xlsx')
     path_to_file_mean_all_info_cooling = os.path.join(path_to_visualization_folder, 'mean_all_info_cooling.xlsx')
     path_to_file_mean_all_info_heating = os.path.join(path_to_visualization_folder, 'mean_all_info_heating.xlsx')
+    path_to_file_lcoc_buildings = os.path.join(path_to_visualization_folder, 'lcoc_buildings.xlsx')
+    path_to_file_lcoh_buildings = os.path.join(path_to_visualization_folder, 'lcoh_buildings.xlsx')
     
     #%% create visualization data
     with open(path_to_file_scenarios, 'r') as file:
@@ -510,6 +512,12 @@ def plot_result():
     
     output_bar_heating.to_excel(path_to_file_bar_all_info_heating, index=True)
     output_mean_heating.to_excel(path_to_file_mean_all_info_heating, index=True)
+    
+    output_lcoc_buildings = pd.DataFrame.from_dict(buildings_lcoc, orient='index', columns=scenarios)
+    output_lcoh_buildings = pd.DataFrame.from_dict(buildings_lcoh, orient='index', columns=scenarios)
+    
+    output_lcoc_buildings.to_excel(path_to_file_lcoc_buildings, index=True)
+    output_lcoh_buildings.to_excel(path_to_file_lcoh_buildings, index=True)
     
     #%% original
     # import pyam as py
