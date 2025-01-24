@@ -527,7 +527,11 @@ def plot_result():
     output_mean_heating.to_excel(path_to_file_mean_all_info_heating, index=True)
     
     output_lcoc_buildings = pd.DataFrame.from_dict(buildings_lcoc, orient='index', columns=scenarios)
+    output_lcoc_buildings.loc[0] = list(scenarios_weighting.values())
+    output_lcoc_buildings = output_lcoc_buildings.sort_index().reset_index(drop=True)
     output_lcoh_buildings = pd.DataFrame.from_dict(buildings_lcoh, orient='index', columns=scenarios)
+    output_lcoh_buildings.loc[0] = list(scenarios_weighting.values())
+    output_lcoh_buildings = output_lcoh_buildings.sort_index().reset_index(drop=True)
     
     output_lcoc_buildings.to_excel(path_to_file_lcoc_buildings, index=True)
     output_lcoh_buildings.to_excel(path_to_file_lcoh_buildings, index=True)
