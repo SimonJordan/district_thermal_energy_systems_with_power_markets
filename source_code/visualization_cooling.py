@@ -453,7 +453,7 @@ fig.add_trace(go.Scatter(x=years[:5], y=ratio_ac_inv[:5], name='Ratio airchiller
 
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='636EFA')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='#636EFA')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='#FECB52')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:5], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
 
@@ -482,7 +482,7 @@ fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]],
 
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='636EFA')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='#636EFA')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='#FECB52')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:5], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
 
