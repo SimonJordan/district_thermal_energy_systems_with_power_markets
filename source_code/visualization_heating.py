@@ -384,7 +384,6 @@ df_0 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand[visualize_s
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_hp-'], mode='lines', name='Absorption with heat pump take out', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_hp+'], mode='lines', name='Absorption with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_ct-'], mode='lines', name='Absorption with cooling tower take out', stackgroup='two', line=dict(color='grey')))
@@ -392,6 +391,7 @@ fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['chp'], mode='lines', name='Comb
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['wi'], mode='lines', name='Waste incineration', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='#636EFA')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
@@ -424,7 +424,6 @@ df_1 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_1, '
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_hp-'], mode='lines', name='Absorption with heat pump take out', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_hp+'], mode='lines', name='Absorption with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_ct-'], mode='lines', name='Absorption with cooling tower take out', stackgroup='two', line=dict(color='grey')))
@@ -432,6 +431,7 @@ fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['chp'], mode='lines', name='Comb
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['wi'], mode='lines', name='Waste incineration', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='#636EFA')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
@@ -465,7 +465,6 @@ df_2 = pd.DataFrame({'hour': hours, 'heating_demand': heating_demand_sorted_2, '
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_hp-'], mode='lines', name='Absorption with heat pump take out', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_hp+'], mode='lines', name='Absorption with heat pump feed in', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_ct-'], mode='lines', name='Absorption with cooling tower take out', stackgroup='two', line=dict(color='grey')))
@@ -473,6 +472,7 @@ fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['chp'], mode='lines', name='Comb
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['wi'], mode='lines', name='Waste incineration', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['dgt'], mode='lines', name='Deep geothermal', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['st'], mode='lines', name='Solar thermal', stackgroup='one', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cp_hp+'], mode='lines', name='Compression with heat pump feed in', stackgroup='one', line=dict(color='#636EFA')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['gt'], mode='lines', name='Geothermal', stackgroup='one', line=dict(color='#00CC96')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['hp'], mode='lines', name='Heat pump', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ieh'], mode='lines', name='Industrial excess heat', stackgroup='one', line=dict(color='#B6E880')))
@@ -651,13 +651,13 @@ fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Electric boiler'].val
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Industrial excess heat'].values())[:5], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Heat pump'].values())[:5], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Geothermal'].values())[:5], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='#636EFA')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Solar thermal'].values())[:5], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Deep geothermal'].values())[:5], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Waste incineration'].values())[:5], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Combined heat and power'].values())[:5], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
 
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=1)
 fig.update_xaxes(title_text='Investment year', titlefont=dict(size=20), tickfont=dict(size=20), tickvals=years[:5], row=1, col=2)
@@ -684,13 +684,13 @@ fig.add_trace(go.Scatter(x=years[:5], y=ratio_hp_inv[:5], name='Ratio heat pump'
 fig.add_trace(go.Scatter(x=years[:5], y=ratio_ieh_inv[:5], name='Ratio industrial excess heat', line=dict(color='#B6E880')), row=2, col=1)
 fig.add_trace(go.Scatter(x=years[:5], y=ratio_eb_inv[:5], name='Ratio electric boiler', line=dict(color='#FF6692')), row=2, col=1)
 
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Combined heat and power'].values())[:5], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Waste incineration'].values())[:5], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Deep geothermal'].values())[:5], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Solar thermal'].values())[:5], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='#636EFA')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Geothermal'].values())[:5], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Heat pump'].values())[:5], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Industrial excess heat'].values())[:5], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)
@@ -719,13 +719,13 @@ fig = go.Figure()
 
 fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]], subplot_titles=('Heating technology investments', 'Storage technology investments'))
 
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Combined heat and power'].values())[:5], name='Combined heat and power', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Waste incineration'].values())[:5], name='Waste incineration', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Deep geothermal'].values())[:5], name='Deep geothermal', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Solar thermal'].values())[:5], name='Solar thermal', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='#636EFA')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Geothermal'].values())[:5], name='Geothermal', marker=dict(color='#00CC96')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Heat pump'].values())[:5], name='Heat pump', marker=dict(color='#19D3F3')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Industrial excess heat'].values())[:5], name='Industrial excess heat', marker=dict(color='#B6E880')), row=1, col=1)

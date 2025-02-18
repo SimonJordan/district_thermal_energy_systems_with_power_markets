@@ -255,10 +255,10 @@ df_0 = pd.DataFrame({'hour': hours, 'electricity': electricity_price[visualize_s
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp'], mode='lines', name='Compression with heat pump', stackgroup='one', line=dict(color='grey')))
-fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_ct'], mode='lines', name='Compression with cooling tower', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_hp'], mode='lines', name='Absorption with heat pump', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_ct'], mode='lines', name='Absorption with cooling tower', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp'], mode='lines', name='Compression with heat pump', stackgroup='one', line=dict(color='#636EFA')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_ct'], mode='lines', name='Compression with cooling tower', stackgroup='one', line=dict(color='#FECB52')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ac'], mode='lines', name='Airchiller', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ites-'], mode='lines', name='ITES store', stackgroup='two', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ites+'], mode='lines', name='ITES feed in', stackgroup='one', line=dict(color='#FFA15A')))
@@ -270,10 +270,10 @@ fig.show()
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp'], mode='lines', name='Compression with heat pump', stackgroup='one', line=dict(color='grey')))
-fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_ct'], mode='lines', name='Compression with cooling tower', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_hp'], mode='lines', name='Absorption with heat pump', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ab_ct'], mode='lines', name='Absorption with cooling tower', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_hp'], mode='lines', name='Compression with heat pump', stackgroup='one', line=dict(color='#636EFA')))
+fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['cp_ct'], mode='lines', name='Compression with cooling tower', stackgroup='one', line=dict(color='#FECB52')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ac'], mode='lines', name='Airchiller', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ites-'], mode='lines', name='ITES store', stackgroup='two', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_0['hour'], y=df_0['ites+'], mode='lines', name='ITES feed in', stackgroup='one', line=dict(color='#FFA15A')))
@@ -299,10 +299,10 @@ df_1 = pd.DataFrame({'hour': hours, 'cooling_demand': cooling_demand_sorted_1, '
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cp_hp'], mode='lines', name='Compression with heat pump', stackgroup='one', line=dict(color='grey')))
-fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cp_ct'], mode='lines', name='Compression with cooling tower', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_hp'], mode='lines', name='Absorption with heat pump', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ab_ct'], mode='lines', name='Absorption with cooling', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cp_hp'], mode='lines', name='Compression with heat pump', stackgroup='one', line=dict(color='#636EFA')))
+fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['cp_ct'], mode='lines', name='Compression with cooling tower', stackgroup='one', line=dict(color='#FECB52')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ac'], mode='lines', name='Airchiller', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ites-'], mode='lines', name='ITES store', stackgroup='two', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_1['hour'], y=df_1['ites+'], mode='lines', name='ITES feed in', stackgroup='one', line=dict(color='#FFA15A')))
@@ -326,10 +326,10 @@ df_2 = pd.DataFrame({'hour': hours, 'cooling_demand': cooling_demand_sorted_2, '
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cp_hp'], mode='lines', name='Compression with heat pump', stackgroup='one', line=dict(color='grey')))
-fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cp_ct'], mode='lines', name='Compression with cooling tower', stackgroup='one', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_hp'], mode='lines', name='Absorption with heat pump', stackgroup='two', line=dict(color='grey')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ab_ct'], mode='lines', name='Absorption with cooling', stackgroup='two', line=dict(color='grey')))
+fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cp_hp'], mode='lines', name='Compression with heat pump', stackgroup='one', line=dict(color='#636EFA')))
+fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['cp_ct'], mode='lines', name='Compression with cooling tower', stackgroup='one', line=dict(color='#FECB52')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ac'], mode='lines', name='Airchiller', stackgroup='one', line=dict(color='#19D3F3')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ites-'], mode='lines', name='ITES store', stackgroup='two', line=dict(color='#FFA15A')))
 fig.add_trace(go.Scatter(x=df_2['hour'], y=df_2['ites+'], mode='lines', name='ITES feed in', stackgroup='one', line=dict(color='#FFA15A')))
@@ -424,8 +424,8 @@ fig.add_trace(go.Scatter(x=years[:5], y=ratio_inv[:5], name='Ratio'), row=2, col
 fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Ice thermal energy storage'].values())[:5], name='Ice thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
 
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:5], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='#FECB52')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='#636EFA')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
 
@@ -453,8 +453,8 @@ fig.add_trace(go.Scatter(x=years[:5], y=ratio_ac_inv[:5], name='Ratio airchiller
 
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='636EFA')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='#FECB52')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:5], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
 
 fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Ice thermal energy storage'].values())[:5], name='Ice thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
@@ -482,8 +482,8 @@ fig = sp.make_subplots(rows=1, cols=2, specs=[[{'colspan': 1}, {'colspan': 1}]],
 
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with heat pump'].values())[:5], name='Absorption with heat pump', marker=dict(color='grey')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Absorption with cooling tower'].values())[:5], name='Absorption with cooling tower', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='grey')), row=1, col=1)
-fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='grey')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with heat pump'].values())[:5], name='Compression with heat pump', marker=dict(color='636EFA')), row=1, col=1)
+fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Compression with cooling tower'].values())[:5], name='Compression with cooling tower', marker=dict(color='#FECB52')), row=1, col=1)
 fig.add_trace(go.Bar(x=years[:5], y=list(technologies_map['Airchiller'].values())[:5], name='Airchiller', marker=dict(color='#19D3F3')), row=1, col=1)
 
 fig.add_trace(go.Bar(x=years[:5], y=list(storages_map['Ice thermal energy storage'].values())[:5], name='Ice thermal energy storage', marker=dict(color='#FFA15A')), row=1, col=2)
