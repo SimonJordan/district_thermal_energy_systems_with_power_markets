@@ -27,6 +27,75 @@ def plot_result():
     path_to_file_mean_all_info_heating = os.path.join(path_to_visualization_folder, 'mean_all_info_heating.xlsx')
     path_to_file_lcoc_buildings = os.path.join(path_to_visualization_folder, 'lcoc_buildings.xlsx')
     path_to_file_lcoh_buildings = os.path.join(path_to_visualization_folder, 'lcoh_buildings.xlsx')
+    path_to_file_co2_emissions = os.path.join(path_to_visualization_folder, 'co2_emissions.xlsx')
+    path_to_file_elec_consumption = os.path.join(path_to_visualization_folder, 'elec_consumption.xlsx')
+    
+    #%% calculate co2 emissions
+    scenarios = []
+    scenarios_weighting = {}
+    
+    with open(path_to_file_scenarios, 'r') as file:
+        for line in file:
+            scenario, weighting = line.strip().split(',')
+            scenarios.append(scenario)
+            scenarios_weighting[scenario] = float(weighting)
+            
+    years = [2025, 2030, 2035, 2040, 2045, 2050]
+    # year_expansion_range = {2025: 5, 2030: 5, 2035: 5, 2040: 5, 2045: 5, 2050: 1}
+    hours = list(range(8760))
+    
+    electricity_co2_share = {}
+    electricity_cosumption = {}
+    emissions = {}
+    
+    for scenario in scenarios:
+        electricity_co2_share_scenario = {}
+        electricity_consumption_scenario = {}
+        emissions_scenario = {}
+        
+        path_to_elec_price_co2_share_gas_price = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_price_co2_share_gas_price.xlsx')
+        path_to_elec_consumption = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_consumption.xlsx')
+        
+        for year in years:
+            df_elec_price_co2_share_gas_price = pd.read_excel(path_to_elec_price_co2_share_gas_price, sheet_name=str(year))
+            df_elec_consumption = pd.read_excel(path_to_elec_consumption, sheet_name=str(year))
+            
+            electricity_co2_share_scenario[year] = df_elec_price_co2_share_gas_price['co2'].tolist()
+            electricity_consumption_scenario[year] = list(df_elec_consumption.iloc[:, 1:].sum(axis=1))
+            emissions_scenario[year] = sum([share * consumption for share, consumption in zip(electricity_co2_share_scenario[year], electricity_consumption_scenario[year])])
+            
+        electricity_co2_share[scenario] = electricity_co2_share_scenario
+        electricity_cosumption[scenario] = electricity_consumption_scenario
+        emissions[scenario] = emissions_scenario
+        
+    df_emissions = pd.DataFrame(emissions).transpose()
+
+    df_emissions.index.name = 'scenarios'
+    df_emissions.reset_index(inplace=True)
+    df_emissions.to_excel(path_to_file_co2_emissions, index=False)
+    
+    #%% extract electricity consumption
+    
+    elec_consumption = {}
+    
+    for year in years:
+        
+        elec_consumption_scenario = {}
+        
+        for scenario in scenarios:
+            
+            path_to_elec_consumption = os.path.join(path_to_result_folder, f'[{str(scenario)}]_#_elec_consumption.xlsx')
+            df_elec_consumption = pd.read_excel(path_to_elec_consumption, sheet_name=str(year))
+            elec_consumption_scenario[scenario] = list(df_elec_consumption.iloc[:, 1:].sum(axis=1))
+            
+        elec_consumption[year] = elec_consumption_scenario
+    
+    with pd.ExcelWriter(path_to_file_elec_consumption) as writer:
+        for value_year, value_scenarios in elec_consumption.items():
+            df_data = pd.DataFrame(value_scenarios)
+            df_data.insert(0, 'hour', hours)
+            df_data.to_excel(writer, sheet_name=str(value_year), index=False)
+    
     
     #%% create visualization data
     scenarios = []
