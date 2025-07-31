@@ -72,7 +72,7 @@ def initialize_parameters(years=[]):
         
         heating_demand[year] = df_demand['heating_demand_districts_building'].tolist()
         cooling_demand[year] = df_demand['cooling_demand_districts_building'].tolist()
-        electricity_price[year] = df_electricity_price['electricity_price'].tolist()
+        electricity_price[year] = df_electricity_price['new_electricity_price'].tolist()
         electricity_mean_price[year] = np.mean(electricity_price[year])
         gas_price[year] = df_gas_price['gas_price'].tolist()
         co2_price[year] = df_co2_price['co2_price'].tolist()[0]
