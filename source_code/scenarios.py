@@ -322,7 +322,7 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                       'electricity_price': {year: [value * 1.1 for value in values] for year, values in electricity_price.items()},
     #                       'electricity_mean_price': {year: value * 1.1 for year, value in electricity_mean_price.items()},
     #                       'gas_price': {year: [value * 0.9 for value in values] for year, values in gas_price.items()},
-    #                       'co2_price': {year: [value * 1.5 for value in values] for year, values in co2_price.items()},
+    #                       'co2_price': {year: value * 1.5 for year, value in co2_price.items()},
     #                       'eb': data_eb,
     #                       'gb': data_gb,
     #                       'hp': data_hp,
