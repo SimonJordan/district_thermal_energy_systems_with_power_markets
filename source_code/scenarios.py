@@ -316,5 +316,26 @@ def define_scenarios(year_expansion_range, heating_demand, cooling_demand, elect
     #                                    'btes': {year: {name: (value * 0.7 if name == 'p_btes_c_inv' and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_btes.items()},
     #                                    'ites': {year: {name: (value * 0.7 if name == 'p_ites_c_inv' and year in [2025, 2030] else value) for name, value in dict_items.items()} for year, dict_items in data_ites.items()}}
     
+    # data['16_unknown'] = {'year_expansion_range': year_expansion_range,
+    #                       'heating': {year: [value * 0.9 for value in values] if year in [2035, 2040] else values for year, values in heating_demand.items()},
+    #                       'cooling': {year: [value * 1.1 for value in values] if year in [2035, 2040] else values for year, values in cooling_demand.items()},
+    #                       'electricity_price': {year: [value * 1.1 for value in values] for year, values in electricity_price.items()},
+    #                       'electricity_mean_price': {year: value * 1.1 for year, value in electricity_mean_price.items()},
+    #                       'gas_price': {year: [value * 0.9 for value in values] for year, values in gas_price.items()},
+    #                       'co2_price': {year: value * 1.5 for year, value in co2_price.items()},
+    #                       'eb': data_eb,
+    #                       'gb': data_gb,
+    #                       'hp': data_hp,
+    #                       'st': data_st,
+    #                       'wi': data_wi,
+    #                       'ieh': data_ieh,
+    #                       'chp': data_chp,
+    #                       'ac': data_ac,
+    #                       'ab': data_ab,
+    #                       'cp': data_cp,
+    #                       'ttes': data_ttes,
+    #                       'btes': data_btes,
+    #                       'ites': data_ites}
+    
     return data
     
