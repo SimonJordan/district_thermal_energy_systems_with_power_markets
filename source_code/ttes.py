@@ -6,10 +6,10 @@ def add_ttes_equations(m=None):
         return m.v_ttes_q_heat_out[s, y, h] <= m.v_ttes_hp_Q_max[s, y]
     
     def ttes_limit_1(m, s, y):
-        return m.v_ttes_hp_Q_max[s, y] == m.p_ttes_inv[s, y]
+        return m.v_ttes_hp_Q_max[s, y] == m.p_ttes_hp_inv[s, y]
     
-    # def ttes_limit_2(m, s, y):
-    #     return m.v_ttes_k_heat_max[s, y] <= 0
+    def ttes_limit_2(m, s, y):
+        return m.v_ttes_k_heat_max[s, y] == m.p_ttes_inv[s, y]
     
     def ttes_soc_max_bound(m, s, y, h):
         return m.v_ttes_k_heat[s, y, h] <= m.v_ttes_k_heat_max[s, y]
@@ -80,10 +80,10 @@ def add_ttes_equations(m=None):
                                      rule = ttes_c_var)
     
     m.con_ttes_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
-                                      rule = ttes_limit_1)
+                                       rule = ttes_limit_1)
     
-    # m.con_ttes_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = ttes_limit_2)
+    m.con_ttes_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
+                                       rule = ttes_limit_2)
 
 def add_ttes_variables(m=None):
     """This section defines the variables for TTES"""
@@ -161,6 +161,9 @@ def add_ttes_parameters(m=None):
     def init_ttes_inv(m, s, y):
         return m.data_values[s]['ttes'][y]['p_ttes_inv']
     
+    def init_ttes_hp_inv(m, s, y):
+        return m.data_values[s]['ttes'][y]['p_ttes_hp_inv']
+    
     m.p_ttes_losses = py.Param(m.set_scenarios, m.set_years,
                                initialize = init_ttes_losses,
                                within = py.NonNegativeReals,
@@ -202,6 +205,11 @@ def add_ttes_parameters(m=None):
                                            doc = 'charge/discharge price per scenario, year and hour')
 
     m.p_ttes_inv = py.Param(m.set_scenarios, m.set_years,
-                           initialize = init_ttes_inv,
-                           within = py.NonNegativeReals,
-                           doc = 'inv capacity of ttes')
+                            initialize = init_ttes_inv,
+                            within = py.NonNegativeReals,
+                            doc = 'inv capacity of ttes')
+    
+    m.p_ttes_hp_inv = py.Param(m.set_scenarios, m.set_years,
+                               initialize = init_ttes_hp_inv,
+                               within = py.NonNegativeReals,
+                               doc = 'inv capacity of ttes_hp')

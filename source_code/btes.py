@@ -6,10 +6,10 @@ def add_btes_equations(m=None):
         return m.v_wi_q_heat_out[s, y, h] <= m.v_btes_hp_Q_max[s, y]
     
     def btes_limit_1(m, s, y):
-        return m.v_btes_hp_Q_max[s, y] == m.p_btes_inv[s, y]
+        return m.v_btes_hp_Q_max[s, y] == m.p_btes_hp_inv[s, y]
     
-    # def btes_limit_2(m, s, y):
-    #     return m.v_btes_k_heat_max[s, y] <= 0
+    def btes_limit_2(m, s, y):
+        return m.v_btes_k_heat_max[s, y] == m.p_btes_inv[s, y]
     
     def btes_soc_max_bound(m, s, y, h):
         return m.v_btes_k_heat[s, y, h] <= m.v_btes_k_heat_max[s, y]
@@ -80,10 +80,10 @@ def add_btes_equations(m=None):
                                      rule = btes_c_var)
     
     m.con_btes_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
-                                      rule = btes_limit_1)
+                                       rule = btes_limit_1)
     
-    # m.con_btes_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = btes_limit_2)
+    m.con_btes_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
+                                       rule = btes_limit_2)
 
 def add_btes_variables(m=None):
     """This section defines the variables for BTES"""
@@ -157,6 +157,9 @@ def add_btes_parameters(m=None):
     def init_btes_inv(m, s, y):
         return m.data_values[s]['btes'][y]['p_btes_inv']
     
+    def init_btes_hp_inv(m, s, y):
+        return m.data_values[s]['btes'][y]['p_btes_hp_inv']
+    
     m.p_btes_losses = py.Param(m.set_scenarios, m.set_years,
                                initialize = init_btes_losses,
                                within = py.NonNegativeReals,
@@ -201,3 +204,8 @@ def add_btes_parameters(m=None):
                             initialize = init_btes_inv,
                             within = py.NonNegativeReals,
                             doc = 'inv capacity of btes')
+    
+    m.p_btes_hp_inv = py.Param(m.set_scenarios, m.set_years,
+                               initialize = init_btes_hp_inv,
+                               within = py.NonNegativeReals,
+                               doc = 'inv capacity of btes_hp')

@@ -6,10 +6,10 @@ def add_ites_equations(m=None):
         return m.v_ites_q_cool_out[s, y, h] <= m.v_ites_ac_Q_max[s, y]
     
     def ites_limit_1(m, s, y):
-        return m.v_ites_ac_Q_max[s, y] == m.p_ites_inv[s, y]
+        return m.v_ites_ac_Q_max[s, y] == m.p_ites_ac_inv[s, y]
     
-    # def ites_limit_2(m, s, y):
-    #     return m.v_ites_k_cool_max[s, y] <= 0
+    def ites_limit_2(m, s, y):
+        return m.v_ites_k_cool_max[s, y] == m.p_ites_inv[s, y]
     
     def ites_soc_max_bound(m, s, y, h):
         return m.v_ites_k_cool[s, y, h] <= m.v_ites_k_cool_max[s, y]
@@ -80,10 +80,10 @@ def add_ites_equations(m=None):
                                      rule = ites_c_var)
     
     m.con_ites_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
-                                      rule = ites_limit_1)
+                                       rule = ites_limit_1)
     
-    # m.con_ites_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = ites_limit_2)
+    m.con_ites_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
+                                       rule = ites_limit_2)
 
 def add_ites_variables(m=None):
     """This section defines the variables for ITES"""
@@ -161,6 +161,9 @@ def add_ites_parameters(m=None):
     def init_ites_inv(m, s, y):
         return m.data_values[s]['ites'][y]['p_ites_inv']
     
+    def init_ites_ac_inv(m, s, y):
+        return m.data_values[s]['ites'][y]['p_ites_ac_inv']
+    
     m.p_ites_losses = py.Param(m.set_scenarios, m.set_years,
                                initialize = init_ites_losses,
                                within = py.NonNegativeReals,
@@ -205,3 +208,8 @@ def add_ites_parameters(m=None):
                             initialize = init_ites_inv,
                             within = py.NonNegativeReals,
                             doc = 'inv capacity of ites')
+    
+    m.p_ites_ac_inv = py.Param(m.set_scenarios, m.set_years,
+                               initialize = init_ites_ac_inv,
+                               within = py.NonNegativeReals,
+                               doc = 'inv capacity of ites_ac')
