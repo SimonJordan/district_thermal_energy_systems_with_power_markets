@@ -5,8 +5,8 @@ def add_wi_equations(m=None):
     def wi_feed_in_max_bound(m, s, y, h):
         return m.v_wi_q_heat[s, y, h] + m.v_wi_q_elec_in[s, y, h] <= m.v_wi_Q_mix_max[s, y]
     
-    # def wi_limit(m, s, y):
-    #     return m.v_wi_Q_mix_max[s, y] <= 0
+    def wi_limit(m, s, y):
+        return m.v_wi_Q_mix_max[s, y] == m.p_wi_inv[s, y]
     
     def wi_waste_heat(m, s, y, h):
         return m.v_wi_q_heat[s, y, h] == m.p_wi_q_waste[s, y] * m.p_wi_eta[s, y] * m.p_wi_h_waste[s, y] * m.p_wi_heat[s, y]
@@ -59,8 +59,8 @@ def add_wi_equations(m=None):
     m.con_wi_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = wi_c_var)
     
-    # m.con_wi_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                rule = wi_limit)
+    m.con_wi_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                   rule = wi_limit)
 
 def add_wi_variables(m=None):
     
@@ -126,6 +126,9 @@ def add_wi_parameters(m=None):
     def init_wi_c_inv(m, s, y):
         return m.data_values[s]['wi'][y]['p_wi_c_inv']
     
+    def init_wi_inv(m, s, y):
+        return m.data_values[s]['wi'][y]['p_wi_inv']
+    
     m.p_wi_eta = py.Param(m.set_scenarios, m.set_years,
                           initialize = init_wi_eta,
                           within = py.NonNegativeReals,
@@ -166,3 +169,7 @@ def add_wi_parameters(m=None):
                             within = py.NonNegativeReals,
                             doc = 'specific inv cost of wi')
     
+    m.p_wi_inv = py.Param(m.set_scenarios, m.set_years,
+                          initialize = init_wi_inv,
+                          within = py.NonNegativeReals,
+                          doc = 'inv capacity of wi')

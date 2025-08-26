@@ -5,8 +5,8 @@ def add_chp_equations(m=None):
     def chp_feed_in_max_bound(m, s, y, h):
         return m.v_chp_q_heat_in[s, y, h] + m.v_chp_q_elec_in[s, y, h] <= m.v_chp_Q_mix_max[s, y]
     
-    # def chp_limit(m, s, y):
-    #     return m.v_chp_Q_mix_max[s, y] <= 0
+    def chp_limit(m, s, y):
+        return m.v_chp_Q_mix_max[s, y] == m.p_chp_inv[s, y]
     
     def chp_gas_heat(m, s, y, h):
         return m.v_chp_q_heat_in[s, y, h] == m.v_chp_q_gas[s, y, h] * m.p_chp_eta[s, y] * m.p_chp_heat[s, y]
@@ -53,8 +53,8 @@ def add_chp_equations(m=None):
     m.con_chp_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                     rule = chp_c_var)
     
-    # m.con_chp_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                rule = chp_limit)
+    m.con_chp_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                    rule = chp_limit)
 
 def add_chp_variables(m=None):
     
@@ -110,6 +110,9 @@ def add_chp_parameters(m=None):
     def init_chp_c_inv(m, s, y):
         return m.data_values[s]['chp'][y]['p_chp_c_inv']
     
+    def init_chp_inv(m, s, y):
+        return m.data_values[s]['chp'][y]['p_chp_inv']
+    
     m.p_chp_eta = py.Param(m.set_scenarios, m.set_years,
                            initialize = init_chp_eta,
                            within = py.NonNegativeReals,
@@ -139,4 +142,8 @@ def add_chp_parameters(m=None):
                             initialize = init_chp_c_inv,
                             within = py.NonNegativeReals,
                             doc = 'specific inv cost of chp')
-    
+
+    m.p_chp_inv = py.Param(m.set_scenarios, m.set_years,
+                           initialize = init_chp_inv,
+                           within = py.NonNegativeReals,
+                           doc = 'inv capacity of chp')

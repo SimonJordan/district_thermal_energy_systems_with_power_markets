@@ -5,8 +5,11 @@ def add_ieh_equations(m=None):
     def ieh_feed_in_max_bound(m, s, y, h):
         return m.v_ieh_q_heat_in[s, y, h] <= m.v_ieh_Q_heat_max[s, y]
     
-    def ieh_limit(m, s, y, h):
+    def ieh_limit_1(m, s, y, h):
         return m.v_ieh_q_heat_in[s, y, h] <= m.p_ieh_in[s, y, h]
+    
+    def ieh_limit_2(m, s, y):
+        return m.v_ieh_Q_heat_max[s, y] == m.p_ieh_inv[s, y]
     
     def ieh_elec_heat(m, s, y, h): 
         return m.v_ieh_q_elec_consumption[s, y, h] == m.v_ieh_q_heat_in[s, y, h] * m.p_ieh_elec[s, y]
@@ -32,8 +35,11 @@ def add_ieh_equations(m=None):
     m.con_ieh_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                 rule = ieh_feed_in_max_bound)
     
-    m.con_ieh_limit = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
-                                    rule = ieh_limit)
+    m.con_ieh_limit_1 = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
+                                      rule = ieh_limit_1)
+    
+    m.con_ieh_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = ieh_limit_2)
     
     m.con_ieh_elec_heat = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                         rule = ieh_elec_heat)
@@ -94,6 +100,8 @@ def add_ieh_parameters(m=None):
     def init_ieh_in(m, s, y, h):
         return m.data_values[s]['ieh'][y]['p_ieh_in'][h]
     
+    def init_ieh_inv(m, s, y):
+        return m.data_values[s]['ieh'][y]['p_ieh_inv']
     
     m.p_ieh_c_inv =py.Param(m.set_scenarios, m.set_years,
                             initialize = init_ieh_c_inv,
@@ -115,3 +123,7 @@ def add_ieh_parameters(m=None):
                           within = py.NonNegativeReals,
                           doc = 'feed in from ieh')
     
+    m.p_ieh_inv = py.Param(m.set_scenarios, m.set_years,
+                           initialize = init_ieh_inv,
+                           within = py.NonNegativeReals,
+                           doc = 'inv capacity of ieh')

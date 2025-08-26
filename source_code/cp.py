@@ -5,8 +5,8 @@ def add_cp_equations(m=None):
     def cp_ct_feed_in_max_bound(m, s, y, h):
         return m.v_cp_ct_q_cool_in[s, y, h] <= m.v_cp_ct_Q_cool_max[s, y]
     
-    # def cp_ct_limit(m, s, y):
-    #     return m.v_cp_ct_Q_cool_max[s, y] <= 0
+    def cp_ct_limit(m, s, y):
+        return m.v_cp_ct_Q_cool_max[s, y] == m.p_cp_ct_inv[s, y]
     
     def cp_ct_elec_cool(m, s, y, h):
         return m.v_cp_ct_q_elec_consumption[s, y, h] == m.v_cp_ct_q_cool_in[s, y, h]  / m.p_cp_ct_seer[s, y] + m.v_cp_ct_q_cool_in[s, y, h] * (1 + 1 / m.p_cp_hp_seer[s, y]) * 0.05
@@ -32,8 +32,8 @@ def add_cp_equations(m=None):
     def cp_hp_feed_in_max_bound(m, s, y, h):
         return m.v_cp_hp_q_cool_in[s, y, h] <= m.v_cp_hp_Q_cool_max[s, y]
     
-    # def cp_hp_limit(m, s, y):
-    #     return m.v_cp_hp_Q_cool_max[s, y] <= 0
+    def cp_hp_limit(m, s, y):
+        return m.v_cp_hp_Q_cool_max[s, y] == m.p_cp_hp_inv[s, y]
     
     def cp_hp_elec_cool(m, s, y, h):
         return m.v_cp_hp_q_elec_consumption[s, y, h] == m.v_cp_hp_q_cool_in[s, y, h]  / m.p_cp_hp_seer[s, y] + m.v_cp_hp_q_heat_in[s, y, h] / m.p_cp_hp_cop[s, y]
@@ -77,8 +77,8 @@ def add_cp_equations(m=None):
     m.con_cp_ct_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                       rule = cp_ct_c_var)
     
-    # m.con_cp_ct_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = cp_ct_limit)
+    m.con_cp_ct_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = cp_ct_limit)
 
     m.con_cp_hp_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                   rule = cp_hp_feed_in_max_bound)
@@ -101,8 +101,8 @@ def add_cp_equations(m=None):
     m.con_cp_hp_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                       rule = cp_hp_c_var)
     
-    # m.con_cp_hp_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = cp_hp_limit)
+    m.con_cp_hp_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = cp_hp_limit)
 
 def add_cp_variables(m=None):
     
@@ -183,6 +183,12 @@ def add_cp_parameters(m=None):
     def init_ct_cp_c_inv(m, s, y):
         return m.data_values[s]['cp'][y]['p_ct_cp_c_inv']
 
+    def init_cp_ct_inv(m, s, y):
+        return m.data_values[s]['cp'][y]['p_cp_ct_inv']
+    
+    def init_cp_hp_inv(m, s, y):
+        return m.data_values[s]['cp'][y]['p_cp_hp_inv']
+    
     m.p_cp_ct_seer = py.Param(m.set_scenarios, m.set_years,
                            initialize = init_cp_ct_seer,
                            within = py.NonNegativeReals,
@@ -208,3 +214,12 @@ def add_cp_parameters(m=None):
                            within = py.NonNegativeReals,
                            doc = 'specific inv cost of the large-scale cooling tower')
     
+    m.p_cp_ct_inv = py.Param(m.set_scenarios, m.set_years,
+                          initialize = init_cp_ct_inv,
+                          within = py.NonNegativeReals,
+                          doc = 'inv capacity of cp_ct')
+    
+    m.p_cp_hp_inv = py.Param(m.set_scenarios, m.set_years,
+                          initialize = init_cp_hp_inv,
+                          within = py.NonNegativeReals,
+                          doc = 'inv capacity of cp_hp')

@@ -5,8 +5,8 @@ def add_btes_equations(m=None):
     def btes_feed_in_max_bound(m, s, y, h):
         return m.v_wi_q_heat_out[s, y, h] <= m.v_btes_hp_Q_max[s, y]
     
-    # def btes_limit_1(m, s, y):
-    #     return m.v_btes_hp_Q_max[s, y] <= 0
+    def btes_limit_1(m, s, y):
+        return m.v_btes_hp_Q_max[s, y] == m.p_btes_inv[s, y]
     
     # def btes_limit_2(m, s, y):
     #     return m.v_btes_k_heat_max[s, y] <= 0
@@ -79,8 +79,8 @@ def add_btes_equations(m=None):
     m.con_btes_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                      rule = btes_c_var)
     
-    # m.con_btes_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = btes_limit_1)
+    m.con_btes_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = btes_limit_1)
     
     # m.con_btes_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
     #                                   rule = btes_limit_2)
@@ -154,6 +154,9 @@ def add_btes_parameters(m=None):
     def init_btes_c_charge_discharge(m, s, y):
         return m.data_values[s]['btes'][y]['p_btes_c_charge_discharge']
     
+    def init_btes_inv(m, s, y):
+        return m.data_values[s]['btes'][y]['p_btes_inv']
+    
     m.p_btes_losses = py.Param(m.set_scenarios, m.set_years,
                                initialize = init_btes_losses,
                                within = py.NonNegativeReals,
@@ -193,3 +196,8 @@ def add_btes_parameters(m=None):
                                            initialize = init_btes_c_charge_discharge,
                                            within = py.NonNegativeReals,
                                            doc = 'charge/discharge price per scenario, year and hour')
+
+    m.p_btes_inv = py.Param(m.set_scenarios, m.set_years,
+                            initialize = init_btes_inv,
+                            within = py.NonNegativeReals,
+                            doc = 'inv capacity of btes')

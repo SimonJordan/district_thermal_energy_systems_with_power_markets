@@ -5,8 +5,8 @@ def add_ac_equations(m=None):
     def ac_feed_in_max_bound(m, s, y, h):
         return m.v_ac_q_cool_in[s, y, h] <= m.v_ac_Q_cool_max[s, y]
     
-    # def ac_limit(m, s, y):
-    #     return m.v_ac_Q_cool_max[s, y] <= 0
+    def ac_limit(m, s, y):
+        return m.v_ac_Q_cool_max[s, y] == m.p_ac_inv[s, y]
     
     def ac_elec_cool(m, s, y, h):
         return m.v_ac_q_cool_in[s, y, h] == m.v_ac_q_elec_consumption[s, y, h] * m.p_ac_eer[s, y, h]
@@ -47,8 +47,8 @@ def add_ac_equations(m=None):
     m.con_ac_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = ac_c_var)
     
-    # m.con_ac_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                 rule = ac_limit)
+    m.con_ac_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                   rule = ac_limit)
 
 def add_ac_variables(m=None):
     
@@ -88,6 +88,9 @@ def add_ac_parameters(m=None):
     def init_ac_c_inv(m, s, y):
         return m.data_values[s]['ac'][y]['p_ac_c_inv']
 
+    def init_ac_inv(m, s, y):
+        return m.data_values[s]['ac'][y]['p_ac_inv']
+    
     m.p_ac_eer = py.Param(m.set_scenarios, m.set_years, m.set_hours,
                           initialize = init_ac_seer,
                           within = py.NonNegativeReals,
@@ -98,3 +101,7 @@ def add_ac_parameters(m=None):
                            within = py.NonNegativeReals,
                            doc = 'specific inv cost of the large-scale airchiller')
     
+    m.p_ac_inv = py.Param(m.set_scenarios, m.set_years,
+                          initialize = init_ac_inv,
+                          within = py.NonNegativeReals,
+                          doc = 'inv capacity of ac')

@@ -5,8 +5,8 @@ def add_ites_equations(m=None):
     def ites_feed_in_max_bound(m, s, y, h):
         return m.v_ites_q_cool_out[s, y, h] <= m.v_ites_ac_Q_max[s, y]
     
-    # def ites_limit_1(m, s, y):
-    #     return m.v_ites_ac_Q_max[s, y] <= 0
+    def ites_limit_1(m, s, y):
+        return m.v_ites_ac_Q_max[s, y] == m.p_ites_inv[s, y]
     
     # def ites_limit_2(m, s, y):
     #     return m.v_ites_k_cool_max[s, y] <= 0
@@ -79,8 +79,8 @@ def add_ites_equations(m=None):
     m.con_ites_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                      rule = ites_c_var)
     
-    # m.con_ites_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = ites_limit_1)
+    m.con_ites_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = ites_limit_1)
     
     # m.con_ites_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
     #                                   rule = ites_limit_2)
@@ -158,6 +158,9 @@ def add_ites_parameters(m=None):
     def init_ites_c_charge_discharge(m, s, y):
         return m.data_values[s]['ites'][y]['p_ites_c_charge_discharge']
     
+    def init_ites_inv(m, s, y):
+        return m.data_values[s]['ites'][y]['p_ites_inv']
+    
     m.p_ites_losses = py.Param(m.set_scenarios, m.set_years,
                                initialize = init_ites_losses,
                                within = py.NonNegativeReals,
@@ -197,3 +200,8 @@ def add_ites_parameters(m=None):
                                            initialize = init_ites_c_charge_discharge,
                                            within = py.NonNegativeReals,
                                            doc = 'charge/discharge price per scenario, year and hour')
+
+    m.p_ites_inv = py.Param(m.set_scenarios, m.set_years,
+                            initialize = init_ites_inv,
+                            within = py.NonNegativeReals,
+                            doc = 'inv capacity of ites')

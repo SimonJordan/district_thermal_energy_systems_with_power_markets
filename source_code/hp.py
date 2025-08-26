@@ -5,8 +5,8 @@ def add_hp_equations(m=None):
     def hp_feed_in_max_bound(m, s, y, h):
         return m.v_hp_q_heat_in[s, y, h] <= m.v_hp_Q_heat_max[s, y]
     
-    # def hp_limit(m, s, y):
-    #     return m.v_hp_Q_heat_max[s, y] <= 0
+    def hp_limit(m, s, y):
+        return m.v_hp_Q_heat_max[s, y] == m.p_hp_inv[s, y]
     
     def hp_elec_heat(m, s, y, h): 
         return m.v_hp_q_heat_in[s, y, h] == m.v_hp_q_elec_consumption[s, y, h] * m.p_hp_cop[s, y, h]
@@ -47,8 +47,8 @@ def add_hp_equations(m=None):
     m.con_hp_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = hp_c_var)
     
-    # m.con_hp_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                rule = hp_limit)
+    m.con_hp_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                   rule = hp_limit)
 
 def add_hp_variables(m=None):
     
@@ -88,6 +88,9 @@ def add_hp_parameters(m=None):
     def init_hp_c_inv(m, s, y):
         return m.data_values[s]['hp'][y]['p_hp_c_inv']
 
+    def init_hp_inv(m, s, y):
+        return m.data_values[s]['hp'][y]['p_hp_inv']
+    
     m.p_hp_cop = py.Param(m.set_scenarios, m.set_years, m.set_hours,
                           initialize = init_hp_cop,
                           within = py.NonNegativeReals,
@@ -97,3 +100,8 @@ def add_hp_parameters(m=None):
                            initialize = init_hp_c_inv,
                            within = py.NonNegativeReals,
                            doc = 'specific inv cost of the large-scale heat pump')
+
+    m.p_hp_inv = py.Param(m.set_scenarios, m.set_years,
+                          initialize = init_hp_inv,
+                          within = py.NonNegativeReals,
+                          doc = 'inv capacity of hp')

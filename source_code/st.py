@@ -5,8 +5,8 @@ def add_st_equations(m=None):
     def st_feed_in_max_bound(m, s, y, h):
         return m.v_st_q_heat_in[s, y, h] <= m.v_st_Q_heat_max[s, y]
     
-    # def st_limit(m, s, y):
-    #     return m.v_st_Q_heat_max[s, y] <= 0
+    def st_limit(m, s, y):
+        return m.v_st_Q_heat_max[s, y] == m.p_st_inv[s, y]
     
     def st_solar_radiation(m, s, y, h):
         return m.v_st_q_heat_in[s, y, h] == m.p_st_solar_radiation[s, y, h] * m.v_st_p[s, y, h] / 1000 * m.p_st_eta[s, y]
@@ -68,8 +68,8 @@ def add_st_equations(m=None):
     m.con_st_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = st_c_var)
     
-    # m.con_st_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                rule = st_limit)
+    m.con_st_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                   rule = st_limit)
     
      
 def add_st_variables(m=None):
@@ -128,6 +128,9 @@ def add_st_parameters(m=None):
     def init_solar_radiation(m, s, y, h):
         return m.data_values[s]['st'][y]['p_st_solar_radiation'][h]
     
+    def init_st_inv(m, s, y):
+        return m.data_values[s]['st'][y]['p_st_inv']
+    
     m.p_st_eta = py.Param(m.set_scenarios, m.set_years,
                           initialize = init_st_eta,
                           within = py.NonNegativeReals,
@@ -148,3 +151,7 @@ def add_st_parameters(m=None):
                                       within = py.NonNegativeReals,
                                       doc = 'solar radiation in W/m2')
     
+    m.p_st_inv = py.Param(m.set_scenarios, m.set_years,
+                          initialize = init_st_inv,
+                          within = py.NonNegativeReals,
+                          doc = 'inv capacity of st')

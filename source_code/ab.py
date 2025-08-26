@@ -5,8 +5,8 @@ def add_ab_equations(m=None):
     def ab_ct_feed_in_max_bound(m, s, y, h):
         return m.v_ab_ct_q_cool_in[s, y, h] <= m.v_ab_ct_Q_cool_max[s, y]
     
-    # def ab_ct_limit(m, s, y):
-    #     return m.v_ab_ct_Q_cool_max[s, y] <= 0
+    def ab_ct_limit(m, s, y):
+        return m.v_ab_ct_Q_cool_max[s, y] == m.p_ab_ct_inv[s, y]
     
     def ab_ct_heat_out(m, s, y, h):
         return m.v_ab_ct_q_cool_in[s, y, h] == m.v_ab_ct_q_heat_out[s, y, h] * m.p_ab_eer[s, y]
@@ -35,8 +35,8 @@ def add_ab_equations(m=None):
     def ab_hp_feed_in_max_bound(m, s, y, h):
         return m.v_ab_hp_q_cool_in[s, y, h] <= m.v_ab_hp_Q_cool_max[s, y]
     
-    # def ab_hp_limit(m, s, y):
-    #     return m.v_ab_hp_Q_cool_max[s, y] <= 0
+    def ab_hp_limit(m, s, y):
+        return m.v_ab_hp_Q_cool_max[s, y] == m.p_ab_hp_inv[s, y]
     
     def ab_hp_heat_out(m, s, y, h):
         return m.v_ab_hp_q_cool_in[s, y, h] == m.v_ab_hp_q_heat_out[s, y, h] * m.p_ab_eer[s, y]
@@ -86,8 +86,8 @@ def add_ab_equations(m=None):
     m.con_ab_ct_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                       rule = ab_ct_c_var)
     
-    # m.con_ab_ct_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = ab_ct_limit)
+    m.con_ab_ct_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = ab_ct_limit)
     
     m.con_ab_hp_feed_in_max_bound = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                                   rule = ab_hp_feed_in_max_bound)
@@ -113,8 +113,8 @@ def add_ab_equations(m=None):
     m.con_ab_hp_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                       rule = ab_hp_c_var)
     
-    # m.con_ab_hp_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = ab_hp_limit)
+    m.con_ab_hp_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = ab_hp_limit)
 
 def add_ab_variables(m=None):
     
@@ -199,6 +199,12 @@ def add_ab_parameters(m=None):
     
     def init_ct_ab_c_inv(m, s, y):
         return m.data_values[s]['ab'][y]['p_ct_ab_c_inv']
+        
+    def init_ab_ct_inv(m, s, y):
+        return m.data_values[s]['ab'][y]['p_ab_ct_inv']
+        
+    def init_ab_hp_inv(m, s, y):
+        return m.data_values[s]['ab'][y]['p_ab_hp_inv']
     
     m.p_ab_eer = py.Param(m.set_scenarios, m.set_years,
                           initialize = init_ab_eer,
@@ -219,3 +225,13 @@ def add_ab_parameters(m=None):
                            initialize = init_ct_ab_c_inv,
                            within = py.NonNegativeReals,
                            doc = 'specific inv cost of the large-scale cooling tower')
+
+    m.p_ab_ct_inv = py.Param(m.set_scenarios, m.set_years,
+                          initialize = init_ab_ct_inv,
+                          within = py.NonNegativeReals,
+                          doc = 'inv capacity of ab_ct')
+    
+    m.p_ab_hp_inv = py.Param(m.set_scenarios, m.set_years,
+                          initialize = init_ab_hp_inv,
+                          within = py.NonNegativeReals,
+                          doc = 'inv capacity of ab_hp')

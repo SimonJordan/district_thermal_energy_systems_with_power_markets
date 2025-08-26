@@ -5,8 +5,8 @@ def add_ttes_equations(m=None):
     def ttes_feed_in_max_bound(m, s, y, h):
         return m.v_ttes_q_heat_out[s, y, h] <= m.v_ttes_hp_Q_max[s, y]
     
-    # def ttes_limit_1(m, s, y):
-    #     return m.v_ttes_hp_Q_max[s, y] <= 0
+    def ttes_limit_1(m, s, y):
+        return m.v_ttes_hp_Q_max[s, y] == m.p_ttes_inv[s, y]
     
     # def ttes_limit_2(m, s, y):
     #     return m.v_ttes_k_heat_max[s, y] <= 0
@@ -79,8 +79,8 @@ def add_ttes_equations(m=None):
     m.con_ttes_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                      rule = ttes_c_var)
     
-    # m.con_ttes_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
-    #                                   rule = ttes_limit_1)
+    m.con_ttes_limit_1 = py.Constraint(m.set_scenarios, m.set_years,
+                                      rule = ttes_limit_1)
     
     # m.con_ttes_limit_2 = py.Constraint(m.set_scenarios, m.set_years,
     #                                   rule = ttes_limit_2)
@@ -158,6 +158,9 @@ def add_ttes_parameters(m=None):
     def init_ttes_c_charge_discharge(m, s, y):
         return m.data_values[s]['ttes'][y]['p_ttes_c_charge_discharge']
     
+    def init_ttes_inv(m, s, y):
+        return m.data_values[s]['ttes'][y]['p_ttes_inv']
+    
     m.p_ttes_losses = py.Param(m.set_scenarios, m.set_years,
                                initialize = init_ttes_losses,
                                within = py.NonNegativeReals,
@@ -197,3 +200,8 @@ def add_ttes_parameters(m=None):
                                            initialize = init_ttes_c_charge_discharge,
                                            within = py.NonNegativeReals,
                                            doc = 'charge/discharge price per scenario, year and hour')
+
+    m.p_ttes_inv = py.Param(m.set_scenarios, m.set_years,
+                           initialize = init_ttes_inv,
+                           within = py.NonNegativeReals,
+                           doc = 'inv capacity of ttes')

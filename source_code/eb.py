@@ -5,8 +5,8 @@ def add_eb_equations(m=None):
     def eb_feed_in_max_bound(m, s, y, h):
         return m.v_eb_q_heat_in[s, y, h] <= m.v_eb_Q_heat_max[s, y]
     
-    # def eb_limit(m, s, y):
-    #     return m.v_eb_Q_heat_max[s, y] <= 0
+    def eb_limit(m, s, y):
+        return m.v_eb_Q_heat_max[s, y] == m.p_eb_inv[s, y]
     
     def eb_elec_heat(m, s, y, h):
         return m.v_eb_q_heat_in[s, y, h] == m.v_eb_q_elec_consumption[s, y, h] * m.p_eb_eta[s, y]
@@ -47,8 +47,8 @@ def add_eb_equations(m=None):
     m.con_eb_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                    rule = eb_c_var)
     
-    # m.con_eb_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                rule = eb_limit)
+    m.con_eb_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                   rule = eb_limit)
 
 def add_eb_variables(m=None):
     
@@ -88,6 +88,9 @@ def add_eb_parameters(m=None):
     def init_eb_c_inv(m, s, y):
         return m.data_values[s]['eb'][y]['p_eb_c_inv']
     
+    def init_eb_inv(m, s, y):
+        return m.data_values[s]['eb'][y]['p_eb_inv']
+    
     m.p_eb_eta = py.Param(m.set_scenarios, m.set_years,
                           initialize = init_eb_eta,
                           within = py.NonNegativeReals,
@@ -97,3 +100,8 @@ def add_eb_parameters(m=None):
                             initialize = init_eb_c_inv,
                             within = py.NonNegativeReals,
                             doc = 'specific inv cost of eb')
+
+    m.p_eb_inv = py.Param(m.set_scenarios, m.set_years,
+                          initialize = init_eb_inv,
+                          within = py.NonNegativeReals,
+                          doc = 'inv capacity of eb')

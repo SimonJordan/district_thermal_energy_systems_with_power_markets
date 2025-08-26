@@ -5,8 +5,8 @@ def add_gb_equations(m=None):
     def gb_feed_in_max_bound(m, s, y, h):
         return m.v_gb_q_heat_in[s, y, h] <= m.v_gb_Q_heat_max[s, y]
     
-    # def gb_limit(m, s, y):
-    #     return m.v_gb_Q_heat_max[s, y] <= 0
+    def gb_limit(m, s, y):
+        return m.v_gb_Q_heat_max[s, y] == m.p_gb_inv[s, y]
     
     def gb_gas_heat(m, s, y, h):
         return m.v_gb_q_heat_in[s, y, h] == m.v_gb_q_gas[s, y, h] * m.p_gb_eta[s, y]
@@ -47,8 +47,8 @@ def add_gb_equations(m=None):
     m.con_gb_c_var = py.Constraint(m.set_scenarios, m.set_years, m.set_hours,
                                     rule = gb_c_var)
     
-    # m.con_gb_limit = py.Constraint(m.set_scenarios, m.set_years,
-    #                                rule = gb_limit)
+    m.con_gb_limit = py.Constraint(m.set_scenarios, m.set_years,
+                                    rule = gb_limit)
 
 def add_gb_variables(m=None):
     
@@ -94,6 +94,9 @@ def add_gb_parameters(m=None):
     def init_gb_c_inv(m, s, y):
         return m.data_values[s]['gb'][y]['p_gb_c_inv']
     
+    def init_gb_inv(m, s, y):
+        return m.data_values[s]['gb'][y]['p_gb_inv']
+    
     m.p_gb_eta = py.Param(m.set_scenarios, m.set_years,
                            initialize = init_gb_eta,
                            within = py.NonNegativeReals,
@@ -113,4 +116,8 @@ def add_gb_parameters(m=None):
                             initialize = init_gb_c_inv,
                             within = py.NonNegativeReals,
                             doc = 'specific inv cost of gb')
-    
+
+    m.p_gb_inv = py.Param(m.set_scenarios, m.set_years,
+                            initialize = init_gb_inv,
+                            within = py.NonNegativeReals,
+                            doc = 'inv capacity of gb')    
