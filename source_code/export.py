@@ -72,8 +72,11 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             cp_ct_inv = []
             cp_hp_inv = []
             ttes_inv = []
+            ttes_hp_inv = []
             btes_inv = []
+            btes_hp_inv = []
             ites_inv = []
+            ites_ac_inv = []
             
             eb_c_inv = []
             gb_c_inv = []
@@ -153,8 +156,11 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             cp_ct_inv.append(py.value(m.v_cp_ct_Q_inv[scenario, year]))
             cp_hp_inv.append(py.value(m.v_cp_hp_Q_inv[scenario, year]))
             ttes_inv.append(py.value(m.v_ttes_k_inv[scenario, year]))
+            ttes_hp_inv.append(py.value(m.v_ttes_hp_Q_inv[scenario, year]))
             btes_inv.append(py.value(m.v_btes_k_inv[scenario, year]))
+            btes_hp_inv.append(py.value(m.v_btes_hp_Q_inv[scenario, year]))
             ites_inv.append(py.value(m.v_ites_k_inv[scenario, year]))
+            ites_ac_inv.append(py.value(m.v_ites_ac_Q_inv[scenario, year]))
             
             eb_c_inv.append(py.value(m.v_eb_c_inv[scenario, year]))
             gb_c_inv.append(py.value(m.v_gb_c_inv[scenario, year]))
@@ -248,7 +254,7 @@ def export_result(m=None, data={}, scenarios=[], years=[], hours=[]):
             
             df_0.append(pd.DataFrame({'hour': hours, 'heating': data[scenario]['heating'][year], 'eb': eb_heat_in, 'gb': gb_heat_in, 'hp': hp_heat_in, 'st': st_heat_in, 'wi': wi_heat_in, 'wi_btes': wi_heat_out, 'ieh': ieh_heat_in, 'chp': chp_heat_in, 'ab_ct-': ab_ct_heat_out, 'ab_hp+': ab_hp_heat_in, 'ab_hp-': ab_hp_heat_out, 'cp_hp+': cp_hp_heat_in, 'ttes+': ttes_heat_in, 'ttes-': ttes_heat_out, 'btes+': btes_heat_in}))
             df_1.append(pd.DataFrame({'hour': hours, 'cooling': data[scenario]['cooling'][year], 'ac': ac_cool_in, 'ab_ct': ab_ct_cool_in, 'ab_hp': ab_hp_cool_in, 'cp_ct': cp_ct_cool_in, 'cp_hp': cp_hp_cool_in, 'ites+': ites_cool_in, 'ites-': ites_cool_out}))
-            df_2.append(pd.DataFrame({'eb': eb_inv, 'gb': gb_inv, 'hp': hp_inv, 'st': st_inv, 'wi': wi_inv, 'ieh': ieh_inv, 'chp': chp_inv, 'ac': ac_inv, 'ab_ct': ab_ct_inv, 'ab_hp': ab_hp_inv, 'cp_ct': cp_ct_inv, 'cp_hp': cp_hp_inv, 'ttes': ttes_inv, 'btes': btes_inv, 'ites': ites_inv}))
+            df_2.append(pd.DataFrame({'eb': eb_inv, 'gb': gb_inv, 'hp': hp_inv, 'st': st_inv, 'wi': wi_inv, 'ieh': ieh_inv, 'chp': chp_inv, 'ac': ac_inv, 'ab_ct': ab_ct_inv, 'ab_hp': ab_hp_inv, 'cp_ct': cp_ct_inv, 'cp_hp': cp_hp_inv, 'ttes': ttes_inv, 'ttes_hp': ttes_hp_inv, 'btes': btes_inv, 'btes_hp': btes_hp_inv, 'ites': ites_inv, 'ites_ac': ites_ac_inv}))
             df_3.append(pd.DataFrame({'eb': eb_c_inv, 'gb': gb_c_inv, 'hp': hp_c_inv, 'st': st_c_inv, 'wi': wi_c_inv, 'ieh': ieh_c_inv, 'chp': chp_c_inv, 'ac': ac_c_inv, 'ab_ct': ab_ct_c_inv, 'ab_hp': ab_hp_c_inv, 'cp_ct': cp_ct_c_inv, 'cp_hp': cp_hp_c_inv, 'ttes': ttes_c_inv, 'btes': btes_c_inv, 'ites': ites_c_inv}))
             df_4.append(pd.DataFrame({'eb': eb_c_fix, 'gb': gb_c_fix, 'hp': hp_c_fix, 'st': st_c_fix, 'wi': wi_c_fix, 'ieh': ieh_c_fix, 'chp': chp_c_fix, 'ac': ac_c_fix, 'ab_ct': ab_ct_c_fix, 'ab_hp': ab_hp_c_fix, 'cp_ct': cp_ct_c_fix, 'cp_hp': cp_hp_c_fix, 'ttes': ttes_c_fix, 'btes': btes_c_fix, 'ites': ites_c_fix}))
             df_5.append(pd.DataFrame({'hour': hours, 'eb': eb_c_var, 'gb': gb_c_var, 'hp': hp_c_var, 'st': st_c_var, 'wi': wi_c_var, 'ieh': ieh_c_var, 'chp': chp_c_var, 'ac': ac_c_var, 'ab_ct': ab_ct_c_var, 'ab_hp': ab_hp_c_var, 'cp_ct': cp_ct_c_var, 'cp_hp': cp_hp_c_var, 'ttes': ttes_c_var, 'btes': btes_c_var, 'ites': ites_c_var}))
