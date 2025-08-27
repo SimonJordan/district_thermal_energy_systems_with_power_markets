@@ -6,10 +6,10 @@ def add_btes_equations(m=None):
         return m.v_wi_q_heat_out[s, y, h] <= m.v_btes_hp_Q_max[s, y]
     
     def btes_limit_1(m, s, y):
-        return m.v_btes_hp_Q_max[s, y] == m.p_btes_hp_inv[s, y]
+        return m.v_btes_hp_Q_inv[s, y] == m.p_btes_hp_inv[s, y]
     
     def btes_limit_2(m, s, y):
-        return m.v_btes_k_heat_max[s, y] == m.p_btes_inv[s, y]
+        return m.v_btes_k_inv[s, y] == m.p_btes_inv[s, y]
     
     def btes_soc_max_bound(m, s, y, h):
         return m.v_btes_k_heat[s, y, h] <= m.v_btes_k_heat_max[s, y]

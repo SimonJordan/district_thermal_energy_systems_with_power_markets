@@ -6,7 +6,7 @@ def add_st_equations(m=None):
         return m.v_st_q_heat_in[s, y, h] <= m.v_st_Q_heat_max[s, y]
     
     def st_limit(m, s, y):
-        return m.v_st_Q_heat_max[s, y] == m.p_st_inv[s, y]
+        return m.v_st_P_inv[s, y] == m.p_st_inv[s, y]
     
     def st_solar_radiation(m, s, y, h):
         return m.v_st_q_heat_in[s, y, h] == m.p_st_solar_radiation[s, y, h] * m.v_st_p[s, y, h] / 1000 * m.p_st_eta[s, y]

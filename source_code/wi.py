@@ -6,7 +6,7 @@ def add_wi_equations(m=None):
         return m.v_wi_q_heat[s, y, h] + m.v_wi_q_elec_in[s, y, h] <= m.v_wi_Q_mix_max[s, y]
     
     def wi_limit(m, s, y):
-        return m.v_wi_Q_mix_max[s, y] == m.p_wi_inv[s, y]
+        return m.v_wi_Q_inv[s, y] == m.p_wi_inv[s, y]
     
     def wi_waste_heat(m, s, y, h):
         return m.v_wi_q_heat[s, y, h] == m.p_wi_q_waste[s, y] * m.p_wi_eta[s, y] * m.p_wi_h_waste[s, y] * m.p_wi_heat[s, y]

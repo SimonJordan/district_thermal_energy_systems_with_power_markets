@@ -6,7 +6,7 @@ def add_chp_equations(m=None):
         return m.v_chp_q_heat_in[s, y, h] + m.v_chp_q_elec_in[s, y, h] <= m.v_chp_Q_mix_max[s, y]
     
     def chp_limit(m, s, y):
-        return m.v_chp_Q_mix_max[s, y] == m.p_chp_inv[s, y]
+        return m.v_chp_Q_inv[s, y] == m.p_chp_inv[s, y]
     
     def chp_gas_heat(m, s, y, h):
         return m.v_chp_q_heat_in[s, y, h] == m.v_chp_q_gas[s, y, h] * m.p_chp_eta[s, y] * m.p_chp_heat[s, y]

@@ -6,10 +6,10 @@ def add_ites_equations(m=None):
         return m.v_ites_q_cool_out[s, y, h] <= m.v_ites_ac_Q_max[s, y]
     
     def ites_limit_1(m, s, y):
-        return m.v_ites_ac_Q_max[s, y] == m.p_ites_ac_inv[s, y]
+        return m.v_ites_ac_Q_inv[s, y] == m.p_ites_ac_inv[s, y]
     
     def ites_limit_2(m, s, y):
-        return m.v_ites_k_cool_max[s, y] == m.p_ites_inv[s, y]
+        return m.v_ites_k_inv[s, y] == m.p_ites_inv[s, y]
     
     def ites_soc_max_bound(m, s, y, h):
         return m.v_ites_k_cool[s, y, h] <= m.v_ites_k_cool_max[s, y]

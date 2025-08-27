@@ -6,7 +6,7 @@ def add_ac_equations(m=None):
         return m.v_ac_q_cool_in[s, y, h] <= m.v_ac_Q_cool_max[s, y]
     
     def ac_limit(m, s, y):
-        return m.v_ac_Q_cool_max[s, y] == m.p_ac_inv[s, y]
+        return m.v_ac_Q_inv[s, y] == m.p_ac_inv[s, y]
     
     def ac_elec_cool(m, s, y, h):
         return m.v_ac_q_cool_in[s, y, h] == m.v_ac_q_elec_consumption[s, y, h] * m.p_ac_eer[s, y, h]

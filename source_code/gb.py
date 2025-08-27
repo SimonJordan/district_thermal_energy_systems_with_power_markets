@@ -6,7 +6,7 @@ def add_gb_equations(m=None):
         return m.v_gb_q_heat_in[s, y, h] <= m.v_gb_Q_heat_max[s, y]
     
     def gb_limit(m, s, y):
-        return m.v_gb_Q_heat_max[s, y] == m.p_gb_inv[s, y]
+        return m.v_gb_Q_inv[s, y] == m.p_gb_inv[s, y]
     
     def gb_gas_heat(m, s, y, h):
         return m.v_gb_q_heat_in[s, y, h] == m.v_gb_q_gas[s, y, h] * m.p_gb_eta[s, y]

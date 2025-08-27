@@ -6,7 +6,7 @@ def add_ab_equations(m=None):
         return m.v_ab_ct_q_cool_in[s, y, h] <= m.v_ab_ct_Q_cool_max[s, y]
     
     def ab_ct_limit(m, s, y):
-        return m.v_ab_ct_Q_cool_max[s, y] == m.p_ab_ct_inv[s, y]
+        return m.v_ab_ct_Q_inv[s, y] == m.p_ab_ct_inv[s, y]
     
     def ab_ct_heat_out(m, s, y, h):
         return m.v_ab_ct_q_cool_in[s, y, h] == m.v_ab_ct_q_heat_out[s, y, h] * m.p_ab_eer[s, y]
@@ -36,7 +36,7 @@ def add_ab_equations(m=None):
         return m.v_ab_hp_q_cool_in[s, y, h] <= m.v_ab_hp_Q_cool_max[s, y]
     
     def ab_hp_limit(m, s, y):
-        return m.v_ab_hp_Q_cool_max[s, y] == m.p_ab_hp_inv[s, y]
+        return m.v_ab_hp_Q_inv[s, y] == m.p_ab_hp_inv[s, y]
     
     def ab_hp_heat_out(m, s, y, h):
         return m.v_ab_hp_q_cool_in[s, y, h] == m.v_ab_hp_q_heat_out[s, y, h] * m.p_ab_eer[s, y]

@@ -9,7 +9,7 @@ def add_ieh_equations(m=None):
         return m.v_ieh_q_heat_in[s, y, h] <= m.p_ieh_in[s, y, h]
     
     def ieh_limit_2(m, s, y):
-        return m.v_ieh_Q_heat_max[s, y] == m.p_ieh_inv[s, y]
+        return m.v_ieh_Q_inv[s, y] == m.p_ieh_inv[s, y]
     
     def ieh_elec_heat(m, s, y, h): 
         return m.v_ieh_q_elec_consumption[s, y, h] == m.v_ieh_q_heat_in[s, y, h] * m.p_ieh_elec[s, y]

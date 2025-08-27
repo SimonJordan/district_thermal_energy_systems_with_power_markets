@@ -6,10 +6,10 @@ def add_ttes_equations(m=None):
         return m.v_ttes_q_heat_out[s, y, h] <= m.v_ttes_hp_Q_max[s, y]
     
     def ttes_limit_1(m, s, y):
-        return m.v_ttes_hp_Q_max[s, y] == m.p_ttes_hp_inv[s, y]
+        return m.v_ttes_hp_Q_inv[s, y] == m.p_ttes_hp_inv[s, y]
     
     def ttes_limit_2(m, s, y):
-        return m.v_ttes_k_heat_max[s, y] == m.p_ttes_inv[s, y]
+        return m.v_ttes_k_inv[s, y] == m.p_ttes_inv[s, y]
     
     def ttes_soc_max_bound(m, s, y, h):
         return m.v_ttes_k_heat[s, y, h] <= m.v_ttes_k_heat_max[s, y]

@@ -6,7 +6,7 @@ def add_hp_equations(m=None):
         return m.v_hp_q_heat_in[s, y, h] <= m.v_hp_Q_heat_max[s, y]
     
     def hp_limit(m, s, y):
-        return m.v_hp_Q_heat_max[s, y] == m.p_hp_inv[s, y]
+        return m.v_hp_Q_inv[s, y] == m.p_hp_inv[s, y]
     
     def hp_elec_heat(m, s, y, h): 
         return m.v_hp_q_heat_in[s, y, h] == m.v_hp_q_elec_consumption[s, y, h] * m.p_hp_cop[s, y, h]

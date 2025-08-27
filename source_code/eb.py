@@ -9,7 +9,7 @@ def add_eb_equations(m=None):
         return m.v_eb_Q_heat_max[s, y] == m.p_eb_inv[s, y]
     
     def eb_elec_heat(m, s, y, h):
-        return m.v_eb_q_heat_in[s, y, h] == m.v_eb_q_elec_consumption[s, y, h] * m.p_eb_eta[s, y]
+        return m.v_eb_Q_inv[s, y, h] == m.v_eb_q_elec_consumption[s, y, h] * m.p_eb_eta[s, y]
     
     def eb_Q_inv(m, s, y):
         if (y - 5) in m.set_years:
